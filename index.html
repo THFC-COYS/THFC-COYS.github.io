@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en" class="scroll-smooth"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Greg Lucas - Senior Design Leader&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #0f172a; /* slate-900 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.accent-text {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #60a5fa; /* blue-400 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.ms-card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #1e293b; /* slate-800 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #334155; /* slate-700 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.ms-card:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: #475569; /* slate-600 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.section-fade-in {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(20px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: opacity 0.6s ease-out, transform 0.6s ease-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.section-fade-in.visible {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-slate-900 text-slate-300"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Header &amp; Navigation --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="bg-slate-900/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-slate-800"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container mx-auto px-6 py-4 flex justify-between items-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#" class="text-2xl font-bold accent-text"&gt;Greg Lucas&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;nav class="hidden md:flex space-x-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#about" class="text-slate-300 hover:text-blue-400 transition-colors duration-300"&gt;About&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#featured-project" class="text-slate-300 hover:text-blue-400 transition-colors duration-300"&gt;Featured Project&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#experience" class="text-slate-300 hover:text-blue-400 transition-colors duration-300"&gt;Experience&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#portfolio" class="text-slate-300 hover:text-blue-400 transition-colors duration-300"&gt;Portfolio&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#skills" class="text-slate-300 hover:text-blue-400 transition-colors duration-300"&gt;Skills&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#contact" class="text-slate-300 hover:text-blue-400 transition-colors duration-300"&gt;Contact&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="mobile-menu-button" class="md:hidden text-slate-300 hover:text-blue-400"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Mobile Menu --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="mobile-menu" class="hidden md:hidden bg-slate-900/95"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#about" class="block py-3 px-6 text-slate-300 hover:bg-slate-800"&gt;About&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#featured-project" class="block py-3 px-6 text-slate-300 hover:bg-slate-800"&gt;Featured Project&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#experience" class="block py-3 px-6 text-slate-300 hover:bg-slate-800"&gt;Experience&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#portfolio" class="block py-3 px-6 text-slate-300 hover:bg-slate-800"&gt;Portfolio&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#skills" class="block py-3 px-6 text-slate-300 hover:bg-slate-800"&gt;Skills&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#contact" class="block py-3 px-6 text-slate-300 hover:bg-slate-800"&gt;Contact&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="container mx-auto px-6 pt-24"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Hero Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="home" class="min-h-screen flex items-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center md:text-left max-w-3xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1 class="text-5xl md:text-7xl font-bold mb-4 text-slate-100"&gt;Hi, I'm &lt;span class="accent-text"&gt;Greg Lucas&lt;/span&gt;&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-xl md:text-2xl text-slate-400 mb-8"&gt;A Senior Design Leader and digital learning expert specializing in &lt;span class="text-slate-200 font-medium"&gt;AI&lt;/span&gt;, &lt;span class="text-slate-200 font-medium"&gt;Spatial Computing&lt;/span&gt;, &amp; &lt;span class="text-slate-200 font-medium"&gt;Interactive 3D Experiences.&lt;/span&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#experience" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300"&gt;View My Work&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="mailto:greg.lucas1@icloud.com" class="ml-4 border-2 border-blue-500 text-blue-400 font-bold py-3 px-6 rounded-lg hover:bg-blue-500 hover:text-white transition-all duration-300"&gt;Hire Me&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- About Me Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="about" class="py-20 section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;About Me&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex flex-col md:flex-row items-center gap-12"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="md:w-1/3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;img src="https://i.imgur.com/o0hC0mU.jpeg" alt="Greg Lucas speaking at a conference" class="rounded-lg mx-auto shadow-2xl shadow-slate-950/60 w-full object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="md:w-2/3 text-lg text-slate-400"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>I'm a senior design leader and immersive learning expert with over 15 years of experience building and coaching teams to deliver groundbreaking products in emerging technologies. My focus is on leveraging spatial computing and interactive 3D experiences to revolutionize how we learn.</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>I have a proven ability to lead design efforts from initial concept through to finalized design specs for new software products, particularly in the immersive education space. I excel at communicating a compelling vision that aligns designers, engineers, and executive leadership, while upholding the highest standards of quality and design aesthetic.</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Featured Project Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="featured-project" class="py-20 section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="md:flex"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="md:w-1/2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/qnWn-C6kec4/hqdefault.jpg" alt="Meta Workrooms for Education" class="w-full h-full object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-8 md:w-1/2 flex flex-col justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-3xl font-bold mb-3 text-blue-400"&gt;Featured Project: Day in the Metaverse&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-slate-400 mb-4 text-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>This project explores how spatial computing can transform remote education. The video demonstrates using Meta Workrooms as a dynamic virtual classroom for more engaging and collaborative learning experiences.</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;a href="https://youtu.be/qnWn-C6kec4" target="_blank" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 self-start"&gt;Watch the Demo&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Experience Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="experience" class="py-20 section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;Professional Experience&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="space-y-12 max-w-4xl mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- GCU Experience --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="ms-card p-8 rounded-xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-3xl font-bold text-blue-400"&gt;GRAND CANYON UNIVERSITY&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl text-slate-400 mb-4"&gt;Director, Experience Design &amp; Prototyping | 2010–Present&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ul class="list-disc list-inside text-slate-300 space-y-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Led, coached, and grew a cross-functional team of over 300, including technical designers, artists, and project managers.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Led end-to-end design for a new immersive learning platform, from 0-to-1 concept to first customer ship, serving over 80,000 users.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Developed and communicated the design strategy for a new metaverse initiative to the University President and executive team.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Managed design and prototyping of an AI-powered "Faculty Assistant" tool, achieving a 60% adoption rate.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Solved complex interaction problems for an "Early Alert" workflow, improving user retention by 15-20%.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- MARK85LABS Experience --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="ms-card p-8 rounded-xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-3xl font-bold text-blue-400"&gt;MARK85LABS &amp; FREELANCE CONSULTING&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl text-slate-400 mb-4"&gt;Founder &amp; Principal Design Consultant | 2020–Present&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ul class="list-disc list-inside text-slate-300 space-y-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Leads design and development of bespoke VR simulations and custom metaverse environments for enterprise clients.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Partners with clients to take emerging technology products from 0 to 1, establishing product-market fit.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Founded and produce "9to5vision," a YouTube channel dedicated to the Apple Vision Pro.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Intel Experience --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="ms-card p-8 rounded-xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-3xl font-bold text-blue-400"&gt;INTEL CORPORATION&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl text-slate-400 mb-4"&gt;Manufacturing Technical Specialist | 1999–2005&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ul class="list-disc list-inside text-slate-300 space-y-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Gained extensive experience in a high-volume manufacturing environment, analyzing complex production issues and driving yield optimization.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Portfolio Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="portfolio" class="py-20 space-y-20"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Metaverse &amp; Spatial Computing Projects --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;Metaverse &amp; Spatial Computing Projects&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Career Services in the Metaverse --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/jV0j2nFGJjo/hqdefault.jpg" alt="Career Services in the Metaverse" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Career Services in the Metaverse&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4"&gt;This project demonstrates hosting university career service events in the metaverse to increase student engagement and accessibility.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://youtu.be/jV0j2nFGJjo" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Watch Video&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Metaverse Shopping --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/_PAuqg__ocw/hqdefault.jpg" alt="Metaverse Shopping Experience" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Metaverse Retail Experience&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4"&gt;A forward-thinking concept that explores the future of retail by creating an immersive shopping experience for digital-native consumers.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://youtu.be/_PAuqg__ocw" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Watch Video&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Doctoral Community --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/PRvmWzVivBQ/hqdefault.jpg" alt="Doctoral students in Spatial.io" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Doctoral Community in the Metaverse&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4"&gt;A proof-of-concept using Spatial.io to create a sense of presence and community for remote doctoral students, combating isolation.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://youtu.be/PRvmWzVivBQ" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Watch Video&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Digital Avatars --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/77rAYDKkMB4/hqdefault.jpg" alt="Digital Avatars and Collectibles" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Digital Avatars &amp; Collectibles&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4"&gt;This project demonstrates a creative pipeline for turning 3D digital avatars into unique, tangible collectible items.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://youtu.be/77rAYDKkMB4" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Watch Video&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Corporate Metaverse Space --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/cAyL2IuBfs8/hqdefault.jpg" alt="Metaverse Conference Space" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Corporate Metaverse Space&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4"&gt;A customizable virtual environment designed for enterprise use, perfect for employee onboarding, training, and client engagement.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://youtu.be/cAyL2IuBfs8" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Watch Demo&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Mosaic Project --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6 flex flex-col h-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Mosaic Immersive Learning Platform&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4 flex-grow"&gt;Led the 0-to-1 product design for a pioneering immersive learning platform that now serves over 80,000 university students.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://mediaservices.gcu.edu/products/mosaic" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;View Product&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- AI &amp; Prototyping Projects --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;AI &amp; Prototyping Projects&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- AI Avatar Project --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;img src="https://img.youtube.com/vi/W6DRBMs6UMo/hqdefault.jpg" alt="AI Virtual Avatar in a metaverse environment" class="w-full h-48 object-cover"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;AI-Powered Virtual Avatar&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4"&gt;An AI-driven virtual teaching assistant in an immersive environment, designed to provide students with 24/7 course support.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://youtu.be/W6DRBMs6UMo" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Watch Demo&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- AI Lab --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>&lt;div class="p-6 flex flex-col h-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;AI Lab &amp; Google Partnership&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4 flex-grow"&gt;Spearheaded the creation of an on-campus AI Lab in partnership with Google to drive hands-on AI skill development for students.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://news.gcu.edu/colangelo-college-of-business/ai-lab-gives-students-a-chance-at-badge-of-honor/" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Read More&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Publications &amp; Speaking Engagements --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;Publications &amp; Speaking Engagements&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- TLG Conference --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="p-6 flex flex-col h-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Presenter: Transforming Local Government&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4 flex-grow"&gt;Presented a session on how municipal governments can leverage metaverse technologies to engage younger demographics.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="#" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Learn More&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>&lt;!-- Keynote Speaker --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>&lt;div class="p-6 flex flex-col h-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Keynote: AZ Career Services Conference&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4 flex-grow"&gt;Delivered a keynote address on the impact of AI on the future of career services and student development.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://lnkd.in/gQc_2rir" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;View Conference News&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- GCU Magazine --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>&lt;div class="p-6 flex flex-col h-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;GCU Magazine Feature&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4 flex-grow"&gt;A case study detailing my leadership in developing Grand Canyon University's virtual metaverse campus initiative.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://news.gcu.edu/gcu-magazine/" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Read More (Page 18)&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Research Paper --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ms-card rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>&lt;div class="p-6 flex flex-col h-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h3 class="text-2xl font-bold mb-2 text-slate-100"&gt;Peer-Reviewed Research&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p class="text-slate-400 mb-4 flex-grow"&gt;Co-authored and published research on enhancing student interaction and engagement in online learning environments.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;a href="https://digitalcommons.usu.edu/cgi/viewcontent.cgi?article=1071&amp;context=jete" target="_blank" class="font-semibold text-blue-400 hover:underline"&gt;Read Paper&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Skills Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="skills" class="py-20 section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;Skills &amp; Competencies&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mb-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-2xl font-semibold text-blue-400 mb-6"&gt;Design Leadership&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex flex-wrap justify-center items-center gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Leading Creative Teams&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Coaching &amp; Mentoring&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Design Strategy &amp; Vision&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mb-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-2xl font-semibold text-blue-400 mb-6"&gt;Product &amp; Spatial Design&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex flex-wrap justify-center items-center gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;0-to-1 Product Development&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Interaction Design&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;3D Game Development&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-2xl font-semibold text-blue-400 mb-6"&gt;Prototyping &amp; Tools&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex flex-wrap justify-center items-center gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Figma&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Unity&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Unreal Engine&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="bg-slate-800 border border-slate-700 text-blue-300 text-lg font-medium px-5 py-2 rounded-full"&gt;Generative AI&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Education Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="education" class="py-20 ms-card rounded-xl section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-4xl font-bold text-center mb-12 text-slate-100"&gt;Education &amp; Certifications&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="max-w-4xl mx-auto text-center text-slate-300 space-y-4 text-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;&lt;span class="font-bold text-blue-400"&gt;Executive MBA, Global Strategy&lt;/span&gt; – Arizona State University&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;&lt;span class="font-bold text-blue-400"&gt;Google Project Management Professional Certificate&lt;/span&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;&lt;span class="font-bold text-blue-400"&gt;A.A.S., Electrical Engineering&lt;/span&gt; – ITT Technical Institute&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Contact Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section id="contact" class="py-20 section-fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-4xl font-bold text-center mb-4 text-slate-100"&gt;Get In Touch&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto"&gt;I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision. Feel free to reach out.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;a href="mailto:greg.lucas1@icloud.com" class="bg-blue-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-blue-700 transition-all duration-300 text-xl"&gt;Email Me&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;a href="https://linkedin.com/in/greglucasai" target="_blank" class="ml-4 border-2 border-blue-500 text-blue-400 font-bold py-4 px-8 rounded-lg hover:bg-blue-500 hover:text-white transition-all duration-300 text-xl"&gt;LinkedIn&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Footer --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;footer class="border-t border-slate-800"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container mx-auto px-6 py-6 text-center text-slate-500"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;San Tan Valley, AZ | 480.332.7866 | greg.lucas1@icloud.com&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="mt-2 text-sm"&gt;&amp;copy; 2024 Greg Lucas. All Rights Reserved.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// JavaScript for mobile menu toggle</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mobileMenuButton = document.getElementById('mobile-menu-button');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mobileMenu = document.getElementById('mobile-menu');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>mobileMenuButton.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>mobileMenu.classList.toggle('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mobileMenuLinks = mobileMenu.querySelectorAll('a');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>mobileMenuLinks.forEach(link =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>link.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>mobileMenu.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Intersection Observer for fade-in sections</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sections = document.querySelectorAll('.section-fade-in');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const observer = new IntersectionObserver((entries) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>entries.forEach(entry =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (entry.isIntersecting) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>entry.target.classList.add('visible');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}, {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>threshold: 0.1</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>sections.forEach(section =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>observer.observe(section);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+<p class="p2"><br></p>
+</body>
+</html>
