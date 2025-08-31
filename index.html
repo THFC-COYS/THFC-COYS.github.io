@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Greg Lucas, a Product Manager specializing in immersive technology and AI-powered productivity.">
+    <title>Greg Lucas - Product Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .accent-text {
+            color: #22d3ee; /* cyan-400 */
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #22d3ee, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background-color: rgba(17, 24, 39, 0.5); /* slate-900 with transparency */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.7); /* slate-700 with transparency */
+            transition: all 0.3s ease-in-out;
+        }
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, 0.5); /* cyan-400 with transparency */
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-slate-300">
+
+    <!-- Header & Navigation -->
+    <header class="bg-black/50 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gradient">Greg Lucas</a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">About</a>
+                <a href="#experience" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Experience</a>
+                <a href="#portfolio" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Portfolio</a>
+                <a href="#engagements" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Engagements</a>
+                <a href="#skills" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Skills</a>
+                <a href="https://drive.google.com/file/d/12J5SC23ilit_vqzHa0AsZwDmHTSR-A3N/view?usp=share_link" target="_blank" class="border-2 border-cyan-500 text-cyan-400 font-bold py-2 px-4 rounded-lg hover:bg-cyan-500 hover:text-white transition-all duration-300">Download Resume</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-slate-300 hover:text-cyan-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95">
+            <a href="#about" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">About</a>
+            <a href="#experience" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Experience</a>
+            <a href="#portfolio" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Portfolio</a>
+            <a href="#engagements" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Engagements</a>
+            <a href="#skills" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Skills</a>
+            <a href="https://drive.google.com/file/d/12J5SC23ilit_vqzHa0AsZwDmHTSR-A3N/view?usp=share_link" target="_blank" class="block py-3 px-6 text-cyan-400 font-bold hover:bg-slate-800">Download Resume</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-24">
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center">
+            <div class="grid md:grid-cols-2 gap-12 items-center w-full">
+                <!-- Left Column: Text Content -->
+                <div class="text-center md:text-left">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-slate-100">Hi, I'm <span class="text-gradient">Greg Lucas</span></h1>
+                    <p class="text-xl md:text-2xl text-slate-400 mb-8">A customer-obsessed <span class="text-slate-200 font-medium">Product Manager</span> specializing in <span class="text-slate-200 font-medium">immersive learning technology</span> and <span class="text-slate-200 font-medium">AI-powered productivity & creativity</span>.</p>
+                    <a href="#portfolio" class="bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-cyan-700 transition-all duration-300">View My Portfolio</a>
+                    <a href="mailto:greg.lucas1@icloud.com" class="ml-4 border-2 border-cyan-500 text-cyan-400 font-bold py-3 px-6 rounded-lg hover:bg-cyan-500 hover:text-white transition-all duration-300">Contact Me</a>
+                </div>
+                <!-- Right Column: Avatar Image -->
+                <div class="hidden md:flex justify-center items-center">
+                    <img src="https://i.imgur.com/L7LCaaY.jpeg" alt="Greg Lucas Avatar" class="rounded-full w-full max-w-sm lg:max-w-md mx-auto shadow-2xl shadow-cyan-500/10">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 section-fade-in">
+            <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">About Me</h2>
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/3">
+                    <img src="https://i.imgur.com/3nz0qSZ.png" alt="Greg Lucas headshot" class="rounded-lg mx-auto shadow-2xl shadow-black/60 w-full object-cover">
+                </div>
+                <div class="md:w-2/3 text-lg text-slate-400">
+                    <p class="mb-4">
+                        As a Product Manager with over a decade of experience, I specialize in transforming ambitious ideas into market-ready products. At Grand Canyon University, I owned the content strategy for the university’s first responsible AI guidelines, creating clarity for over 80,000 users. I've supported the full go-to-market lifecycle for new AI and immersive learning products, achieving a 60% user adoption rate within just two months of launch.
+                    </p>
+                    <p>
+                        My approach is rooted in data and user-centric design. By defining clear product scenarios for AI tutors, I helped reduce user support tickets by 45%, and through data-driven experimentation on a new VR platform, I drove a 30-50% increase in user engagement. I thrive in cross-functional environments, partnering with stakeholders to translate complex business goals into clear product requirements for innovative GenAI and immersive technology.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Experience Section -->
+        <section id="experience" class="py-20 section-fade-in">
+            <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">Professional Experience</h2>
+            <div class="space-y-12 max-w-4xl mx-auto">
+                <!-- GCU Experience -->
+                <div class="glass-card p-8 rounded-xl">
+                    <h3 class="text-3xl font-bold accent-text">GRAND CANYON UNIVERSITY</h3>
+                    <div class="mb-8">
+                        <p class="text-xl text-slate-400 mb-4 font-semibold">Senior Product Manager / Faculty Lead, Learning & Technology Solutions | 2010–Present</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-2">
+                            <li>Owned the content strategy and documentation for the university's first responsible AI guidelines, creating clarity for over 80,000 users.</li>
+                            <li>Supported GTM readiness for a new portfolio of AI and immersive learning products, ensuring successful launches and 60% user adoption in two months.</li>
+                            <li>Defined product scenarios and user journeys for a suite of agentic AI tutors, resulting in a 45% reduction in user support tickets.</li>
+                            <li>Used data analysis and experimentation to validate hypotheses on a new VR community platform, leading to a 30-50% increase in user engagement.</li>
+                            <li>Partnered with a cross-functional team to launch a GPT-powered grading assistant, simplifying a key workflow for thousands of internal users.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-xl text-slate-400 mb-4 font-semibold">Lead Faculty, Introduction to Business Technology (BIT-200)</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-2">
+                            <li>Authored and delivered a foundational technology curriculum with a modern emphasis on preparing students for the future of work.</li>
+                            <li>Integrated cutting-edge topics including Generative AI, prompt engineering, and ethical AI frameworks into the core syllabus.</li>
+                            <li>Designed course modules on cloud computing fundamentals and the role of AI in data-driven business strategy.</li>
+                            <li>Mentored students on developing innovative "AI for Good" business proposals, moving beyond theory to practical, real-world application.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- MARK85LABS Experience -->
+                <div class="glass-card p-8 rounded-xl">
+                    <h3 class="text-3xl font-bold accent-text">MARK85LABS & FREELANCE CONSULTING</h3>
+                    <p class="text-xl text-slate-400 mb-4">Product Consultant, Enterprise SaaS | 2020–Present</p>
+                    <ul class="list-disc list-inside text-slate-300 space-y-2">
+                        <li>Partners with enterprise clients to translate business goals into clear product requirements for new GenAI and immersive technology use cases.</li>
+                        <li>Develops technical documentation and content strategy for new product prototypes to validate value propositions and inform GTM strategy.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 space-y-20">
+            <!-- Featured Project Section -->
+            <div id="featured-project" class="section-fade-in">
+                 <div class="glass-card rounded-xl overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/2">
+                            <img src="https://img.youtube.com/vi/qnWn-C6kec4/hqdefault.jpg" alt="Meta Workrooms for Education" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-8 md:w-1/2 flex flex-col justify-center">
+                            <h3 class="text-3xl font-bold mb-3 accent-text">Featured Project: Day in the Metaverse</h3>
+                             <div class="text-slate-400 mb-4 text-lg">
+                                <p>This project explores how spatial computing can transform remote education. The video demonstrates using Meta Workrooms as a dynamic virtual classroom for more engaging and collaborative learning experiences.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Meta Workrooms, Meta Quest 3, OBS for recording.</p>
+                            </div>
+                            <a href="https://youtu.be/qnWn-C6kec4" target="_blank" class="bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-cyan-700 transition-all duration-300 self-start">Watch the Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI & Prototyping Projects -->
+            <div class="section-fade-in">
+                <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">AI & Prototyping Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- AIThentik -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://i.imgur.com/N7uUjsg.png" alt="AIThentik Writing Tool" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">AIThentik Writing Tool</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>Developed and launched an AI tool focused on process transparency over punitive detection, preparing students for ethical AI collaboration. The tool is now used in 5 schools, reaching over 3,000 students.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> React, TypeScript, Node.js (Express), PostgreSQL (Drizzle), OpenAI GPT-4o, Tailwind CSS.</p>
+                            </div>
+                            <a href="https://www.loom.com/share/778968a316be475293e4240ee494f40d?sid=45aa34e2-703c-49a1-b57e-0fbe629f5f25" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Demo</a>
+                        </div>
+                    </div>
+                    <!-- NovaBloomLearning -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://i.imgur.com/3AGRnL3.png" alt="NovaBloom Learning Platform" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">NovaBloom Learning</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>Managed the end-to-end product lifecycle for NovaBloom from initial concept through to a successful buy-out. Led the development and launch of the AI-driven platform, which uses GPT-4o to generate personalized learning paths, culminating in a successful exit that validated the product's market value.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> React, TypeScript, Node.js, PostgreSQL, OpenAI GPT-4o, Tailwind CSS.</p>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Faculty Assistant AI Dashboard -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://i.imgur.com/YmmGouR.png" alt="Faculty Assistant AI Dashboard" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Faculty Assistant AI Dashboard</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>Managed the full product lifecycle of a faculty productivity tool, evolving an initial custom GPT prototype into a scalable, standalone software suite. Following successful development and testing phases, the final product was delivered for production and successfully integrated as a core feature within GCU's broader Mosaic AI platform.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> React, TypeScript, Node.js (Express), PostgreSQL, OpenAI GPT-4o, Tailwind CSS.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- AI Avatar Project -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/W6DRBMs6UMo/hqdefault.jpg" alt="AI Virtual Avatar in a metaverse environment" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">AI-Powered Virtual Avatar</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>An AI-driven virtual teaching assistant in an immersive environment, designed to provide students with 24/7 course support.</p>
+                                 <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Unity, C#, OpenAI GPT-4o, ElevenLabs TTS, Node.js, WebSocket.</p>
+                            </div>
+                            <a href="https://youtu.be/W6DRBMs6UMo" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Demo</a>
+                        </div>
+                    </div>
+                    <!-- Mosaic Project -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Mosaic AI Platform</h3>
+                             <div class="text-slate-400 mb-4 flex-grow">
+                                <p>Led the 0-to-1 product design for a pioneering AI platform serving cross-functional teams including faculty, students, and counselors.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> React, Python (FastAPI), PostgreSQL, TensorFlow, AWS (S3, ECS).</p>
+                            </div>
+                            <a href="https://mediaservices.gcu.edu/products/mosaic" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">View Product</a>
+                        </div>
+                    </div>
+                     <!-- AI Lab -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">AI Lab & Google Partnership</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>Managed the end-to-end project lifecycle for the university's AI Lab, from initial research and needs analysis through to establishing a strategic partnership with Google. I led a successful beta testing phase to refine the curriculum before launching and scaling the program, providing hands-on AI skill development to over 100,000 online and on-campus students.</p>
+                            </div>
+                            <a href="https://news.gcu.edu/colangelo-college-of-business/ai-lab-gives-students-a-chance-at-badge-of-honor/" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Metaverse & Spatial Computing Projects -->
+            <div class="section-fade-in">
+                <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">Metaverse & Spatial Computing Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Avondale Metaverse Space -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/UhaNDipvA2Y/hqdefault.jpg" alt="Avondale Metaverse Space" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Avondale Metaverse Space</h3>
+                             <div class="text-slate-400 mb-4 flex-grow">
+                                <p>Delivered a custom metaverse environment for the City of Avondale to reimagine their digital presence and engage younger demographics. Since launch, the city has utilized the space to host workshops on financial literacy, AI safety, and small business development.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Unity, Spatial.io SDK, C#, Blender.</p>
+                            </div>
+                             <a href="https://youtu.be/UhaNDipvA2Y" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Video</a>
+                        </div>
+                    </div>
+                    <!-- Career Services in the Metaverse -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/jV0j2nFGJjo/hqdefault.jpg" alt="Career Services in the Metaverse" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Career Services in the Metaverse</h3>
+                             <div class="text-slate-400 mb-4 flex-grow">
+                                <p>This project demonstrates hosting university career service events in the metaverse to increase student engagement and accessibility.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Meta Horizon Worlds, TypeScript for scripting, Blender, Adobe Substance Painter.</p>
+                            </div>
+                            <a href="https://youtu.be/jV0j2nFGJjo" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Video</a>
+                        </div>
+                    </div>
+                    <!-- Metaverse Shopping -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/_PAuqg__ocw/hqdefault.jpg" alt="Metaverse Shopping Experience" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Metaverse Retail Experience</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>A forward-thinking concept that explores the future of retail by creating an immersive shopping experience for digital-native consumers.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Unreal Engine 5, Node.js, MongoDB, WebXR for browser support.</p>
+                            </div>
+                            <a href="https://youtu.be/_PAuqg__ocw" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Video</a>
+                        </div>
+                    </div>
+                    <!-- Doctoral Community -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/PRvmWzVivBQ/hqdefault.jpg" alt="Doctoral students in Spatial.io" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Doctoral Community in the Metaverse</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>A proof-of-concept using Spatial.io to create a sense of presence and community for remote doctoral students, combating isolation.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Spatial.io Platform, Spatial Creator Toolkit, Unity, C#.</p>
+                            </div>
+                            <a href="https://youtu.be/PRvmWzVivBQ" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Video</a>
+                        </div>
+                    </div>
+                    <!-- Digital Avatars -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/77rAYDKkMB4/hqdefault.jpg" alt="Digital Avatars and Collectibles" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Digital Avatars & Collectibles</h3>
+                             <div class="text-slate-400 mb-4 flex-grow">
+                                <p>This project demonstrates a creative pipeline for turning 3D digital avatars into unique, tangible collectible items.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Blender, ZBrush, Ready Player Me, Python, React.</p>
+                            </div>
+                            <a href="https://youtu.be/77rAYDKkMB4" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Video</a>
+                        </div>
+                    </div>
+                    <!-- Corporate Metaverse Space -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                        <img src="https://img.youtube.com/vi/cAyL2IuBfs8/hqdefault.jpg" alt="Metaverse Conference Space" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Corporate Metaverse Space</h3>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>A customizable virtual environment designed for enterprise use, perfect for employee onboarding, training, and client engagement.</p>
+                                <p class="mt-3 text-sm"><strong class="text-slate-300">Tech Stack:</strong> Unity, Photon Fusion (networking), Go, PostgreSQL, deployed to Meta Quest Store.</p>
+                            </div>
+                            <a href="https://youtu.be/cAyL2IuBfs8" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Watch Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publications & Articles -->
+            <div class="section-fade-in">
+                <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">Publications & Articles</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- GCU Magazine Feature -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">GCU Magazine Feature</h3>
+                            <p class="text-slate-400 mb-4 flex-grow">A narrative case study detailing my work in pioneering the university's innovative metaverse campus initiative.</p>
+                            <a href="https://news.gcu.edu/gcu-magazine/" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read Article</a>
+                        </div>
+                    </div>
+                    <!-- 9to5Vision YouTube Channel -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">9to5Vision YouTube Channel</h3>
+                            <p class="text-slate-400 mb-4 flex-grow">My YouTube channel dedicated to the Apple Vision Pro and the world of spatial computing apps and experiences.</p>
+                            <a href="https://www.youtube.com/@9to5Vision" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">View Channel</a>
+                        </div>
+                    </div>
+                    <!-- AI-Q Newsletter -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">AI-Q Newsletter</h3>
+                            <p class="text-slate-400 mb-4 flex-grow">My LinkedIn newsletter sharing insights, analysis, and tutorials on the evolving world of Artificial Intelligence.</p>
+                            <a href="https://www.linkedin.com/newsletters/ai-q-intelligence-evolved-7178522583783337985/" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">View on LinkedIn</a>
+                        </div>
+                    </div>
+                     <!-- GCU Blog -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">GCU Technology & Education Blog</h3>
+                            <p class="text-slate-400 mb-4 flex-grow">A collection of my articles on the intersection of technology, education, and innovation, published on the official GCU blog.</p>
+                            <a href="https://www.gcu.edu/blog/author/greg-lucas" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read My Articles</a>
+                        </div>
+                    </div>
+                    <!-- GCU News Feature: AI Lab -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">GCU News Feature: AI Lab</h3>
+                            <p class="text-slate-400 mb-4 flex-grow">A news story from GCU highlighting the AI Lab I initiated in partnership with Google to drive hands-on AI skilling for students.</p>
+                            <a href="https://news.gcu.edu/colangelo-college-of-business/ai-lab-gives-students-a-chance-at-badge-of-honor/" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read News Story</a>
+                        </div>
+                    </div>
+                    <!-- Peer-Reviewed Research -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                         <div class="p-6 flex flex-col h-full flex-grow">
+                            <h3 class="text-2xl font-bold mb-2 text-slate-100">Peer-Reviewed Research</h3>
+                            <p class="text-slate-400 mb-4 flex-grow">Co-authored academic paper on interaction in online learning environments, published in a peer-reviewed journal.</p>
+                            <a href="https://digitalcommons.usu.edu/cgi/viewcontent.cgi?article=1071&context=jete" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read Paper</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        
+        <!-- Speaking & Engagements Section -->
+        <section id="engagements" class="py-20 section-fade-in">
+            <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">Speaking & Engagements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- AZ Career Services Conference -->
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                    <img src="https://i.imgur.com/349LcQb.jpg" alt="Greg Lucas speaking at a conference" class="w-full h-56 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold mb-2 text-slate-100">AZ Statewide Career Services Conference</h3>
+                        <p class="text-slate-400 mb-4 flex-grow">Delivered a keynote address on the intersection of AI and career services, discussing how new technologies are shaping the future of workforce development.</p>
+                        <a href="https://news.gcu.edu/gcu-news/how-career-services-employ-innovation-to-prepare-students-for-jobs/" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read News Story</a>
+                    </div>
+                </div>
+                <!-- Transforming Local Government -->
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                    <img src="https://i.imgur.com/FOnV4Ho.jpeg" alt="Greg Lucas with conference attendees" class="w-full h-56 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold mb-2 text-slate-100">Transforming Local Government Conference</h3>
+                        <p class="text-slate-400 mb-4 flex-grow">Presented strategies for how city governments can leverage the metaverse to connect with and serve younger, digital-native demographics.</p>
+                    </div>
+                </div>
+                <!-- GCU Integrity Week -->
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                    <img src="https://i.imgur.com/bfjoPue.jpeg" alt="Greg Lucas on a panel discussion" class="w-full h-56 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold mb-2 text-slate-100">GCU Integrity Week Panel</h3>
+                        <p class="text-slate-400 mb-4 flex-grow">Joined a panel discussion on navigating AI's impact with integrity in industry, sharing insights on responsible innovation and ethical considerations.</p>
+                    </div>
+                </div>
+                <!-- Breaking Barriers Leadership Conference -->
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                    <img src="https://i.imgur.com/LEZqSjt.jpeg" alt="Breaking Barriers Leadership Conference" class="w-full h-56 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold mb-2 text-slate-100">Breaking Barriers Leadership Conference</h3>
+                        <p class="text-slate-400 mb-4 flex-grow">Led a session titled "Navigating the Realm of AI" with GCU alumni and students, discussing the practical and ethical dimensions of AI in business.</p>
+                        <a href="https://news.gcu.edu/gcu-news/__trashed-15/" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">Read News Story</a>
+                    </div>
+                </div>
+                <!-- The Human Environment Conference -->
+                <div class="glass-card rounded-xl overflow-hidden flex flex-col">
+                    <img src="https://i.imgur.com/mz2xhfw.jpeg" alt="The Human Environment Conference" class="w-full h-56 object-cover">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-2xl font-bold mb-2 text-slate-100">The Human Environment Conference</h3>
+                        <p class="text-slate-400 mb-4 flex-grow">Presented my session "Beyond the Screen: Conversational AI and Spatial Computing" at a future-focused industry event, exploring the next generation of user interaction.</p>
+                        <a href="https://events.blackthorn.io/en/1N1TpJJ7/g/0BNG419QAx/the-past-present-and-future-of-the-human-environment-4a3NKgcdaq/overview" target="_blank" class="font-semibold text-cyan-400 hover:underline self-start mt-auto">View Event</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 section-fade-in">
+            <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">Skills & Competencies</h2>
+            <div class="text-center">
+                <div class="mb-10">
+                    <h3 class="text-2xl font-semibold accent-text mb-6">Product Management</h3>
+                    <div class="flex flex-wrap justify-center items-center gap-4">
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">Content Strategy & Documentation</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">Go-to-Market (GTM) Planning</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">User Journeys</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">A/B Testing</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">User Insights & Research</span>
+                    </div>
+                </div>
+                <div class="mb-10">
+                    <h3 class="text-2xl font-semibold accent-text mb-6">Enterprise Technology</h3>
+                    <div class="flex flex-wrap justify-center items-center gap-4">
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">Learning Management Systems (LMS)</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">Data Analysis (Power BI)</span>
+                    </div>
+                </div>
+                 <div class="mb-10">
+                    <h3 class="text-2xl font-semibold accent-text mb-6">AI / ML</h3>
+                    <div class="flex flex-wrap justify-center items-center gap-4">
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">Generative AI (OpenAI, Bedrock)</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">RAG Pipelines</span>
+                         <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">AWS SageMaker</span>
+                        <span class="glass-card text-slate-300 text-lg font-medium px-5 py-2 rounded-full">LangChain</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-20 glass-card rounded-xl section-fade-in">
+            <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">Education & Certifications</h2>
+            <div class="max-w-4xl mx-auto text-center text-slate-300 space-y-4 text-lg">
+                <p><span class="font-bold accent-text">AWS Certified Machine Learning – Specialty</span></p>
+                <p><span class="font-bold accent-text">AWS Machine Learning Engineer Certification</span> (estimated September 2025)</p>
+                <p><span class="font-bold accent-text">Executive MBA, Global Strategy</span> – Arizona State University</p>
+                <p><span class="font-bold accent-text">A.A.S., Electrical Engineering</span> – ITT Technical Institute</p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 section-fade-in">
+            <h2 class="text-4xl font-bold text-center mb-4 text-slate-100">Get In Touch</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">I'm always open to discussing new products, creative ideas, or opportunities to be part of an ambitious vision. Feel free to reach out.</p>
+            <div class="text-center">
+                 <a href="mailto:greg.lucas1@icloud.com" class="bg-cyan-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-cyan-700 transition-all duration-300 text-xl">Email Me</a>
+                 <a href="https://linkedin.com/in/greglucasai" target="_blank" class="ml-4 border-2 border-cyan-500 text-cyan-400 font-bold py-4 px-8 rounded-lg hover:bg-cyan-500 hover:text-white transition-all duration-300 text-xl">LinkedIn</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/50">
+        <div class="container mx-auto px-6 py-6 text-center text-slate-500">
+            <p>San Tan Valley, AZ | 480.332.7866 | greg.lucas1@icloud.com</p>
+            <p class="mt-2 text-sm">&copy; 2024 Greg Lucas. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for fade-in sections
+        const sections = document.querySelectorAll('.section-fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
