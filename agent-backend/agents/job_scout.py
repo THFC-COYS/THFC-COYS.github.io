@@ -7,28 +7,36 @@ against the master resume. Returns structured job objects ready for the resume t
 import json
 import anthropic
 
-SYSTEM_PROMPT = """You are a specialized job scout agent for Greg Lucas, a higher-education
-technology leader with 15+ years of experience at the intersection of AI and education.
+SYSTEM_PROMPT = """You are a specialized job scout agent for Greg Lucas, a technology leader
+with 15+ years of experience at the intersection of AI, innovation, and education.
 
 Your role:
 1. Search for job openings that match his background
-2. Focus on roles involving: LMS strategy, AI in education, EdTech leadership,
-   academic technology, learning platforms, digital learning innovation
-3. Target seniority: Director, VP, Head of, Senior Manager, Chair, or Founder-level
-4. Prioritize roles at: universities, EdTech companies, LMS vendors, OPM providers,
-   AI companies with education products, corporate L&D
-5. Look for postings from the last 30 days
+2. Cast a WIDE net — include any of these role types:
+   - AI product, strategy, or platform roles (Director/VP of AI, Head of AI Products)
+   - Innovation leadership (Chief Innovation Officer, Director of Innovation, VP of R&D)
+   - EdTech and learning technology leadership
+   - Academic technology and LMS strategy
+   - Corporate L&D technology leadership
+   - AI company roles focused on education, training, or workforce development
+   - Instructional design platform or learning experience platform (LXP) leadership
+3. Target seniority: Director, VP, Head of, Senior Manager, Chief, or Founder-level
+4. Prioritize roles at: AI companies, EdTech companies, universities, LMS vendors,
+   OPM providers, corporate L&D, workforce tech companies, HR tech companies
+5. Look for postings from the last 60 days
 6. Extract: title, company, URL, location, salary (if listed), key requirements
 
 Search queries to use:
-- "Director of Academic Technology" site:linkedin.com OR site:indeed.com
-- "Head of AI Education" OR "VP Learning Technology" job opening 2025
-- "LMS Director" OR "EdTech Platform Director" higher education hiring
-- "AI Learning Systems" Director OR Lead job posting
-- "Director of Digital Learning Innovation" university OR edtech
-- site:greenhouse.io OR site:lever.co "learning management" director AI
+- "Director of AI" OR "VP of AI" OR "Head of AI" job opening 2025 2026
+- "Chief Innovation Officer" OR "Director of Innovation" hiring 2025 2026
+- "VP of Learning Technology" OR "Director of Learning Technology" job
+- "Head of EdTech" OR "Director of EdTech" company hiring
+- "AI in Education" director OR VP OR lead role site:linkedin.com OR site:greenhouse.io
+- "Director of Learning Experience" OR "Head of Learning Products" job posting
+- "VP of Product" AI education OR learning platform hiring
+- site:greenhouse.io OR site:lever.co "artificial intelligence" director learning OR education
 
-Return results as a JSON array. For each job include:
+IMPORTANT: Return results as a JSON array — this is required. For each job include:
 {
   "title": "...",
   "company": "...",
@@ -39,7 +47,9 @@ Return results as a JSON array. For each job include:
   "description": "3-5 sentence summary of role and requirements",
   "key_requirements": ["..."],
   "source": "linkedin|indeed|greenhouse|lever|other"
-}"""
+}
+
+You MUST return a JSON array even if some fields are incomplete. Do not return prose."""
 
 
 async def run_job_scout(target_count: int = 10) -> list[dict]:
@@ -54,7 +64,6 @@ async def run_job_scout(target_count: int = 10) -> list[dict]:
     async with client.messages.stream(
         model="claude-opus-4-6",
         max_tokens=8000,
-        thinking={"type": "adaptive"},
         system=SYSTEM_PROMPT,
         tools=[{"type": "web_search_20260209", "name": "web_search"}],
         messages=[{
@@ -62,17 +71,20 @@ async def run_job_scout(target_count: int = 10) -> list[dict]:
             "content": f"""Search for {target_count} current job openings that match Greg Lucas's profile.
 
 Greg's background:
-- 15+ years in higher-ed technology leadership
+- 15+ years in technology leadership across AI, education, and innovation
 - Faculty Chair & Academic Innovation Leader at GCU (Grand Canyon University)
 - Led LMS migration from Blackboard to Halo LMS
 - Chaired Academic Technology AI subcommittee
 - Founded pAIgeBreaker (AI-native learning platform with 7-agent pipeline, LTI 1.3)
 - Founded LMSBreaker / MoltALP (AI-native LMS replacement)
 - SNHU COLT Team Lead of the Year (2020)
-- Deep expertise: LMS optimization, AI integration, CBE, LTI, vendor roadmaps
+- Deep expertise: AI product strategy, LMS optimization, AI integration, CBE, LTI, vendor roadmaps
 
-Search for roles posted in the last 30 days. Return your findings as a JSON array
-of job objects. Only include real, specific job postings with URLs."""
+Search broadly — include AI leadership roles, innovation director roles, EdTech roles,
+and learning technology roles. Look for postings from the last 60 days.
+
+IMPORTANT: You MUST return your findings as a valid JSON array of job objects.
+Start your final response with [ and end with ]. Include {target_count} jobs."""
         }]
     ) as stream:
         response = await stream.get_final_message()
