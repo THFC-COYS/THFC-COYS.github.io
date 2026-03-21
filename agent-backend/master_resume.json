@@ -1,0 +1,178 @@
+{
+  "personal": {
+    "name": "Greg Lucas",
+    "title": "Faculty Chair · Academic Technology & Innovative Delivery Models",
+    "location": "San Tan Valley, AZ",
+    "phone": "480-332-7866",
+    "email": "greg.lucas1@icloud.com",
+    "portfolio": "paigebreaker.com",
+    "secondary_site": "lmsbreaker.com",
+    "linkedin": "https://linkedin.com/in/greglucasai",
+    "summary": "Higher-education technology leader with 15+ years driving academic technology strategy, LMS optimization, AI integration, and scalable online delivery models. Expertise in leading cross-functional teams to optimize learning management systems (including transitions from legacy platforms like Blackboard to custom LMS like Halo at GCU), manage continuous delivery/release cycles, oversee LTI integrations and functional testing, collaborate with vendors on roadmaps, and implement AI-enabled solutions for enhanced student success and operational efficiency. Founder of pAIgeBreaker and LMSBreaker (MoltALP) — AI-native, agentic platforms with LTI compatibility that personalize learning, automate content generation, and support adaptive ecosystems. Proven in translating institutional priorities into tactical implementations, stakeholder communication, and data-driven refinements in complex, enterprise environments."
+  },
+  "core_competencies": [
+    "LMS Optimization & Continuous Delivery",
+    "Academic Technology Strategy & Roadmapping",
+    "AI Integration & Agentic Learning Systems",
+    "Vendor Collaboration & Roadmap Alignment",
+    "LTI/Integration Testing & Functional/UAT Management",
+    "Cross-Functional Team Leadership",
+    "Online Portfolio Support & Course Roll/Grade Pass-Back Processes",
+    "Data Analytics in Learning Ecosystems",
+    "Pilot Development & Scalable Solution Implementation",
+    "Faculty/Staff Training & Adoption"
+  ],
+  "skills": {
+    "ai_ml": [
+      "Generative AI", "LLM orchestration", "Agentic AI systems", "Prompt engineering",
+      "AI curriculum integration", "AI literacy frameworks", "Claude API", "OpenAI API",
+      "Adaptive learning systems", "Predictive at-risk analytics", "Bloom's Taxonomy AI tagging"
+    ],
+    "lms_edtech": [
+      "LMS administration", "Blackboard", "Halo LMS (GCU)", "Canvas", "Moodle",
+      "LTI 1.3 integration", "SCORM/xAPI", "Grade pass-back", "Course rollover workflows",
+      "CBE (Competency-Based Education)", "Adaptive learning platforms", "UAT/functional testing"
+    ],
+    "leadership_strategy": [
+      "Faculty leadership (30-50 person teams)", "Academic technology strategy",
+      "Institutional change management", "Vendor management", "Roadmap planning",
+      "Cross-functional collaboration", "Stakeholder communication", "Pilot program design",
+      "Executive presentations", "Grant and budget oversight"
+    ],
+    "platforms_tools": [
+      "Python", "JavaScript", "React", "Next.js", "Vercel",
+      "GitHub", "Google AI tools", "Notion", "Airtable", "Microsoft 365",
+      "Loom", "Banner (SIS integration)"
+    ]
+  },
+  "experience": [
+    {
+      "title": "Faculty & COLT Team Lead",
+      "company": "Southern New Hampshire University (SNHU)",
+      "location": "Remote",
+      "start": "2014",
+      "end": "Present",
+      "highlights": [
+        "Operated within one of the largest online CBE and digital learning ecosystems, gaining deep fluency in large-scale academic technology infrastructure, delivery model evolution, and institutional priorities.",
+        "Promoted to COLT Team Lead (2018); mentored faculty, drove instructional quality, and ensured operational integrity of the online learning environment.",
+        "Awarded Team Lead of the Year (2020) for leadership in faculty development, technology adoption, and student success outcomes.",
+        "Advised on AI tool adoption, emerging platforms, and LMS best practices to support forward-looking technology integration.",
+        "Maintained active engagement in national conversations on academic technology and delivery innovation."
+      ]
+    },
+    {
+      "title": "Founder & Lead Architect",
+      "company": "pAIgeBreaker",
+      "location": "Remote",
+      "start": "2025",
+      "end": "Present",
+      "url": "https://paigebreaker.com",
+      "highlights": [
+        "Founded and architected an AI-native learning platform that replaces traditional textbooks with a network of specialized AI agents, delivering personalized, competency-aligned content via LTI 1.3 integration.",
+        "Designed agentic pipeline with seven core AI agents (Outliner, Generator, Assessor, Scorer, Persona Router, Mastery Gate, Remediator) that orchestrate dynamic curriculum generation, adaptive difficulty, and mastery-based progression.",
+        "Built Learning Genome for portable student personalization, real-time remediation, institutional audit/controls, Bloom's/DOK tagging, and accreditation exports.",
+        "Achieved 70% cost reduction vs. legacy models while improving content relevance and engagement.",
+        "Developed integration roadmaps for pilots in higher education and K-12."
+      ]
+    },
+    {
+      "title": "Founder & Lead Architect",
+      "company": "LMSBreaker (MoltALP)",
+      "location": "Remote",
+      "start": "2024",
+      "end": "Present",
+      "url": "https://lmsbreaker.com",
+      "highlights": [
+        "Developed MoltALP, an AI-native platform built to transform/replace traditional LMS with native agentic modules for discussion intelligence, course architecture, automated grading, early warnings, and auto-responses.",
+        "Focused on AI-orchestrated education with measurable outcomes in faculty efficiency and student engagement."
+      ]
+    },
+    {
+      "title": "Faculty Chair & Academic Innovation Leader",
+      "company": "Grand Canyon University (GCU)",
+      "location": "Phoenix, AZ",
+      "start": "2010",
+      "end": "Present",
+      "highlights": [
+        "Served as executive-level innovation partner to college Deans and senior leadership, leading cross-college technology strategy, AI integration, pilot execution, and new delivery model development.",
+        "Led institution-wide transition from Blackboard to GCU's internally developed Halo LMS; owned integration roadmap (including Banner components), faculty adoption strategy, and alignment with course competencies.",
+        "Chaired Academic Technology AI subcommittee and led New Innovative Online (NIO) initiative, identifying opportunities for emerging technologies and integrating AI/custom extensions.",
+        "Directed cross-college faculty teams of 30-50 members across multiple colleges with accountability for instructional quality, technology adoption, and strategic execution.",
+        "Partnered with Academic Web Services, Curriculum, and VP-level leaders to develop AI-powered student support tools, dashboards, and cross-platform integrations.",
+        "Oversaw pilots saving >$5M annually including AI-integrated curriculum (Engineering), immersive technologies (Sciences), and custom content replacing third-party dependencies.",
+        "Led implementation of Google AI Badges and other industry credentials; delivered workshops on AI in education, LMS innovation, and emerging technologies.",
+        "Collaborated on overseas enrollment strategy, analyzing trends and producing deliverables to inform technology/program roadmaps."
+      ]
+    },
+    {
+      "title": "Technology Operations",
+      "company": "Intel Corporation",
+      "location": "Chandler, AZ",
+      "start": "Early Career",
+      "end": "2010",
+      "highlights": [
+        "Developed systems thinking and precision execution skills in large-scale engineering and technology environments."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master's Degree",
+      "field": "Business / Technology",
+      "institution": "Not specified"
+    },
+    {
+      "degree": "Bachelor's Degree",
+      "field": "Business / Technology",
+      "institution": "Not specified"
+    }
+  ],
+  "innovation_projects": [
+    {
+      "name": "pAIgeBreaker",
+      "url": "https://paigebreaker.com",
+      "description": "AI-native learning platform with 7-agent agentic pipeline replacing traditional textbooks. LTI 1.3 compatible, adaptive difficulty, mastery-based progression."
+    },
+    {
+      "name": "LMSBreaker (MoltALP)",
+      "url": "https://lmsbreaker.com",
+      "description": "AI-orchestrated LMS replacement with native agentic modules for course architecture, automated grading, early warning systems, and discussion intelligence."
+    },
+    {
+      "name": "Flourish AI",
+      "url": "https://gcu-flourish-fbn2kp3g0-greglucas1-9934s-projects.vercel.app/executive-tour",
+      "description": "Ethical AI agents for student/professional support, demonstrating AI system design and cross-sector application."
+    }
+  ],
+  "awards_recognition": [
+    "COLT Team Lead of the Year, SNHU (2020)",
+    "Featured in GCU publications on AI innovation, metaverse/virtual engagement, and career preparation technologies",
+    "Frequent presenter on AI-enabled learning ecosystems, responsible AI, and academic technology delivery models"
+  ],
+  "target_roles": [
+    "Director of Academic Technology", "VP of Learning Technology",
+    "Chief Learning Technology Officer", "Head of AI in Education",
+    "LMS Director / Platform Lead", "EdTech Product Director",
+    "AI Learning Systems Lead", "Director of Digital Learning Innovation",
+    "Academic Innovation Lead", "Senior Manager, Learning Platforms",
+    "Dean of Online Learning Technology", "AI Curriculum Director"
+  ],
+  "target_industries": [
+    "Higher Education (Universities, Colleges)",
+    "EdTech companies (LMS vendors, adaptive learning platforms)",
+    "AI companies with education products",
+    "Online Program Management (OPM) providers",
+    "Corporate Learning & Development (L&D)",
+    "Government/Non-profit education agencies",
+    "K-12 EdTech"
+  ],
+  "keywords_ats": [
+    "LMS", "Canvas", "Blackboard", "Moodle", "D2L Brightspace", "Instructure",
+    "LTI", "SCORM", "xAPI", "academic technology", "edtech", "AI integration",
+    "online learning", "CBE", "competency-based education", "adaptive learning",
+    "faculty development", "instructional design", "digital transformation",
+    "higher education", "learning management system", "student success",
+    "generative AI", "agentic AI", "LLM", "course design", "curriculum",
+    "vendor management", "roadmap", "UAT", "product management"
+  ]
+}
