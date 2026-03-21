@@ -57,6 +57,19 @@ async def init_db():
                 status TEXT DEFAULT 'draft'
             )
         """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS submissions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                job_id INTEGER REFERENCES jobs(id),
+                platform TEXT NOT NULL,
+                success BOOLEAN DEFAULT FALSE,
+                confirmation_id TEXT,
+                message TEXT,
+                ats_score INTEGER,
+                submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                resume_pdf_path TEXT
+            )
+        """)
         await db.commit()
 
 
@@ -155,6 +168,40 @@ async def get_application(job_id: int) -> dict:
         )
         row = await cursor.fetchone()
         return dict(row) if row else None
+
+
+async def save_submission(job_id: int, result: dict, ats_score: int = 0) -> int:
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("""
+            INSERT INTO submissions (job_id, platform, success, confirmation_id, message, ats_score, resume_pdf_path)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (
+            job_id,
+            result.get("platform", "unknown"),
+            result.get("success", False),
+            result.get("confirmation_id"),
+            result.get("message", ""),
+            ats_score,
+            result.get("resume_pdf_path", "")
+        ))
+        await db.commit()
+        return cursor.lastrowid
+
+
+async def get_submissions(job_id: int = None) -> list:
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        if job_id:
+            cursor = await db.execute(
+                "SELECT * FROM submissions WHERE job_id = ? ORDER BY submitted_at DESC",
+                (job_id,)
+            )
+        else:
+            cursor = await db.execute(
+                "SELECT s.*, j.title, j.company FROM submissions s JOIN jobs j ON s.job_id = j.id ORDER BY s.submitted_at DESC"
+            )
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]
 
 
 async def get_interview_prep(job_id: int) -> dict:

@@ -27,7 +27,7 @@ from pydantic import BaseModel
 
 from database import (
     init_db, get_jobs, get_job, update_job_status,
-    get_application, get_interview_prep
+    get_application, get_interview_prep, get_submissions
 )
 from orchestrator import (
     run_job_discovery, process_job_full_pipeline,
@@ -211,6 +211,73 @@ async def update_status(job_id: int, update: StatusUpdate):
         raise HTTPException(status_code=404, detail="Job not found")
     await update_job_status(job_id, update.status)
     return {"job_id": job_id, "status": update.status}
+
+
+@app.get("/api/submissions")
+async def list_submissions(job_id: int = None):
+    """Get all application submissions, optionally filtered by job."""
+    submissions = await get_submissions(job_id=job_id)
+    return {"submissions": submissions, "count": len(submissions)}
+
+
+@app.post("/api/jobs/{job_id}/submit")
+async def manual_submit(job_id: int, background_tasks: BackgroundTasks):
+    """
+    Manually trigger application submission for a job
+    (bypasses fit score threshold check).
+    """
+    job = await get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    app_data = await get_application(job_id)
+    if not app_data:
+        raise HTTPException(
+            status_code=400,
+            detail="No tailored resume found. Run /prepare first."
+        )
+
+    background_tasks.add_task(_run_manual_submit_task, job_id)
+    return {
+        "message": f"Manual submission started for job {job_id}",
+        "job": f"{job['title']} at {job['company']}"
+    }
+
+
+async def _run_manual_submit_task(job_id: int):
+    from agents.application_submitter import submit_application
+    from database import save_submission
+    import json
+
+    master_resume_path = Path(__file__).parent / "master_resume.json"
+    with open(master_resume_path) as f:
+        master_resume = json.load(f)
+
+    job = await get_job(job_id)
+    app_data = await get_application(job_id)
+
+    if not job or not app_data:
+        return
+
+    # Override fit score threshold for manual submission
+    job["fit_score"] = 1.0
+
+    try:
+        result = await submit_application(
+            job=job,
+            resume_text=app_data["tailored_resume"],
+            cover_letter_text=app_data["cover_letter"],
+            master_resume=master_resume
+        )
+        await save_submission(job_id, result)
+        if result.get("success"):
+            await update_job_status(job_id, "applied")
+            logger.info(f"Manual submission complete: {result.get('confirmation_id')}")
+        else:
+            await update_job_status(job_id, "submission_failed")
+            logger.warning(f"Manual submission failed: {result.get('message')}")
+    except Exception as e:
+        logger.error(f"Manual submit task failed: {e}")
 
 
 @app.post("/api/run-full-pipeline")

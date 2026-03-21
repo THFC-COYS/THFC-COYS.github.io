@@ -23,7 +23,7 @@ from agents.interview_prep import generate_interview_prep
 from database import (
     init_db, save_job, get_jobs, get_job,
     update_job_status, save_application,
-    save_interview_prep, save_outreach
+    save_interview_prep, save_outreach, save_submission, get_submissions
 )
 
 logger = logging.getLogger(__name__)
@@ -117,6 +117,47 @@ async def process_job_full_pipeline(job_id: int) -> dict:
     except Exception as e:
         logger.error(f"Interview prep agent failed: {e}")
         results["interview_prep"] = {"error": str(e)}
+
+    # Step 4: Auto-submit if fit score meets threshold
+    fit_score = job.get("fit_score", 0.0)
+    ats_score = results.get("application", {}).get("ats_score", 0)
+    ats_passed = results.get("application", {}).get("ats_passed", False)
+
+    if fit_score >= FIT_SCORE_THRESHOLD and ats_passed:
+        logger.info(f"Auto-submitting: fit={fit_score:.2f}, ATS={ats_score}% — thresholds met")
+        try:
+            from agents.application_submitter import submit_application
+            submission_result = await submit_application(
+                job=job,
+                resume_text=results.get("application", {}).get("resume", ""),
+                cover_letter_text=results.get("application", {}).get("cover_letter", ""),
+                master_resume=master_resume
+            )
+            submission_id = await save_submission(job_id, submission_result, ats_score)
+            submission_result["id"] = submission_id
+            results["submission"] = submission_result
+
+            if submission_result.get("success"):
+                await update_job_status(job_id, "applied")
+                logger.info(f"Application submitted! Confirmation: {submission_result.get('confirmation_id')}")
+            else:
+                await update_job_status(job_id, "submission_failed")
+                logger.warning(f"Submission failed: {submission_result.get('message')}")
+        except Exception as e:
+            logger.error(f"Auto-submit failed: {e}")
+            results["submission"] = {"error": str(e), "auto_submitted": False}
+    elif not ats_passed:
+        logger.warning(f"ATS score {ats_score}% below 96% target — skipping auto-submit. Review resume manually.")
+        results["submission"] = {
+            "auto_submitted": False,
+            "reason": f"ATS score {ats_score}% below 96% target. Review and re-run to improve before submitting."
+        }
+    else:
+        logger.info(f"Fit score {fit_score:.2f} below auto-submit threshold — queued for manual review")
+        results["submission"] = {
+            "auto_submitted": False,
+            "reason": f"Fit score {fit_score:.2f} below threshold. Mark as approved to submit manually."
+        }
 
     results["job"] = job
     logger.info(f"Pipeline complete for job {job_id}")

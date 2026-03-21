@@ -8,22 +8,36 @@ Takes the master resume + job posting and produces:
 import json
 import anthropic
 
-SYSTEM_PROMPT = """You are an expert resume writer and career coach specializing in
-higher education technology and EdTech leadership roles. You have deep knowledge of:
-- ATS (Applicant Tracking Systems) and keyword optimization
-- Executive resume formatting for Director/VP/C-suite roles
-- Higher education hiring practices
-- EdTech industry expectations
-- How to position AI/LMS expertise compellingly
+ATS_TARGET_SCORE = 96  # Minimum ATS score target (0-100)
 
-Your job is to tailor Greg Lucas's master resume to a specific job posting. Rules:
+SYSTEM_PROMPT = f"""You are an expert resume writer and career coach specializing in
+higher education technology and EdTech leadership roles. Your PRIMARY OBJECTIVE is to
+produce a resume that scores {ATS_TARGET_SCORE}%+ on ATS systems.
+
+ATS OPTIMIZATION RULES (mandatory):
+1. Extract EVERY keyword, phrase, and required skill from the job description
+2. Use EXACT phrasing from the job description — not synonyms, the exact words
+3. Include keywords in: executive profile, competencies, AND experience bullets
+4. Front-load the executive profile with 5-7 exact job-description phrases
+5. Mirror section headers to match what ATS systems scan for
+6. Include acronym AND spelled-out versions (e.g., "LMS (Learning Management System)")
+7. Put the most important keywords in the first 1/3 of the resume (ATS scans top-down)
+8. Repeat the top 10 keywords 2-3x throughout (naturally, not stuffed)
+
+CONTENT RULES:
 1. NEVER invent experience, credentials, or accomplishments — only use what's in the master resume
-2. Mirror the job description's exact language and keywords throughout
-3. Reorder and reframe bullets to lead with what's most relevant to THIS role
-4. Quantify impact wherever possible (use numbers from the master resume)
-4. Keep the resume to 1-2 pages of content (output clean text, no markdown symbols)
-5. Write in active voice, past tense for past roles, present tense for current
-6. Include an ATS keyword density score estimate at the end"""
+2. Quantify EVERY achievement possible (numbers from the master resume)
+3. Keep to 2 pages maximum — executive roles expect density, not brevity
+4. Active voice, past tense for past roles, present tense for current
+5. No markdown symbols — clean plain text output
+
+ATS SCORING: After the resume, output a scoring block:
+ATS_SCORE: [number 0-100]
+ATS_KEYWORDS_MATCHED: [comma-separated list of job keywords found in resume]
+ATS_KEYWORDS_MISSING: [any important job keywords NOT included — should be empty at 96+]
+ATS_SCORE_REASONING: [1-2 sentences explaining the score]
+
+Target: {ATS_TARGET_SCORE}%+. If your draft scores below {ATS_TARGET_SCORE}, revise it before outputting."""
 
 COVER_LETTER_PROMPT = """You are writing a targeted cover letter for Greg Lucas.
 Rules:
@@ -61,32 +75,50 @@ Potential gaps: {json.dumps(job.get('missing_qualifications', []))}
 
     resume_text = _format_master_resume(master_resume)
 
-    # Generate tailored resume
+    # Step 1: Extract all keywords from job description
+    kw_extraction = await client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=800,
+        messages=[{
+            "role": "user",
+            "content": f"""Extract ALL keywords, required skills, and exact phrases from this job posting that an ATS would scan for.
+Include: technical skills, soft skills, certifications, tools, industry terms, action verbs, and role-specific phrases.
+
+JOB POSTING:
+{job_context}
+
+Return as a flat comma-separated list, most important first. Include both acronyms and spelled-out versions."""
+        }]
+    )
+    extracted_keywords = kw_extraction.content[0].text.strip()
+
+    # Step 2: Generate tailored resume targeting 96%+ ATS
     resume_result = ""
     async with client.messages.stream(
         model="claude-opus-4-6",
-        max_tokens=4000,
+        max_tokens=5000,
         thinking={"type": "adaptive"},
         system=SYSTEM_PROMPT,
         messages=[{
             "role": "user",
-            "content": f"""Tailor Greg's resume for this specific role.
+            "content": f"""Tailor Greg's resume for this specific role. TARGET: {ATS_TARGET_SCORE}%+ ATS score.
 
 {job_context}
+
+EXTRACTED ATS KEYWORDS (use ALL of these naturally throughout the resume):
+{extracted_keywords}
 
 GREG'S MASTER RESUME:
 {resume_text}
 
-Output a complete tailored resume. Use this exact structure:
-[HEADER: Name, contact info, websites]
-[EXECUTIVE PROFILE: 4-5 sentences, heavily mirroring the job's language]
-[CORE COMPETENCIES: 10-12 bullet points, prioritized for this role]
-[PROFESSIONAL EXPERIENCE: Reordered/reframed bullets leading with most relevant]
-[INNOVATION & PLATFORMS: pAIgeBreaker, LMSBreaker, Flourish AI]
+Output a complete tailored resume using this structure:
+[HEADER: Greg Lucas | phone | email | paigebreaker.com | lmsbreaker.com | linkedin]
+[EXECUTIVE PROFILE: 5-6 sentences using exact job-description language. Pack the top keywords here.]
+[CORE COMPETENCIES: 12-14 items. Lead with exact phrases from the job posting.]
+[PROFESSIONAL EXPERIENCE: Each bullet mirrors job language. Quantify everything.]
+[INNOVATION & PLATFORMS: pAIgeBreaker (with LTI 1.3, 7-agent pipeline, 70% cost reduction), LMSBreaker/MoltALP, Flourish AI]
 [EDUCATION]
-
-At the end, on a separate line, add:
-ATS_KEYWORDS: [comma-separated list of keywords from the job description that appear in this resume]"""
+[ATS SCORING BLOCK as specified]"""
         }]
     ) as stream:
         response = await stream.get_final_message()
@@ -94,6 +126,33 @@ ATS_KEYWORDS: [comma-separated list of keywords from the job description that ap
     for block in response.content:
         if block.type == "text":
             resume_result += block.text
+
+    # Step 3: Self-review — if ATS score < target, do one revision pass
+    ats_score = _extract_ats_score(resume_result)
+    if ats_score < ATS_TARGET_SCORE:
+        missing = _extract_missing_keywords(resume_result)
+        if missing:
+            revision = await client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=5000,
+                system=SYSTEM_PROMPT,
+                messages=[{
+                    "role": "user",
+                    "content": f"""This resume scored {ats_score}% ATS — below the {ATS_TARGET_SCORE}% target.
+
+Missing keywords: {missing}
+
+CURRENT RESUME:
+{resume_result.split('ATS_SCORE:')[0]}
+
+Revise the resume to naturally incorporate all missing keywords.
+Focus on: executive profile, core competencies, and the most relevant experience bullets.
+Output the full revised resume with updated ATS scoring block."""
+                }]
+            )
+            revised_text = revision.content[0].text.strip()
+            if revised_text:
+                resume_result = revised_text
 
     # Generate cover letter
     cover_letter = ""
@@ -124,21 +183,52 @@ Write the cover letter now:"""
         if block.type == "text":
             cover_letter += block.text
 
-    # Extract ATS keywords
-    ats_keywords = []
-    if "ATS_KEYWORDS:" in resume_result:
-        kw_line = resume_result.split("ATS_KEYWORDS:")[-1].strip().split("\n")[0]
-        ats_keywords = [k.strip() for k in kw_line.split(",") if k.strip()]
-        # Clean the resume text
-        resume_result = resume_result.split("ATS_KEYWORDS:")[0].strip()
+    # Extract ATS scoring block from resume
+    ats_score = _extract_ats_score(resume_result)
+    ats_keywords_matched = _extract_ats_keywords_matched(resume_result)
+    ats_keywords_missing = _extract_missing_keywords(resume_result)
+    # Clean scoring block from the display resume
+    resume_clean = resume_result.split("ATS_SCORE:")[0].strip()
 
     return {
-        "resume": resume_result,
+        "resume": resume_clean,
         "cover_letter": cover_letter,
-        "ats_keywords": ats_keywords,
+        "ats_score": ats_score,
+        "ats_keywords_matched": ats_keywords_matched,
+        "ats_keywords_missing": ats_keywords_missing,
+        "ats_target": ATS_TARGET_SCORE,
+        "ats_passed": ats_score >= ATS_TARGET_SCORE,
         "job_title": job.get("title"),
         "company": job.get("company")
     }
+
+
+def _extract_ats_score(text: str) -> int:
+    """Extract the ATS score from the scoring block."""
+    import re
+    match = re.search(r'ATS_SCORE:\s*(\d+)', text)
+    return int(match.group(1)) if match else 0
+
+
+def _extract_ats_keywords_matched(text: str) -> list[str]:
+    """Extract matched keywords from scoring block."""
+    import re
+    match = re.search(r'ATS_KEYWORDS_MATCHED:\s*(.+)', text)
+    if match:
+        return [k.strip() for k in match.group(1).split(",") if k.strip()]
+    return []
+
+
+def _extract_missing_keywords(text: str) -> list[str]:
+    """Extract missing keywords from scoring block."""
+    import re
+    match = re.search(r'ATS_KEYWORDS_MISSING:\s*(.+)', text)
+    if match:
+        val = match.group(1).strip()
+        if val.lower() in ("none", "n/a", ""):
+            return []
+        return [k.strip() for k in val.split(",") if k.strip()]
+    return []
 
 
 def _format_master_resume(resume: dict) -> str:
