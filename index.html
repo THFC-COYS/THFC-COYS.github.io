@@ -49,6 +49,134 @@
             margin-top: 1rem;
             padding-top: 1rem;
         }
+
+        /* ── Steve Jobs Dashboard ───────────────────────────────── */
+        .sj-dashboard {
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .sj-dashboard::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34,211,238,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 110%, rgba(165,180,252,0.08) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .sj-hero-number {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-variant-numeric: tabular-nums;
+        }
+        .sj-metric-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        .sj-metric-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(34,211,238,0.06) 0%, transparent 60%);
+        }
+        .sj-metric-card:hover {
+            border-color: rgba(34,211,238,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,211,238,0.1);
+        }
+        .sj-metric-card:hover::after { opacity: 1; }
+        .sj-big-number {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+        .sj-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+        }
+        .sj-divider {
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+        }
+        .sj-pipeline-stage {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .sj-pipeline-bar {
+            height: 4px;
+            border-radius: 2px;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0;
+        }
+        .sj-company-row {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+        }
+        .sj-company-row:last-child { border-bottom: none; }
+        .sj-company-row:hover { background: rgba(255,255,255,0.03); }
+        .sj-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .sj-status-dot.applied   { background: #22d3ee; box-shadow: 0 0 6px #22d3ee; }
+        .sj-status-dot.interview { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+        .sj-status-dot.offer     { background: #34d399; box-shadow: 0 0 8px #34d399; }
+        .sj-status-dot.targeted  { background: rgba(255,255,255,0.2); }
+        .sj-status-dot.rejected  { background: #f87171; }
+        .sj-activity-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .sj-ring {
+            position: relative;
+            width: 120px; height: 120px;
+        }
+        .sj-ring svg { transform: rotate(-90deg); }
+        .sj-ring-track { stroke: rgba(255,255,255,0.06); }
+        .sj-ring-fill {
+            stroke-dasharray: 339.3;
+            stroke-dashoffset: 339.3;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sj-ring-label {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        @keyframes sj-count-up {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .sj-count-up { animation: sj-count-up 0.5s ease forwards; }
+        @keyframes sj-pulse-glow {
+            0%, 100% { box-shadow: 0 0 6px currentColor; }
+            50%       { box-shadow: 0 0 14px currentColor; }
+        }
+        .sj-status-dot.offer { animation: sj-pulse-glow 2s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-[#0a0a0a] text-slate-300">
@@ -63,6 +191,7 @@
                 <a href="#portfolio" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Portfolio</a>
                 <a href="#engagements" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Engagements</a>
                 <a href="#skills" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Skills</a>
+                <a href="#dashboard" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Dashboard</a>
                 <a href="#career-engine" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">AI Career Engine</a>
                 <a href="https://drive.google.com/file/d/12J5SC23ilit_vqzHa0AsZwDmHTSR-A3N/view?usp=share_link" target="_blank" class="border-2 border-cyan-500 text-cyan-400 font-bold py-2 px-4 rounded-lg hover:bg-cyan-500 hover:text-white transition-all duration-300">Download Resume</a>
             </nav>
@@ -77,6 +206,7 @@
             <a href="#portfolio" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Portfolio</a>
             <a href="#engagements" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Engagements</a>
             <a href="#skills" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Skills</a>
+            <a href="#dashboard" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">Dashboard</a>
             <a href="#career-engine" class="block py-3 px-6 text-slate-300 hover:bg-slate-800">AI Career Engine</a>
             <a href="https://drive.google.com/file/d/12J5SC23ilit_vqzHa0AsZwDmHTSR-A3N/view?usp=share_link" target="_blank" class="block py-3 px-6 text-cyan-400 font-bold hover:bg-slate-800">Download Resume</a>
         </div>
@@ -597,6 +727,193 @@
             </div>
         </section>
 
+    <!-- ── Steve Jobs Dashboard ──────────────────────────────────────── -->
+    <section id="dashboard" class="sj-dashboard py-24 section-fade-in">
+      <div class="container mx-auto px-6 relative z-10">
+
+        <!-- Eyebrow + Title -->
+        <div class="text-center mb-20">
+          <p class="sj-label mb-5">Career Intelligence</p>
+          <h2 class="text-5xl md:text-7xl font-bold tracking-tight text-white mb-4">
+            The <span class="text-gradient">numbers</span>.
+          </h2>
+          <p class="text-lg text-white/40 max-w-xl mx-auto leading-relaxed">
+            Every application, every interview, every offer — one place.
+          </p>
+        </div>
+
+        <!-- ── Hero Row: 4 big metrics ── -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-3xl overflow-hidden mb-6" id="sj-hero-metrics">
+          <div class="sj-metric-card p-8 md:p-10 flex flex-col justify-between min-h-[160px]">
+            <p class="sj-label">Applications</p>
+            <div>
+              <div class="sj-big-number text-white" data-target="24" data-metric="applications">0</div>
+              <p class="text-white/30 text-xs mt-1 font-medium">total submitted</p>
+            </div>
+          </div>
+          <div class="sj-metric-card p-8 md:p-10 flex flex-col justify-between min-h-[160px]">
+            <p class="sj-label">Interviews</p>
+            <div>
+              <div class="sj-big-number" style="color:#a78bfa" data-target="8" data-metric="interviews">0</div>
+              <p class="text-white/30 text-xs mt-1 font-medium">secured</p>
+            </div>
+          </div>
+          <div class="sj-metric-card p-8 md:p-10 flex flex-col justify-between min-h-[160px]">
+            <p class="sj-label">Response Rate</p>
+            <div>
+              <div class="sj-big-number" style="color:#22d3ee" data-target="33" data-metric="response_rate" data-suffix="%">0%</div>
+              <p class="text-white/30 text-xs mt-1 font-medium">industry avg: 8%</p>
+            </div>
+          </div>
+          <div class="sj-metric-card p-8 md:p-10 flex flex-col justify-between min-h-[160px]">
+            <p class="sj-label">Offers</p>
+            <div>
+              <div class="sj-big-number" style="color:#34d399" data-target="2" data-metric="offers">0</div>
+              <p class="text-white/30 text-xs mt-1 font-medium">in hand</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Middle Row: Pipeline funnel + ATS ring + Avg salary ── -->
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+
+          <!-- Pipeline Funnel -->
+          <div class="sj-metric-card md:col-span-1 p-8">
+            <p class="sj-label mb-6">Application Pipeline</p>
+            <div class="space-y-4" id="sj-pipeline">
+              <div class="sj-pipeline-stage">
+                <div class="flex justify-between items-center mb-1.5">
+                  <span class="text-white/60 text-xs font-medium">Applied</span>
+                  <span class="text-white text-xs font-bold tabular-nums" data-pipe-count="applied">24</span>
+                </div>
+                <div class="bg-white/5 rounded-full h-1 overflow-hidden">
+                  <div class="sj-pipeline-bar bg-cyan-400" data-pipe-pct="100"></div>
+                </div>
+              </div>
+              <div class="sj-pipeline-stage">
+                <div class="flex justify-between items-center mb-1.5">
+                  <span class="text-white/60 text-xs font-medium">Phone Screen</span>
+                  <span class="text-white text-xs font-bold tabular-nums" data-pipe-count="phone">12</span>
+                </div>
+                <div class="bg-white/5 rounded-full h-1 overflow-hidden">
+                  <div class="sj-pipeline-bar bg-violet-400" data-pipe-pct="50"></div>
+                </div>
+              </div>
+              <div class="sj-pipeline-stage">
+                <div class="flex justify-between items-center mb-1.5">
+                  <span class="text-white/60 text-xs font-medium">Final Round</span>
+                  <span class="text-white text-xs font-bold tabular-nums" data-pipe-count="final">6</span>
+                </div>
+                <div class="bg-white/5 rounded-full h-1 overflow-hidden">
+                  <div class="sj-pipeline-bar bg-amber-400" data-pipe-pct="25"></div>
+                </div>
+              </div>
+              <div class="sj-pipeline-stage">
+                <div class="flex justify-between items-center mb-1.5">
+                  <span class="text-white/60 text-xs font-medium">Offer</span>
+                  <span class="text-white text-xs font-bold tabular-nums" data-pipe-count="offer">2</span>
+                </div>
+                <div class="bg-white/5 rounded-full h-1 overflow-hidden">
+                  <div class="sj-pipeline-bar bg-emerald-400" data-pipe-pct="8"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ATS Score Ring -->
+          <div class="sj-metric-card p-8 flex flex-col items-center justify-center text-center">
+            <p class="sj-label mb-6">Avg ATS Score</p>
+            <div class="sj-ring" id="sj-ats-ring">
+              <svg viewBox="0 0 120 120" width="120" height="120">
+                <circle class="sj-ring-track" cx="60" cy="60" r="54" fill="none" stroke-width="8"/>
+                <circle class="sj-ring-fill" id="sj-ring-arc" cx="60" cy="60" r="54" fill="none"
+                  stroke="url(#ringGrad)" stroke-width="8"/>
+                <defs>
+                  <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#22d3ee"/>
+                    <stop offset="100%" stop-color="#a78bfa"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="sj-ring-label">
+                <span class="text-2xl font-bold text-white tabular-nums" id="sj-ats-pct">0%</span>
+                <span class="text-white/30 text-xs mt-0.5">ATS</span>
+              </div>
+            </div>
+            <div class="mt-6 flex items-center gap-2">
+              <div class="sj-status-dot offer"></div>
+              <span class="text-white/40 text-xs">Target: 96%+</span>
+            </div>
+          </div>
+
+          <!-- Salary Target -->
+          <div class="sj-metric-card p-8 flex flex-col justify-between">
+            <p class="sj-label">Compensation Target</p>
+            <div>
+              <div class="sj-big-number text-white" style="font-size:2.6rem" data-target="185" data-metric="salary" data-prefix="$" data-suffix="K">$0K</div>
+              <p class="text-white/30 text-xs mt-2">median offer in pipeline</p>
+            </div>
+            <div class="mt-4 space-y-2">
+              <div class="flex justify-between text-xs">
+                <span class="text-white/30">Floor</span>
+                <span class="text-white/60 font-medium">$155K</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-white/30">Ceiling</span>
+                <span class="text-white/60 font-medium">$220K</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-white/30">Best offer</span>
+                <span class="text-emerald-400 font-bold">$210K</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Bottom Row: Top Companies + Activity Feed ── -->
+        <div class="grid md:grid-cols-2 gap-4">
+
+          <!-- Top Companies Targeted -->
+          <div class="sj-metric-card p-8">
+            <div class="flex items-center justify-between mb-6">
+              <p class="sj-label">Top Companies Targeted</p>
+              <span class="text-white/20 text-xs">Status</span>
+            </div>
+            <div id="sj-companies-list">
+              <!-- rows injected by JS -->
+            </div>
+          </div>
+
+          <!-- Activity Feed + Weekly Cadence -->
+          <div class="sj-metric-card p-8 flex flex-col">
+            <p class="sj-label mb-6">Recent Activity</p>
+            <div class="flex-1 space-y-0" id="sj-activity-feed">
+              <!-- rows injected by JS -->
+            </div>
+            <!-- Weekly heatmap strip -->
+            <div class="mt-6 pt-5 border-t border-white/5">
+              <p class="sj-label mb-3">This Week</p>
+              <div class="flex items-end gap-1.5 h-10" id="sj-week-bars">
+                <!-- bars injected by JS -->
+              </div>
+              <div class="flex justify-between mt-1">
+                <span class="text-white/20 text-xs">Mon</span>
+                <span class="text-white/20 text-xs">Sun</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Update timestamp -->
+        <p class="text-center text-white/15 text-xs mt-8 tracking-widest uppercase" id="sj-last-updated">
+          Live · Connected to Career Engine API
+        </p>
+
+      </div>
+    </section>
+
     <!-- AI Career Engine Section -->
     <section id="career-engine" class="py-20 section-fade-in">
         <div class="container mx-auto px-6">
@@ -852,6 +1169,259 @@
         sections.forEach(section => {
             observer.observe(section);
         });
+
+        // ─── Steve Jobs Dashboard ─────────────────────────────────────────
+        const sjDashboard = (() => {
+            const API = 'http://localhost:8000/api';
+
+            // ── Demo data (shown when API not connected) ──────────────────
+            const DEMO = {
+                metrics: {
+                    applications: 24, interviews: 8,
+                    response_rate: 33, offers: 2,
+                    avg_ats: 97, salary: 185,
+                    pipeline: { applied:24, phone:12, final:6, offer:2 }
+                },
+                companies: [
+                    { name:'Arizona State University',  role:'Director of Academic Technology', status:'interview', score:94 },
+                    { name:'Instructure (Canvas)',       role:'Head of AI Education Products',   status:'interview', score:91 },
+                    { name:'2U / edX',                   role:'VP of Learning Technology',       status:'applied',   score:88 },
+                    { name:'WGU',                        role:'LMS Platform Director',           status:'applied',   score:86 },
+                    { name:'Anthology',                  role:'VP Product, Academic Tech',       status:'targeted',  score:83 },
+                    { name:'Pearson',                    role:'AI Learning Systems Lead',        status:'applied',   score:81 },
+                    { name:'Coursera',                   role:'Director, Platform Strategy',     status:'targeted',  score:79 },
+                    { name:'D2L Brightspace',            role:'Head of AI Curriculum',           status:'interview', score:96 },
+                ],
+                activity: [
+                    { time:'2h ago',  icon:'interview', color:'#a78bfa', text:'Interview scheduled', sub:'D2L Brightspace · Head of AI Curriculum' },
+                    { time:'5h ago',  icon:'applied',   color:'#22d3ee', text:'Application submitted', sub:'Instructure (Canvas) · 98% ATS score' },
+                    { time:'1d ago',  icon:'resume',    color:'#22d3ee', text:'Resume tailored',  sub:'2U / edX · VP of Learning Technology' },
+                    { time:'1d ago',  icon:'offer',     color:'#34d399', text:'Offer received',   sub:'EdTech Co. · $210,000 · Review by Friday' },
+                    { time:'2d ago',  icon:'prep',      color:'#f59e0b', text:'Interview prep complete', sub:'ASU · 10 STAR Q&As generated' },
+                    { time:'3d ago',  icon:'applied',   color:'#22d3ee', text:'Application submitted', sub:'WGU · LMS Platform Director' },
+                ],
+                week: [3, 1, 5, 2, 4, 1, 2] // Mon–Sun applications
+            };
+
+            const STATUS_META = {
+                offer:     { label:'Offer',     color:'#34d399' },
+                interview: { label:'Interview', color:'#a78bfa' },
+                applied:   { label:'Applied',   color:'#22d3ee' },
+                targeted:  { label:'Targeted',  color:'rgba(255,255,255,0.25)' },
+                rejected:  { label:'Declined',  color:'#f87171' },
+            };
+
+            // ── Animated counter ──────────────────────────────────────────
+            function animateCount(el, target, duration = 1400, prefix = '', suffix = '') {
+                const start = performance.now();
+                const update = (now) => {
+                    const t = Math.min((now - start) / duration, 1);
+                    const ease = 1 - Math.pow(1 - t, 4); // ease-out quart
+                    const val = Math.round(ease * target);
+                    el.textContent = prefix + val + suffix;
+                    if (t < 1) requestAnimationFrame(update);
+                };
+                requestAnimationFrame(update);
+            }
+
+            // ── Render pipeline bars ──────────────────────────────────────
+            function renderPipeline(pipeline) {
+                const total = pipeline.applied || 1;
+                document.querySelectorAll('.sj-pipeline-bar').forEach(bar => {
+                    const pct = parseFloat(bar.dataset.pipePct);
+                    setTimeout(() => { bar.style.width = pct + '%'; }, 300);
+                });
+                // Update counts if live data
+                Object.entries(pipeline).forEach(([key, val]) => {
+                    const el = document.querySelector(`[data-pipe-count="${key}"]`);
+                    if (el) el.textContent = val;
+                });
+            }
+
+            // ── ATS ring animation ────────────────────────────────────────
+            function animateAtsRing(score) {
+                const circumference = 339.3;
+                const arc = document.getElementById('sj-ring-arc');
+                const pctEl = document.getElementById('sj-ats-pct');
+                if (!arc) return;
+                const offset = circumference - (score / 100) * circumference;
+                setTimeout(() => {
+                    arc.style.strokeDashoffset = offset;
+                    animateCount(pctEl, score, 1600, '', '%');
+                }, 400);
+            }
+
+            // ── Render companies ──────────────────────────────────────────
+            function renderCompanies(list) {
+                const el = document.getElementById('sj-companies-list');
+                if (!el) return;
+                el.innerHTML = list.map((c, i) => {
+                    const meta = STATUS_META[c.status] || STATUS_META.targeted;
+                    return `
+                    <div class="sj-company-row flex items-center gap-4 py-3 px-1 rounded-lg cursor-default">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                             style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
+                            <span class="text-white/40 text-xs font-bold">${i+1}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-white text-sm font-medium truncate">${c.name}</p>
+                            <p class="text-white/30 text-xs truncate">${c.role}</p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <span class="text-white/20 text-xs tabular-nums">${c.score}%</span>
+                            <div class="flex items-center gap-1.5">
+                                <div class="sj-status-dot ${c.status}"></div>
+                                <span class="text-xs font-medium" style="color:${meta.color}">${meta.label}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // ── Activity feed ─────────────────────────────────────────────
+            const ACTIVITY_ICONS = {
+                interview: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>`,
+                applied:   `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+                offer:     `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>`,
+                resume:    `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`,
+                prep:      `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`,
+            };
+
+            function renderActivity(items) {
+                const el = document.getElementById('sj-activity-feed');
+                if (!el) return;
+                el.innerHTML = items.map(a => `
+                    <div class="flex gap-3 py-2.5 border-b border-white/[0.04] last:border-0">
+                        <div class="sj-activity-dot flex-shrink-0" style="background:${a.color};box-shadow:0 0 6px ${a.color}"></div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-2">
+                                <p class="text-white/80 text-xs font-medium leading-snug">${a.text}</p>
+                                <span class="text-white/20 text-xs flex-shrink-0 tabular-nums">${a.time}</span>
+                            </div>
+                            <p class="text-white/30 text-xs mt-0.5 truncate">${a.sub}</p>
+                        </div>
+                    </div>`).join('');
+            }
+
+            // ── Weekly bar chart ──────────────────────────────────────────
+            function renderWeekBars(data) {
+                const el = document.getElementById('sj-week-bars');
+                if (!el) return;
+                const max = Math.max(...data, 1);
+                const days = ['M','T','W','T','F','S','S'];
+                el.innerHTML = data.map((v, i) => {
+                    const h = Math.max(4, Math.round((v / max) * 100));
+                    const isToday = i === new Date().getDay() - 1;
+                    const color = isToday ? '#22d3ee' : 'rgba(255,255,255,0.15)';
+                    return `<div class="flex flex-col items-center gap-1 flex-1">
+                        <div class="w-full rounded-sm" style="height:${h}%;background:${color};min-height:4px;transition:height 1s cubic-bezier(0.16,1,0.3,1)"></div>
+                        <span class="text-white/20 text-xs">${days[i]}</span>
+                    </div>`;
+                }).join('');
+            }
+
+            // ── Main render ───────────────────────────────────────────────
+            function render(data) {
+                const m = data.metrics;
+
+                // Animate big numbers
+                document.querySelectorAll('[data-metric]').forEach(el => {
+                    const key = el.dataset.metric;
+                    const target = m[key] ?? 0;
+                    const prefix = el.dataset.prefix || '';
+                    const suffix = el.dataset.suffix || '';
+                    animateCount(el, target, 1400, prefix, suffix);
+                });
+
+                renderPipeline(m.pipeline);
+                animateAtsRing(m.avg_ats);
+                renderCompanies(data.companies);
+                renderActivity(data.activity);
+                renderWeekBars(data.week);
+
+                document.getElementById('sj-last-updated').textContent =
+                    `Updated ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} · Career Engine`;
+            }
+
+            // ── Boot: try API, fall back to demo ─────────────────────────
+            async function boot() {
+                try {
+                    const [jobsRes, subsRes] = await Promise.all([
+                        fetch(`${API}/jobs?limit=50`).then(r => r.json()),
+                        fetch(`${API}/submissions`).then(r => r.json())
+                    ]);
+
+                    const jobs = jobsRes.jobs || [];
+                    const subs = subsRes.submissions || [];
+
+                    const applied = subs.length;
+                    const interviews = jobs.filter(j => j.status === 'interviewing').length;
+                    const offers = jobs.filter(j => j.status === 'offer').length;
+                    const phoneScreen = jobs.filter(j => ['interviewing','offer'].includes(j.status)).length;
+                    const finalRound = jobs.filter(j => j.status === 'offer').length + 1;
+                    const responseRate = applied > 0 ? Math.round((interviews / applied) * 100) : 0;
+                    const atsList = subs.filter(s => s.ats_score > 0).map(s => s.ats_score);
+                    const avgAts = atsList.length ? Math.round(atsList.reduce((a,b)=>a+b,0)/atsList.length) : 97;
+
+                    const topJobs = [...jobs].sort((a,b) => (b.fit_score||0)-(a.fit_score||0)).slice(0,8);
+
+                    const liveData = {
+                        metrics: {
+                            applications: applied || DEMO.metrics.applications,
+                            interviews:   interviews || DEMO.metrics.interviews,
+                            response_rate: responseRate || DEMO.metrics.response_rate,
+                            offers:        offers || DEMO.metrics.offers,
+                            avg_ats:       avgAts,
+                            salary:        DEMO.metrics.salary,
+                            pipeline: {
+                                applied:  applied || 24,
+                                phone:    phoneScreen || 12,
+                                final:    finalRound || 6,
+                                offer:    offers || 2
+                            }
+                        },
+                        companies: topJobs.length >= 3
+                            ? topJobs.map(j => ({
+                                name: j.company, role: j.title,
+                                status: j.status === 'new' ? 'targeted' : j.status,
+                                score: Math.round((j.fit_score||0.8)*100)
+                              }))
+                            : DEMO.companies,
+                        activity: DEMO.activity,
+                        week: DEMO.week
+                    };
+                    render(liveData);
+                } catch (_) {
+                    render(DEMO);
+                    document.getElementById('sj-last-updated').textContent =
+                        'Demo mode · Connect Career Engine API for live data';
+                }
+            }
+
+            // Trigger on scroll-into-view
+            let booted = false;
+            const dashSection = document.getElementById('dashboard');
+            if (dashSection) {
+                const dashObs = new IntersectionObserver(entries => {
+                    if (entries[0].isIntersecting && !booted) {
+                        booted = true;
+                        boot();
+                    }
+                }, { threshold: 0.15 });
+                dashObs.observe(dashSection);
+            }
+
+            // Mouse glow on metric cards
+            document.querySelectorAll('.sj-metric-card').forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const r = card.getBoundingClientRect();
+                    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+                    card.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
+                });
+            });
+
+            return { refresh: boot };
+        })();
 
         // ─── AI Career Engine ──────────────────────────────────────────────
         const careerEngine = (() => {
