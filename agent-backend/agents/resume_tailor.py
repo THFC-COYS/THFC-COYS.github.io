@@ -28,43 +28,21 @@ async def _with_retry(coro_fn, max_retries=4):
 
 ATS_TARGET_SCORE = 96  # Minimum ATS score target (0-100)
 
-SYSTEM_PROMPT = f"""You are an expert resume writer and career coach specializing in
-higher education technology and EdTech leadership roles. Your PRIMARY OBJECTIVE is to
-produce a resume that scores {ATS_TARGET_SCORE}%+ on ATS systems.
+SYSTEM_PROMPT = f"""Expert resume writer for higher-ed technology/EdTech leadership. Target: {ATS_TARGET_SCORE}%+ ATS score.
 
-ATS OPTIMIZATION RULES (mandatory):
-1. Extract EVERY keyword, phrase, and required skill from the job description
-2. Use EXACT phrasing from the job description — not synonyms, the exact words
-3. Include keywords in: executive profile, competencies, AND experience bullets
-4. Front-load the executive profile with 5-7 exact job-description phrases
-5. Mirror section headers to match what ATS systems scan for
-6. Include acronym AND spelled-out versions (e.g., "LMS (Learning Management System)")
-7. Put the most important keywords in the first 1/3 of the resume (ATS scans top-down)
-8. Repeat the top 10 keywords 2-3x throughout (naturally, not stuffed)
+ATS RULES: Use EXACT job-description phrasing (not synonyms). Pack keywords into executive profile, competencies, and bullets. Include acronym + spelled-out (e.g. "LMS (Learning Management System)"). Top keywords in first 1/3. Repeat top 10 keywords 2-3x naturally.
 
-CONTENT RULES:
-1. NEVER invent experience, credentials, or accomplishments — only use what's in the master resume
-2. Quantify EVERY achievement possible (numbers from the master resume)
-3. Keep to 2 pages maximum — executive roles expect density, not brevity
-4. Active voice, past tense for past roles, present tense for current
-5. No markdown symbols — clean plain text output
+CONTENT RULES: Never invent experience. Quantify everything. 2 pages max. Active voice. No markdown symbols.
 
-ATS SCORING: After the resume, output a scoring block:
-ATS_SCORE: [number 0-100]
-ATS_KEYWORDS_MATCHED: [comma-separated list of job keywords found in resume]
-ATS_KEYWORDS_MISSING: [any important job keywords NOT included — should be empty at 96+]
-ATS_SCORE_REASONING: [1-2 sentences explaining the score]
+After resume output:
+ATS_SCORE: [0-100]
+ATS_KEYWORDS_MATCHED: [comma list]
+ATS_KEYWORDS_MISSING: [comma list or none]
+ATS_SCORE_REASONING: [1 sentence]
 
-Target: {ATS_TARGET_SCORE}%+. If your draft scores below {ATS_TARGET_SCORE}, revise it before outputting."""
+If draft scores below {ATS_TARGET_SCORE}, revise before outputting."""
 
-COVER_LETTER_PROMPT = """You are writing a targeted cover letter for Greg Lucas.
-Rules:
-1. 3 paragraphs, ~300 words total
-2. Opening: specific hook connecting Greg's background to THIS company's mission
-3. Middle: 2-3 concrete achievements most relevant to the role with measurable impact
-4. Closing: confident call to action
-5. Never use generic phrases like 'I am writing to express my interest'
-6. Reference specific things about the company/role to show research"""
+COVER_LETTER_PROMPT = """Write a targeted cover letter for Greg Lucas. 3 paragraphs, ~300 words. Opening: specific hook tied to company mission. Middle: 2-3 quantified achievements relevant to the role. Closing: confident call to action. No generic openers. Reference specific role/company details."""
 
 
 async def tailor_resume(job: dict, master_resume: dict) -> dict:
@@ -74,22 +52,19 @@ async def tailor_resume(job: dict, master_resume: dict) -> dict:
     """
     client = anthropic.AsyncAnthropic()
 
-    job_context = f"""
-JOB TITLE: {job.get('title')}
-COMPANY: {job.get('company')}
-LOCATION: {job.get('location', 'Not specified')} {'(Remote)' if job.get('remote') else ''}
-SALARY: {job.get('salary_range', 'Not specified')}
+    # Truncate description to keep prompt size manageable
+    description = (job.get('description', '') or '')[:1500]
 
-JOB DESCRIPTION:
-{job.get('description', '')}
+    job_context = f"""ROLE: {job.get('title')} at {job.get('company')} | {job.get('location', '')}{'  (Remote)' if job.get('remote') else ''} | {job.get('salary_range', '')}
 
-KEY REQUIREMENTS:
-{json.dumps(job.get('key_requirements', []), indent=2)}
+DESCRIPTION:
+{description}
 
-FIT ANALYSIS:
-Strong matches: {json.dumps(job.get('strong_matches', []))}
-Potential gaps: {json.dumps(job.get('missing_qualifications', []))}
-"""
+REQUIREMENTS: {'; '.join(job.get('key_requirements', []))}
+STRONG MATCHES: {', '.join(job.get('strong_matches', []))}
+GAPS: {', '.join(job.get('missing_qualifications', []))}"""
+
+    job_stub = f"{job.get('title')} at {job.get('company')} — {'; '.join(job.get('key_requirements', [])[:5])}"
 
     resume_text = _format_master_resume(master_resume)
 
@@ -151,43 +126,25 @@ Output a complete tailored resume using this structure:
     if ats_score < ATS_TARGET_SCORE:
         missing = _extract_missing_keywords(resume_result)
         if missing:
+            current_resume = resume_result.split('ATS_SCORE:')[0].strip()
             revision = await _with_retry(lambda: client.messages.create(
                 model="claude-opus-4-6",
                 max_tokens=5000,
                 system=SYSTEM_PROMPT,
                 messages=[{
                     "role": "user",
-                    "content": f"""This resume scored {ats_score}% ATS — below the {ATS_TARGET_SCORE}% target.
-
-Missing keywords: {missing}
-
-CURRENT RESUME:
-{resume_result.split('ATS_SCORE:')[0]}
-
-Revise the resume to naturally incorporate all missing keywords.
-Focus on: executive profile, core competencies, and the most relevant experience bullets.
-Output the full revised resume with updated ATS scoring block."""
+                    "content": f"Resume scored {ats_score}% (target {ATS_TARGET_SCORE}%). Missing: {missing}\n\nRevise to add missing keywords naturally into executive profile, competencies, and bullets. Output full revised resume + ATS scoring block.\n\n{current_resume}"
                 }]
             ))
             revised_text = revision.content[0].text.strip()
             if revised_text:
                 resume_result = revised_text
 
-    # Generate cover letter
+    # Generate cover letter (uses compact stub — full description already processed above)
     cover_letter = ""
-    cover_letter_user_msg = f"""Write a targeted cover letter for Greg Lucas applying to:
+    cover_letter_user_msg = f"""Cover letter for Greg Lucas: {job_stub}
 
-{job_context}
-
-Key achievements to potentially highlight:
-- Led Blackboard → Halo LMS migration at GCU (institution of 100k+ students)
-- Chaired AI subcommittee, launched NIO initiative
-- Saved GCU >$5M annually through tech pilot programs
-- Built pAIgeBreaker: 7-agent AI platform with LTI 1.3
-- SNHU Team Lead of the Year 2020
-- 15+ years higher-ed tech leadership
-
-Write the cover letter now:"""
+Highlight (pick most relevant 2-3): Blackboard→Halo LMS migration (100k+ students) | AI subcommittee chair + NIO initiative | >$5M annual savings via tech pilots | pAIgeBreaker 7-agent AI platform (LTI 1.3) | SNHU Team Lead of Year 2020 | 15+ yrs higher-ed tech leadership"""
 
     async def _run_cover_letter_stream():
         async with client.messages.stream(
