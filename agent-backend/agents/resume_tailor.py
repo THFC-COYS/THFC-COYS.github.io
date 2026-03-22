@@ -5,8 +5,26 @@ Takes the master resume + job posting and produces:
 1. A tailored resume (ATS-optimized, mirrors job language, highlights relevant experience)
 2. A tailored cover letter (specific, compelling, ~300 words)
 """
+import asyncio
 import json
+import logging
 import anthropic
+
+logger = logging.getLogger(__name__)
+
+
+async def _with_retry(coro_fn, max_retries=4):
+    """Retry an async API call on 429 with exponential backoff (2s, 4s, 8s, 16s)."""
+    delay = 2
+    for attempt in range(max_retries + 1):
+        try:
+            return await coro_fn()
+        except anthropic.RateLimitError:
+            if attempt == max_retries:
+                raise
+            logger.warning(f"Rate limited (429). Retrying in {delay}s... (attempt {attempt + 1}/{max_retries})")
+            await asyncio.sleep(delay)
+            delay *= 2
 
 ATS_TARGET_SCORE = 96  # Minimum ATS score target (0-100)
 
@@ -76,8 +94,8 @@ Potential gaps: {json.dumps(job.get('missing_qualifications', []))}
     resume_text = _format_master_resume(master_resume)
 
     # Step 1: Extract all keywords from job description
-    kw_extraction = await client.messages.create(
-        model="claude-opus-4-6",
+    kw_extraction = await _with_retry(lambda: client.messages.create(
+        model="claude-haiku-4-5-20251001",
         max_tokens=800,
         messages=[{
             "role": "user",
@@ -89,19 +107,12 @@ JOB POSTING:
 
 Return as a flat comma-separated list, most important first. Include both acronyms and spelled-out versions."""
         }]
-    )
+    ))
     extracted_keywords = kw_extraction.content[0].text.strip()
 
     # Step 2: Generate tailored resume targeting 96%+ ATS
     resume_result = ""
-    async with client.messages.stream(
-        model="claude-opus-4-6",
-        max_tokens=5000,
-        thinking={"type": "adaptive"},
-        system=SYSTEM_PROMPT,
-        messages=[{
-            "role": "user",
-            "content": f"""Tailor Greg's resume for this specific role. TARGET: {ATS_TARGET_SCORE}%+ ATS score.
+    resume_user_msg = f"""Tailor Greg's resume for this specific role. TARGET: {ATS_TARGET_SCORE}%+ ATS score.
 
 {job_context}
 
@@ -112,17 +123,25 @@ GREG'S MASTER RESUME:
 {resume_text}
 
 Output a complete tailored resume using this structure:
-[HEADER: Greg Lucas | phone | email | paigebreaker.com | lmsbreaker.com | linkedin]
+[HEADER: Greg Lucas | phone | email | paigebreaker.com | lmsbreaker.com | thfc-coys.github.io | linkedin]
 [EXECUTIVE PROFILE: 5-6 sentences using exact job-description language. Pack the top keywords here.]
 [CORE COMPETENCIES: 12-14 items. Lead with exact phrases from the job posting.]
 [PROFESSIONAL EXPERIENCE: Each bullet mirrors job language. Quantify everything.]
 [INNOVATION & PLATFORMS: pAIgeBreaker (with LTI 1.3, 7-agent pipeline, 70% cost reduction), LMSBreaker/MoltALP, Flourish AI]
 [EDUCATION]
 [ATS SCORING BLOCK as specified]"""
-        }]
-    ) as stream:
-        response = await stream.get_final_message()
 
+    async def _run_resume_stream():
+        async with client.messages.stream(
+            model="claude-opus-4-6",
+            max_tokens=5000,
+            thinking={"type": "adaptive"},
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": resume_user_msg}]
+        ) as stream:
+            return await stream.get_final_message()
+
+    response = await _with_retry(_run_resume_stream)
     for block in response.content:
         if block.type == "text":
             resume_result += block.text
@@ -132,7 +151,7 @@ Output a complete tailored resume using this structure:
     if ats_score < ATS_TARGET_SCORE:
         missing = _extract_missing_keywords(resume_result)
         if missing:
-            revision = await client.messages.create(
+            revision = await _with_retry(lambda: client.messages.create(
                 model="claude-opus-4-6",
                 max_tokens=5000,
                 system=SYSTEM_PROMPT,
@@ -149,20 +168,14 @@ Revise the resume to naturally incorporate all missing keywords.
 Focus on: executive profile, core competencies, and the most relevant experience bullets.
 Output the full revised resume with updated ATS scoring block."""
                 }]
-            )
+            ))
             revised_text = revision.content[0].text.strip()
             if revised_text:
                 resume_result = revised_text
 
     # Generate cover letter
     cover_letter = ""
-    async with client.messages.stream(
-        model="claude-opus-4-6",
-        max_tokens=1000,
-        system=COVER_LETTER_PROMPT,
-        messages=[{
-            "role": "user",
-            "content": f"""Write a targeted cover letter for Greg Lucas applying to:
+    cover_letter_user_msg = f"""Write a targeted cover letter for Greg Lucas applying to:
 
 {job_context}
 
@@ -175,10 +188,17 @@ Key achievements to potentially highlight:
 - 15+ years higher-ed tech leadership
 
 Write the cover letter now:"""
-        }]
-    ) as stream:
-        response = await stream.get_final_message()
 
+    async def _run_cover_letter_stream():
+        async with client.messages.stream(
+            model="claude-opus-4-6",
+            max_tokens=1000,
+            system=COVER_LETTER_PROMPT,
+            messages=[{"role": "user", "content": cover_letter_user_msg}]
+        ) as stream:
+            return await stream.get_final_message()
+
+    response = await _with_retry(_run_cover_letter_stream)
     for block in response.content:
         if block.type == "text":
             cover_letter += block.text
@@ -238,7 +258,7 @@ def _format_master_resume(resume: dict) -> str:
     p = resume.get("personal", {})
     lines.append(f"NAME: {p.get('name')}")
     lines.append(f"TITLE: {p.get('title')}")
-    lines.append(f"CONTACT: {p.get('phone')} | {p.get('email')} | {p.get('portfolio')} | {p.get('secondary_site', '')}")
+    lines.append(f"CONTACT: {p.get('phone')} | {p.get('email')} | {p.get('portfolio')} | {p.get('secondary_site', '')} | {p.get('github', '')} | {p.get('linkedin', '')}")
     lines.append(f"\nSUMMARY:\n{p.get('summary', '')}")
 
     lines.append("\nCORE COMPETENCIES:")

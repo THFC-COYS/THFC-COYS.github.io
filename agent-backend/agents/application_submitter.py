@@ -117,7 +117,7 @@ def _detect_platform(url: str) -> str:
         return "greenhouse"
     if "jobs.lever.co" in url_lower:
         return "lever"
-    if "myworkdayjobs.com" in url_lower or "/wday/" in url_lower or "wd1.myworkday" in url_lower:
+    if "myworkdayjobs.com" in url_lower or "/wday/" in url_lower or "myworkday.com" in url_lower:
         return "workday"
     if "icims.com" in url_lower:
         return "icims"
@@ -239,10 +239,10 @@ GREG'S PROFILE:
 - Phone: {personal.get('phone')}
 - Location: {personal.get('location')}
 - LinkedIn: {personal.get('linkedin')}
-- Portfolio: {personal.get('portfolio')} and {personal.get('secondary_site', '')}
+- Portfolio: {personal.get('portfolio')} | {personal.get('secondary_site', '')} | {personal.get('github', '')}
 - Current role: Faculty Chair & Academic Innovation Leader at Grand Canyon University (15+ years)
 - Also: Founder of pAIgeBreaker (AI learning platform) and LMSBreaker (AI-native LMS)
-- Education: Master's & Bachelor's in Business/Technology
+- Education: Executive MBA, Global Strategy (Arizona State University); A.A.S. Electrical Engineering (ITT Technical Institute)
 
 JOB: {job.get('title')} at {job.get('company')}
 

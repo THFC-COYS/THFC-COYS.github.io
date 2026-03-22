@@ -7,6 +7,7 @@
     "email": "greg.lucas1@icloud.com",
     "portfolio": "paigebreaker.com",
     "secondary_site": "lmsbreaker.com",
+    "github": "https://thfc-coys.github.io",
     "linkedin": "https://linkedin.com/in/greglucasai",
     "summary": "Higher-education technology leader with 15+ years driving academic technology strategy, LMS optimization, AI integration, and scalable online delivery models. Expertise in leading cross-functional teams to optimize learning management systems (including transitions from legacy platforms like Blackboard to custom LMS like Halo at GCU), manage continuous delivery/release cycles, oversee LTI integrations and functional testing, collaborate with vendors on roadmaps, and implement AI-enabled solutions for enhanced student success and operational efficiency. Founder of pAIgeBreaker and LMSBreaker (MoltALP) — AI-native, agentic platforms with LTI compatibility that personalize learning, automate content generation, and support adaptive ecosystems. Proven in translating institutional priorities into tactical implementations, stakeholder communication, and data-driven refinements in complex, enterprise environments."
   },
@@ -117,14 +118,14 @@
   ],
   "education": [
     {
-      "degree": "Master's Degree",
-      "field": "Business / Technology",
-      "institution": "Not specified"
+      "degree": "Executive MBA",
+      "field": "Global Strategy",
+      "institution": "Arizona State University"
     },
     {
-      "degree": "Bachelor's Degree",
-      "field": "Business / Technology",
-      "institution": "Not specified"
+      "degree": "A.A.S.",
+      "field": "Electrical Engineering",
+      "institution": "ITT Technical Institute"
     }
   ],
   "innovation_projects": [
