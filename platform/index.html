@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCU AI Platform — THREAD & ECHO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .text-gradient { background: linear-gradient(90deg, #22d3ee, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(17,24,39,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(51,65,85,0.7); }
+        .glass:hover { border-color: rgba(34,211,238,0.5); box-shadow: 0 0 30px rgba(34,211,238,0.15); }
+        .glow-cyan { box-shadow: 0 0 40px rgba(34,211,238,0.2); }
+        .glow-indigo { box-shadow: 0 0 40px rgba(165,180,252,0.2); }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        .fade-in-delay { animation: fadeIn 0.8s ease-out 0.3s forwards; opacity: 0; }
+        .fade-in-delay-2 { animation: fadeIn 0.8s ease-out 0.6s forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .pulse-dot { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+        .orbit { animation: orbit 20s linear infinite; }
+        @keyframes orbit { from { transform: rotate(0deg) translateX(120px) rotate(0deg); } to { transform: rotate(360deg) translateX(120px) rotate(-360deg); } }
+    </style>
+</head>
+<body class="text-slate-300 min-h-screen">
+
+    <!-- Nav -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-lg border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="../index.html" class="text-xl font-bold text-gradient">Greg Lucas</a>
+            <div class="flex items-center gap-6">
+                <span class="text-xs text-slate-500 tracking-widest uppercase">GCU AI Platform</span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400 pulse-dot"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+        <div class="text-center max-w-4xl mx-auto fade-in">
+            <div class="inline-flex items-center gap-2 bg-cyan-400/10 border border-cyan-400/20 rounded-full px-4 py-1.5 mb-8 text-cyan-400 text-sm font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot"></span>
+                GCU AI Productivity Platform — Beta
+            </div>
+            <h1 class="text-6xl md:text-7xl font-extrabold mb-6 leading-tight">
+                <span class="text-gradient">AI that walks</span><br>
+                <span class="text-slate-100">with you.</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                A university-wide AI ecosystem built on two foundations: <strong class="text-cyan-400">THREAD</strong> — the student companion that grows across every course — and <strong class="text-indigo-400">ECHO</strong> — the faculty digital twin that unlocks research, automates the routine, and amplifies what great teachers do.
+            </p>
+
+            <!-- Role Cards -->
+            <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto fade-in-delay">
+
+                <!-- Student Card -->
+                <a href="student.html" class="glass rounded-2xl p-8 text-left cursor-pointer transition-all duration-300 group glow-cyan">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <svg class="w-5 h-5 text-slate-600 group-hover:text-cyan-400 transition-colors mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-1">THREAD</h2>
+                    <p class="text-cyan-400 text-sm font-medium mb-3">Student AI Companion</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Your AI partner from day one to graduation. Builds your portfolio across every class, tracks your growth from AI User → AI Auditor, and prepares you to lead human-AI teams.</p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="text-xs bg-cyan-400/10 text-cyan-400 px-2 py-1 rounded-full">Portfolio Builder</span>
+                        <span class="text-xs bg-cyan-400/10 text-cyan-400 px-2 py-1 rounded-full">AI Auditor Track</span>
+                        <span class="text-xs bg-cyan-400/10 text-cyan-400 px-2 py-1 rounded-full">Study Partner</span>
+                        <span class="text-xs bg-cyan-400/10 text-cyan-400 px-2 py-1 rounded-full">Proof of Work</span>
+                    </div>
+                </a>
+
+                <!-- Faculty Card -->
+                <a href="faculty.html" class="glass rounded-2xl p-8 text-left cursor-pointer transition-all duration-300 group glow-indigo">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-400/10 border border-indigo-400/20 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <svg class="w-5 h-5 text-slate-600 group-hover:text-indigo-400 transition-colors mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-100 mb-1">ECHO</h2>
+                    <p class="text-indigo-400 text-sm font-medium mb-3">Faculty Digital Twin</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Your professional reflection, always working. Surfaces research opportunities hidden in your own courses, generates near-complete drafts, and handles the administrative noise so you can focus on what matters.</p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="text-xs bg-indigo-400/10 text-indigo-400 px-2 py-1 rounded-full">Research Radar</span>
+                        <span class="text-xs bg-indigo-400/10 text-indigo-400 px-2 py-1 rounded-full">Draft Studio</span>
+                        <span class="text-xs bg-indigo-400/10 text-indigo-400 px-2 py-1 rounded-full">Task Automation</span>
+                        <span class="text-xs bg-indigo-400/10 text-indigo-400 px-2 py-1 rounded-full">Open Research</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Framework callout -->
+        <div class="mt-16 max-w-4xl mx-auto w-full fade-in-delay-2">
+            <div class="glass rounded-2xl p-6 md:p-8">
+                <p class="text-center text-xs tracking-widest uppercase text-slate-500 mb-6">Powered by the AI Productivity Competency Framework</p>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="text-center">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-cyan-400 font-bold text-sm">01</span>
+                        </div>
+                        <p class="text-xs text-slate-400">AI Interaction</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-cyan-400 font-bold text-sm">02</span>
+                        </div>
+                        <p class="text-xs text-slate-400">AI Evaluation</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-cyan-400 font-bold text-sm">03</span>
+                        </div>
+                        <p class="text-xs text-slate-400">AI Application</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-cyan-400 font-bold text-sm">04</span>
+                        </div>
+                        <p class="text-xs text-slate-400">AI Governance</p>
+                    </div>
+                    <div class="text-center col-span-2 md:col-span-1">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-cyan-400 font-bold text-sm">05</span>
+                        </div>
+                        <p class="text-xs text-slate-400">AI Strategy</p>
+                    </div>
+                </div>
+                <div class="mt-6 pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="flex -space-x-2">
+                            <div class="w-7 h-7 rounded-full bg-slate-600 border-2 border-slate-800 flex items-center justify-center text-xs">U</div>
+                            <div class="w-7 h-7 rounded-full bg-cyan-800 border-2 border-slate-800 flex items-center justify-center text-xs">E</div>
+                            <div class="w-7 h-7 rounded-full bg-indigo-700 border-2 border-slate-800 flex items-center justify-center text-xs">A</div>
+                        </div>
+                        <span class="text-sm text-slate-400">AI User → AI Evaluator → <strong class="text-indigo-400">AI Auditor (GCU Standard)</strong></span>
+                    </div>
+                    <span class="text-xs text-slate-500">Graduate Profile: AI Productivity Operator (AIPO)</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="mt-8 text-xs text-slate-600 fade-in-delay-2">An API key from Anthropic is required to activate live AI features. Add yours in Settings after selecting your role.</p>
+    </section>
+
+</body>
+</html>
