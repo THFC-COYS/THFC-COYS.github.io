@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "MenuLens",
+    "slug": "menu-lens",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#080D08"
+    },
+    "backgroundColor": "#080D08",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.menulens.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "MenuLens uses your camera to scan restaurant menus and analyze dishes.",
+        "NSPhotoLibraryUsageDescription": "MenuLens can scan menu photos from your photo library.",
+        "NSPhotoLibraryAddUsageDescription": "MenuLens saves scanned menus to your photo library."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#080D08"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "MenuLens uses your camera to scan restaurant menus."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "MenuLens reads menu photos from your photo library."
+        }
+      ]
+    ],
+    "scheme": "menulens",
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
