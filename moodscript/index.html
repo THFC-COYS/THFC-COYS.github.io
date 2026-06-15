@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodScript AI — AI-Powered Daily Journaling</title>
+<meta name="description" content="Turn your feelings into your superpower. AI mood analysis, voice journaling, and daily insights — in your pocket.">
+<meta property="og:title" content="MoodScript AI — AI-Powered Daily Journaling">
+<meta property="og:description" content="Voice or text journaling with instant AI mood analysis, charts, and personalized coaching.">
+<meta property="og:image" content="https://thfc-coys.github.io/moodscript/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#7C5CBF;--s:#E91E8C;--t:#00BCD4;--a:#FFB300;
+  --bg:#08080f;--card:#13131f;--card2:#1a1a2e;
+  --text:#f0f0f8;--muted:rgba(240,240,248,0.55);
+  --border:rgba(255,255,255,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+
+/* ---- UTILS ---- */
+.grad{background:linear-gradient(135deg,var(--p),var(--s))}
+.grad-text{background:linear-gradient(135deg,var(--p),var(--s));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:14px;font-size:16px;
+  font-weight:700;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;
+  border:none;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--p),var(--s));color:#fff;
+  box-shadow:0 8px 32px rgba(124,92,191,.4);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,92,191,.55)}
+.btn-outline{
+  background:transparent;color:var(--text);
+  border:1.5px solid rgba(255,255,255,0.2);
+}
+.btn-outline:hover{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.05)}
+.btn-white{background:#fff;color:var(--p);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+
+/* ---- NAV ---- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 24px;
+  background:rgba(8,8,15,0.8);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{font-size:24px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{font-size:14px;padding:10px 22px}
+@media(max-width:640px){.nav-links{display:none}.nav-cta{padding:9px 18px;font-size:13px}}
+
+/* ---- HERO ---- */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:120px 0 80px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(124,92,191,.25),transparent);
+  pointer-events:none;
+}
+.hero-inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+}
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;text-align:center}
+  .hero-actions{justify-content:center}
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border-radius:20px;
+  background:rgba(124,92,191,.15);border:1px solid rgba(124,92,191,.3);
+  font-size:13px;font-weight:600;color:var(--p);margin-bottom:20px;
+}
+.hero-badge span{width:7px;height:7px;border-radius:50%;background:var(--p);display:inline-block;animation:blink 1.4s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-size:clamp(36px,5.5vw,62px);font-weight:900;
+  line-height:1.05;letter-spacing:-2px;margin-bottom:20px;
+}
+.hero p{
+  font-size:18px;color:var(--muted);max-width:480px;margin-bottom:32px;line-height:1.7;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-trust{
+  display:flex;align-items:center;gap:12px;margin-top:24px;flex-wrap:wrap;
+}
+.avatars{display:flex}
+.avatars div{
+  width:32px;height:32px;border-radius:50%;border:2px solid var(--bg);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  margin-left:-10px;background:var(--card2);
+}
+.avatars div:first-child{margin-left:0}
+.stars{color:#FFB300;font-size:14px;letter-spacing:1px}
+.trust-text{font-size:13px;color:var(--muted)}
+
+/* Phone mockup */
+.phone-wrap{display:flex;justify-content:center;align-items:center}
+.phone{
+  width:280px;height:580px;background:var(--card);
+  border-radius:40px;border:2px solid rgba(255,255,255,.1);
+  box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 0 6px #111,0 0 0 8px rgba(255,255,255,.05);
+  overflow:hidden;position:relative;flex-shrink:0;
+}
+.phone-notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:100px;height:24px;background:var(--bg);border-radius:0 0 16px 16px;z-index:2;
+}
+.phone-screen{
+  height:100%;display:flex;flex-direction:column;
+  background:linear-gradient(160deg,#111124,#0d0d1a);
+}
+.phone-header{
+  padding:28px 20px 16px;
+  background:linear-gradient(135deg,rgba(124,92,191,.8),rgba(233,30,140,.8));
+}
+.phone-greeting{font-size:16px;font-weight:700;margin-bottom:2px}
+.phone-sub{font-size:11px;opacity:.75}
+.phone-body{padding:12px 14px;flex:1;overflow:hidden}
+.phone-card{
+  background:rgba(255,255,255,.06);border-radius:14px;
+  padding:12px;margin-bottom:10px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.phone-card-row{display:flex;align-items:center;gap:10px}
+.phone-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--p),var(--s));
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.phone-label{font-size:12px;font-weight:600;opacity:.9}
+.phone-meta{font-size:10px;opacity:.5;margin-top:2px}
+.mood-bar-container{display:flex;gap:4px;margin:8px 0 4px}
+.mood-dot{
+  flex:1;height:6px;border-radius:3px;
+  background:rgba(255,255,255,.1);
+}
+.mood-dot.filled{background:linear-gradient(135deg,var(--p),var(--s))}
+.ai-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;font-size:10px;
+  background:rgba(124,92,191,.2);color:#BB86FC;
+  border:1px solid rgba(124,92,191,.3);
+}
+.phone-stats{display:flex;gap:6px;margin-bottom:10px}
+.phone-stat{
+  flex:1;background:rgba(255,255,255,.05);border-radius:10px;
+  padding:8px 6px;text-align:center;
+}
+.phone-stat-val{font-size:14px;font-weight:800;color:var(--p)}
+.phone-stat-lbl{font-size:9px;opacity:.5;margin-top:1px}
+@media(max-width:768px){.phone{width:240px;height:500px}}
+
+/* ---- SOCIAL PROOF BAR ---- */
+.proof-bar{
+  padding:28px 0;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+}
+.proof-inner{
+  display:flex;align-items:center;justify-content:center;
+  gap:40px;flex-wrap:wrap;
+}
+.proof-stat{text-align:center}
+.proof-num{font-size:28px;font-weight:900;letter-spacing:-1px}
+.proof-lbl{font-size:13px;color:var(--muted);margin-top:2px}
+@media(max-width:480px){.proof-inner{gap:24px}.proof-num{font-size:22px}}
+
+/* ---- SECTIONS ---- */
+section{padding:80px 0}
+.section-label{
+  display:inline-block;font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--p);margin-bottom:12px;
+}
+.section-title{
+  font-size:clamp(28px,4vw,42px);font-weight:800;
+  letter-spacing:-1px;margin-bottom:16px;
+}
+.section-sub{font-size:17px;color:var(--muted);max-width:560px;line-height:1.7}
+.section-head{text-align:center;margin-bottom:56px}
+.section-head .section-sub{margin:0 auto}
+
+/* ---- FEATURES ---- */
+.features-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+@media(max-width:900px){.features-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.features-grid{grid-template-columns:1fr}}
+.feature-card{
+  background:var(--card);border-radius:24px;
+  padding:28px 24px;border:1px solid var(--border);
+  transition:transform .2s,border-color .2s;
+}
+.feature-card:hover{transform:translateY(-4px);border-color:rgba(124,92,191,.4)}
+.feature-emoji{
+  font-size:36px;margin-bottom:16px;display:block;
+  width:60px;height:60px;line-height:60px;text-align:center;
+  background:rgba(124,92,191,.1);border-radius:16px;
+}
+.feature-title{font-size:17px;font-weight:700;margin-bottom:8px}
+.feature-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* ---- HOW IT WORKS ---- */
+.how-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
+  position:relative;
+}
+.how-grid::before{
+  content:'';position:absolute;top:32px;left:calc(16.67% + 16px);
+  right:calc(16.67% + 16px);height:2px;
+  background:linear-gradient(90deg,var(--p),var(--s));
+  opacity:.3;
+}
+@media(max-width:700px){
+  .how-grid{grid-template-columns:1fr;gap:24px}
+  .how-grid::before{display:none}
+}
+.how-step{text-align:center}
+.how-num{
+  width:64px;height:64px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p),var(--s));
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:900;margin:0 auto 20px;
+  box-shadow:0 8px 32px rgba(124,92,191,.4);
+}
+.how-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.how-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* ---- EMAIL CAPTURE ---- */
+.email-section{
+  background:var(--card);border-radius:28px;
+  padding:48px 40px;text-align:center;
+  border:1px solid var(--border);
+  margin-bottom:80px;
+}
+@media(max-width:640px){.email-section{padding:32px 20px}}
+.email-section h2{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px}
+.email-section p{color:var(--muted);margin-bottom:24px}
+.email-form{
+  display:flex;gap:12px;max-width:480px;margin:0 auto;
+  flex-wrap:wrap;justify-content:center;
+}
+.email-input{
+  flex:1;min-width:200px;padding:14px 18px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1.5px solid var(--border);
+  color:var(--text);font-size:15px;font-family:'Inter',sans-serif;outline:none;
+  transition:border-color .2s;
+}
+.email-input:focus{border-color:var(--p)}
+.email-success{
+  display:none;padding:14px 24px;border-radius:14px;
+  background:rgba(102,187,106,.15);border:1px solid rgba(102,187,106,.3);
+  color:#66BB6A;font-weight:600;font-size:15px;
+}
+
+/* ---- PRICING ---- */
+#pricing{scroll-margin-top:80px}
+.pricing-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:820px;margin:0 auto;
+}
+@media(max-width:640px){.pricing-grid{grid-template-columns:1fr}}
+.pricing-card{
+  background:var(--card);border-radius:28px;padding:36px 32px;
+  border:1.5px solid var(--border);position:relative;overflow:hidden;
+}
+.pricing-card.featured{
+  border-color:transparent;
+  background:linear-gradient(var(--card),var(--card)) padding-box,
+    linear-gradient(135deg,var(--p),var(--s)) border-box;
+  box-shadow:0 0 60px rgba(124,92,191,.25);
+}
+.pricing-card.featured::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at top,rgba(124,92,191,.12),transparent 70%);
+  pointer-events:none;
+}
+.pricing-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;
+  background:linear-gradient(135deg,var(--p),var(--s));color:#fff;
+  margin-bottom:20px;
+}
+.spots-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;
+  background:rgba(255,179,0,.15);color:var(--a);border:1px solid rgba(255,179,0,.3);
+  margin-bottom:12px;
+}
+.pricing-name{font-size:20px;font-weight:800;margin-bottom:6px}
+.pricing-price{font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.pricing-price span{font-size:18px;font-weight:500;opacity:.6}
+.pricing-was{font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:6px}
+.pricing-saving{
+  display:inline-block;font-size:13px;font-weight:700;
+  background:rgba(102,187,106,.15);color:#66BB6A;
+  padding:3px 10px;border-radius:20px;margin-bottom:24px;
+}
+.pricing-features{list-style:none;margin-bottom:28px}
+.pricing-features li{
+  display:flex;align-items:center;gap:10px;
+  font-size:15px;padding:9px 0;
+  border-bottom:1px solid var(--border);
+}
+.pricing-features li:last-child{border-bottom:none}
+.check{color:#66BB6A;font-size:16px;flex-shrink:0}
+.cross{color:rgba(255,255,255,.3);font-size:16px;flex-shrink:0}
+.pricing-note{font-size:12px;color:var(--muted);text-align:center;margin-top:12px}
+
+/* ---- TESTIMONIALS ---- */
+.testi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+@media(max-width:800px){.testi-grid{grid-template-columns:1fr}}
+.testi-card{
+  background:var(--card);border-radius:24px;padding:28px 24px;
+  border:1px solid var(--border);
+}
+.testi-stars{color:#FFB300;font-size:16px;margin-bottom:16px;letter-spacing:2px}
+.testi-quote{font-size:15px;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  background:var(--card2);
+}
+.testi-name{font-size:14px;font-weight:700}
+.testi-role{font-size:12px;color:var(--muted);margin-top:1px}
+
+/* ---- FAQ ---- */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{
+  border-bottom:1px solid var(--border);overflow:hidden;
+}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 0;cursor:pointer;font-size:16px;font-weight:600;
+  list-style:none;transition:color .2s;
+}
+.faq-q:hover{color:var(--p)}
+.faq-q::after{content:'+';font-size:22px;color:var(--p);transition:transform .3s;flex-shrink:0;margin-left:16px}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;
+  font-size:15px;color:var(--muted);line-height:1.7;
+}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:20px}
+
+/* ---- FINAL CTA ---- */
+.final-cta{
+  border-radius:32px;padding:72px 40px;
+  background:linear-gradient(135deg,rgba(124,92,191,.3),rgba(233,30,140,.2));
+  border:1px solid rgba(124,92,191,.3);
+  text-align:center;position:relative;overflow:hidden;
+}
+.final-cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 50%,rgba(124,92,191,.25),transparent),
+              radial-gradient(ellipse at 70% 50%,rgba(233,30,140,.15),transparent);
+  pointer-events:none;
+}
+.final-cta h2{font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-1px;margin-bottom:16px}
+.final-cta p{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto 32px;line-height:1.7}
+.final-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+@media(max-width:480px){.final-cta{padding:48px 20px}}
+
+/* ---- FOOTER ---- */
+footer{
+  padding:40px 0;border-top:1px solid var(--border);
+  text-align:center;font-size:13px;color:var(--muted);
+}
+.footer-logo{font-size:18px;font-weight:800;margin-bottom:16px}
+.footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px}
+.footer-links a{color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+
+/* ---- FLOATING BANNER ---- */
+.float-banner{
+  position:fixed;bottom:24px;right:24px;z-index:99;
+  background:linear-gradient(135deg,var(--p),var(--s));
+  color:#fff;padding:12px 18px;border-radius:16px;
+  font-size:13px;font-weight:700;
+  box-shadow:0 8px 32px rgba(124,92,191,.5);
+  display:flex;align-items:center;gap:8px;
+  animation:floatIn .5s .8s ease both;
+  cursor:pointer;
+}
+.float-banner:hover{transform:translateY(-2px)}
+@keyframes floatIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.float-close{
+  margin-left:6px;opacity:.7;cursor:pointer;
+  font-size:16px;line-height:1;background:none;border:none;color:#fff;
+}
+
+/* ---- ANIMATIONS ---- */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>✨</span> MoodScript AI</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a href="#pricing" class="btn btn-primary nav-cta">Get Early Access</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><span></span> Now in early access</div>
+        <h1>Turn Your Feelings Into Your <span class="grad-text">Superpower</span></h1>
+        <p>Voice or text journaling with instant AI mood analysis, personalized coaching, and beautiful insights — all in your pocket.</p>
+        <div class="hero-actions">
+          <a href="#pricing" class="btn btn-primary">🚀 Get Early Access</a>
+          <a href="#how" class="btn btn-outline">▶ How it works</a>
+        </div>
+        <div class="hero-trust">
+          <div class="avatars">
+            <div>👩</div><div>🧔</div><div>👨‍💻</div><div>👩‍🎨</div><div>🧑‍⚕️</div>
+          </div>
+          <div class="stars">★★★★★</div>
+          <div class="trust-text">1,200+ early users</div>
+        </div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-header">
+              <div class="phone-greeting">Hi Alex 👋</div>
+              <div class="phone-sub">How are you feeling today?</div>
+            </div>
+            <div class="phone-body">
+              <div class="phone-stats">
+                <div class="phone-stat"><div class="phone-stat-val">🔥 7</div><div class="phone-stat-lbl">Day Streak</div></div>
+                <div class="phone-stat"><div class="phone-stat-val">4.2</div><div class="phone-stat-lbl">Avg Mood</div></div>
+                <div class="phone-stat"><div class="phone-stat-val">42</div><div class="phone-stat-lbl">Entries</div></div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-row">
+                  <div class="phone-icon">📝</div>
+                  <div><div class="phone-label">Start journaling</div><div class="phone-meta">Voice or text • AI included</div></div>
+                </div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-row" style="margin-bottom:8px">
+                  <span style="font-size:18px">😊</span>
+                  <div><div class="phone-label" style="font-size:11px">Today, 8:32 AM</div></div>
+                  <div style="margin-left:auto"><div class="ai-pill">✨ AI</div></div>
+                </div>
+                <div style="font-size:11px;opacity:.7;line-height:1.5">Had a really productive morning. Finished the big project...</div>
+                <div class="mood-bar-container">
+                  <div class="mood-dot filled"></div><div class="mood-dot filled"></div>
+                  <div class="mood-dot filled"></div><div class="mood-dot filled"></div>
+                  <div class="mood-dot"></div>
+                </div>
+                <div style="font-size:10px;color:#BB86FC;font-style:italic">You showed great resilience today 🌟</div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-row">
+                  <span style="font-size:18px">😐</span>
+                  <div><div class="phone-label" style="font-size:11px">Yesterday, 9:15 PM</div></div>
+                </div>
+                <div style="font-size:11px;opacity:.6;margin-top:4px">Feeling unsettled about the presentation...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <div class="container">
+    <div class="proof-inner">
+      <div class="proof-stat">
+        <div class="proof-num grad-text">1,200+</div>
+        <div class="proof-lbl">Early users</div>
+      </div>
+      <div class="proof-stat">
+        <div class="proof-num grad-text">48,000+</div>
+        <div class="proof-lbl">Entries analysed</div>
+      </div>
+      <div class="proof-stat">
+        <div class="proof-num grad-text">4.9 ★</div>
+        <div class="proof-lbl">Avg rating</div>
+      </div>
+      <div class="proof-stat">
+        <div class="proof-num grad-text">3</div>
+        <div class="proof-lbl">AI models supported</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything your mind needs</h2>
+      <p class="section-sub">Designed to make daily reflection effortless, insightful, and actually enjoyable.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <span class="feature-emoji">🎤</span>
+        <div class="feature-title">Voice Journaling</div>
+        <div class="feature-desc">Speak your thoughts and watch them transcribe in real time. No more staring at a blank page.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <span class="feature-emoji">🧠</span>
+        <div class="feature-title">AI Mood Analysis</div>
+        <div class="feature-desc">OpenAI, Gemini, or Claude analyses every entry — detecting emotions, mood score, and key insights instantly.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <span class="feature-emoji">📊</span>
+        <div class="feature-title">Beautiful Charts</div>
+        <div class="feature-desc">Mood trend lines and distribution charts reveal your emotional patterns over days, weeks, and months.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <span class="feature-emoji">✨</span>
+        <div class="feature-title">Daily Affirmations</div>
+        <div class="feature-desc">Each entry generates personalised affirmations and 3 actionable steps tailored to how you actually feel.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <span class="feature-emoji">🧡</span>
+        <div class="feature-title">AI Coaching</div>
+        <div class="feature-desc">Therapy-grade insights and a personal coaching note accompany every entry you write.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <span class="feature-emoji">🔗</span>
+        <div class="feature-title">Shareable Reports</div>
+        <div class="feature-desc">Export your mood journey as a PDF and share with your therapist, coach, or loved ones.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">Three steps to self-awareness</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-step fade-up">
+        <div class="how-num">1</div>
+        <div class="how-title">Speak or type your thoughts</div>
+        <div class="how-desc">Open the app, tap the mic, and talk. Or type freely. Takes less than 2 minutes.</div>
+      </div>
+      <div class="how-step fade-up">
+        <div class="how-num">2</div>
+        <div class="how-title">AI analyses your mood instantly</div>
+        <div class="how-desc">Our AI detects emotions, scores your mood 1–5, and surfaces insights you might have missed.</div>
+      </div>
+      <div class="how-step fade-up">
+        <div class="how-num">3</div>
+        <div class="how-title">Grow with daily insights</div>
+        <div class="how-desc">Review your trends, act on your coaching notes, and watch your emotional intelligence compound.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL CAPTURE -->
+<section>
+  <div class="container">
+    <div class="email-section fade-up">
+      <h2>🔔 Get notified at launch</h2>
+      <p>Drop your email and be the first to know when we ship on iOS & Android.</p>
+      <form class="email-form" onsubmit="handleEmail(event)">
+        <input class="email-input" type="email" placeholder="you@example.com" required id="email-in">
+        <button type="submit" class="btn btn-primary">Notify me</button>
+      </form>
+      <div class="email-success" id="email-ok">✅ You’re on the list! We’ll be in touch.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Start free. Unlock everything.</h2>
+      <p class="section-sub">Founding member pricing is limited to 100 spots. Lock in your rate forever.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="pricing-card fade-up">
+        <div class="pricing-name">Free</div>
+        <div class="pricing-price">$0</div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:24px">Forever free, no card needed</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 3 journal entries per day</li>
+          <li><span class="check">✓</span> AI mood analysis</li>
+          <li><span class="check">✓</span> Voice transcription</li>
+          <li><span class="check">✓</span> Basic mood charts</li>
+          <li><span class="check">✓</span> Daily affirmations</li>
+          <li><span class="cross">✕</span> <span style="opacity:.4">Unlimited entries</span></li>
+          <li><span class="cross">✕</span> <span style="opacity:.4">PDF export</span></li>
+          <li><span class="cross">✕</span> <span style="opacity:.4">Advanced coaching</span></li>
+        </ul>
+        <a href="#" class="btn btn-outline" style="width:100%;justify-content:center">📱 Download Free</a>
+        <p class="pricing-note">iOS & Android — coming soon</p>
+      </div>
+      <!-- Founding Member -->
+      <div class="pricing-card featured fade-up">
+        <div class="pricing-badge">✨ Founding Member</div>
+        <div class="spots-badge">🔥 Only 100 spots</div>
+        <div class="pricing-name">Premium</div>
+        <div class="pricing-price">$19<span>.99/yr</span></div>
+        <div class="pricing-was">Was $39.99/year</div>
+        <div class="pricing-saving">You save 50% — locked in forever</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> <strong>Unlimited</strong> journal entries</li>
+          <li><span class="check">✓</span> AI mood analysis (all providers)</li>
+          <li><span class="check">✓</span> Voice transcription</li>
+          <li><span class="check">✓</span> Advanced mood charts</li>
+          <li><span class="check">✓</span> Weekly AI summaries</li>
+          <li><span class="check">✓</span> PDF export</li>
+          <li><span class="check">✓</span> Advanced AI coaching</li>
+          <li><span class="check">✓</span> Photo memories + no ads</li>
+        </ul>
+        <!-- REPLACE: set your actual Stripe payment link below -->
+        <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn btn-primary" style="width:100%;justify-content:center;font-size:17px">🚀 Claim Founding Deal</a>
+        <p class="pricing-note">Secure checkout via Stripe · Cancel anytime</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-label">Testimonials</div>
+      <h2 class="section-title">Loved by early users</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">“I’ve tried every journaling app out there. MoodScript AI is the first one that actually makes me feel understood. The AI coaching notes are eerily accurate.”</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩‍💼</div>
+          <div><div class="testi-name">Sarah M.</div><div class="testi-role">Product Designer, London</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">“The voice journaling is a game-changer. I talk to it during my morning walk and by the time I get home, I have a full mood analysis waiting for me.”</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨‍💻</div>
+          <div><div class="testi-name">James K.</div><div class="testi-role">Software Engineer, NYC</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">“As someone dealing with anxiety, seeing my mood trends visualised over weeks has been genuinely therapeutic. I share the PDF with my therapist every month.”</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩‍🎨</div>
+          <div><div class="testi-name">Priya L.</div><div class="testi-role">Therapist, Melbourne</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Questions answered</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What is MoodScript AI?</div>
+        <div class="faq-a">MoodScript AI is an AI-powered journaling app that lets you capture your thoughts via voice or text, then instantly analyses your mood, detects emotions, and delivers personalized coaching insights. Think of it as a therapist-grade journaling companion in your pocket.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Which AI model does it use?</div>
+        <div class="faq-a">You choose! MoodScript AI supports OpenAI (GPT-4o mini), Google Gemini (1.5 Flash), and Anthropic Claude (Haiku). You can switch between them anytime in Settings and provide your own API key for unlimited usage.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is my journal private and secure?</div>
+        <div class="faq-a">Absolutely. Your entries are encrypted at rest in Firebase (Google Cloud) and only accessible to you. We never read, sell, or share your journal data with third parties. You can delete your account and all associated data at any time.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">When does the iOS / Android app launch?</div>
+        <div class="faq-a">We are targeting App Store and Google Play launch within the next 4–6 weeks. Founding members get immediate access to the web app plus priority access to the mobile apps at launch, with their discounted rate locked in forever.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What happens after the 100 founding member spots fill up?</div>
+        <div class="faq-a">The price goes back to $39.99/year. Founding members keep their $19.99/year rate permanently — it never increases. Once the spots are gone, they’re gone. We are not running this discount again.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="final-cta fade-up">
+      <h2>Start your journey <span class="grad-text">today</span></h2>
+      <p>Join 1,200+ people using AI to understand themselves better, one entry at a time.</p>
+      <div class="final-actions">
+        <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn btn-primary" style="font-size:17px">🚀 Claim Founding Member Deal — $19.99/yr</a>
+        <a href="#" class="btn btn-outline">Download Free App</a>
+      </div>
+      <p style="margin-top:16px;font-size:13px;color:var(--muted)">Secure checkout via Stripe · Cancel anytime · 50% founding discount, forever</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">✨ MoodScript AI</div>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="mailto:hello@moodscript.ai">Contact</a>
+    </div>
+    <div>&copy; 2026 MoodScript AI. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- FLOATING BANNER -->
+<div class="float-banner" id="float" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">
+  🔥 Founding deal ends Friday
+  <button class="float-close" onclick="event.stopPropagation();document.getElementById('float').style.display='none'">&times;</button>
+</div>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') })
+},{threshold:0.12})
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el))
+
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement
+  const isOpen = item.classList.contains('open')
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'))
+  if(!isOpen) item.classList.add('open')
+}
+
+// Email capture
+function handleEmail(e) {
+  e.preventDefault()
+  document.querySelector('.email-form').style.display = 'none'
+  document.getElementById('email-ok').style.display = 'block'
+  // TODO: POST email to your backend / Mailchimp / ConvertKit
+  // fetch('/api/subscribe', {method:'POST', body: JSON.stringify({email: document.getElementById('email-in').value})})
+}
+</script>
+</body>
+</html>
