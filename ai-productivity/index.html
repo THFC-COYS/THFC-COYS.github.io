@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Discover how AI can transform your workday. Tell us your job role and daily tasks to get personalised, ready-to-use AI prompts.">
+    <meta name="description" content="Discover how AI can transform your workday. Tell us your job and tasks — get personalised, ready-to-use AI prompts with real before/after examples.">
     <title>AI Advantage — Your Personal AI Productivity Coach</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -32,17 +32,30 @@
         .btn-secondary:hover{border-color:#94a3b8;color:#e2e8f0}
         .prompt-tab{padding:10px 20px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:.875rem;font-weight:500;border:1px solid transparent;color:#64748b;background:transparent}
         .prompt-tab.active-tab{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.4);color:#22d3ee}
-        .prompt-card{background:rgba(15,23,42,.8);border:1px solid rgba(51,65,85,.6);border-radius:12px;padding:20px;margin-bottom:16px}
-        .copy-btn{background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);color:#22d3ee;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:500;transition:all .2s}
+        .prompt-card{background:rgba(15,23,42,.8);border:1px solid rgba(51,65,85,.6);border-radius:14px;padding:22px;margin-bottom:18px}
+        .copy-btn{background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);color:#22d3ee;padding:7px 16px;border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s;white-space:nowrap}
         .copy-btn:hover{background:rgba(34,211,238,.2)}
         .copy-btn.copied{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:#34d399}
+        .savings-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:9999px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#34d399;font-size:.72rem;font-weight:700;white-space:nowrap}
+        .example-block{background:rgba(34,211,238,.03);border:1px solid rgba(34,211,238,.18);border-radius:10px;padding:16px;margin-bottom:14px}
+        .example-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#22d3ee;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+        .example-input-box{background:rgba(0,0,0,.4);border-radius:6px;padding:8px 12px;color:#64748b;font-size:.82rem;font-style:italic;margin-bottom:8px;font-family:'Inter',sans-serif;border-left:2px solid rgba(51,65,85,.6)}
+        .example-arrow{text-align:center;color:#22d3ee;font-size:.85rem;font-weight:600;margin:8px 0;letter-spacing:.02em}
+        .example-output-box{background:rgba(15,23,42,.9);border-radius:8px;padding:14px 16px;border-left:3px solid #22d3ee}
+        .example-output-box pre{color:#e2e8f0;font-size:.82rem;white-space:pre-wrap;font-family:'Inter',sans-serif;line-height:1.65}
+        .prompt-toggle{width:100%;text-align:left;background:none;border:none;color:#475569;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;cursor:pointer;padding:10px 0 6px;display:flex;align-items:center;gap:6px;transition:color .2s}
+        .prompt-toggle:hover{color:#94a3b8}
+        .prompt-text-box{background:rgba(15,23,42,.8);border-radius:10px;padding:16px;border:1px solid rgba(51,65,85,.5);margin-top:4px}
+        .prompt-text-box pre{color:#94a3b8;font-size:.82rem;white-space:pre-wrap;font-family:'Inter',sans-serif;line-height:1.65}
         .progress-bar{height:3px;background:rgba(51,65,85,.5);border-radius:9999px;overflow:hidden}
         .progress-fill{height:100%;background:linear-gradient(90deg,#22d3ee,#a5b4fc);border-radius:9999px;transition:width .4s ease}
         .tab-content{display:none}.tab-content.active{display:block}
         @keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         .fade-in{animation:fadeInUp .4s ease forwards}
         .glow-text{text-shadow:0 0 60px rgba(34,211,238,.2)}
-        .task-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#22d3ee;font-size:.78rem;font-weight:500}
+        .highlight-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:9999px;background:rgba(165,180,252,.08);border:1px solid rgba(165,180,252,.25);color:#a5b4fc;font-size:.78rem;font-weight:500}
+        .step-pill{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:9999px;background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.3);color:#22d3ee;font-size:.75rem;font-weight:800;flex-shrink:0}
+        details>summary{list-style:none}details>summary::-webkit-details-marker{display:none}
     </style>
 </head>
 <body class="text-slate-300 min-h-screen">
@@ -67,14 +80,12 @@
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:33%"></div></div>
     </div>
 
-    <!-- Welcome -->
+    <!-- ═══ Welcome ═══ -->
     <div class="step-screen active text-center fade-in" id="screen-welcome">
         <div class="mb-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-sm font-medium mb-8">
-                <span>&#10022;</span><span>For every worker &mdash; no tech knowledge needed</span>
-            </div>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-sm font-medium mb-8">&#10022; For every worker — no tech knowledge needed</div>
             <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-5 glow-text leading-tight">Discover Your<br><span class="text-gradient">AI Advantage</span></h1>
-            <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-3">Tell us your job and what you do every day. We&rsquo;ll read your description, identify exactly where AI can help, and give you prompts that actually do the work &mdash; ready to use right now.</p>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-3">Tell us your job and what you do every day. We&rsquo;ll show you — with real examples — exactly how AI can do your most time-consuming tasks in seconds.</p>
             <p class="text-slate-500 text-sm">Takes 2 minutes &middot; Free &middot; No sign-up</p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto mb-12">
@@ -86,13 +97,13 @@
         <button class="btn-primary text-lg px-12 py-4" onclick="startJourney()">Find My AI Advantage &rarr;</button>
     </div>
 
-    <!-- Role -->
+    <!-- ═══ Role ═══ -->
     <div class="step-screen max-w-2xl mx-auto" id="screen-role">
         <h2 class="text-3xl font-bold text-white mb-2">What&rsquo;s your job title?</h2>
-        <p class="text-slate-400 mb-8">This helps us generate prompts that match your actual work.</p>
+        <p class="text-slate-400 mb-8">This lets us tailor the prompts and examples to your actual work.</p>
         <input type="text" id="roleInput" class="custom-input text-lg mb-5" placeholder="e.g. Teacher, Nurse, Project Manager, Sales Rep..." oninput="filterRoles(this.value)" onkeydown="if(event.key==='Enter')nextStep(2)">
         <div class="mb-8">
-            <p class="text-slate-500 text-sm mb-3">Popular roles &mdash; click to select:</p>
+            <p class="text-slate-500 text-sm mb-3">Popular roles — click to select:</p>
             <div class="flex flex-wrap gap-2" id="roleChips"></div>
         </div>
         <div class="flex gap-3">
@@ -101,22 +112,22 @@
         </div>
     </div>
 
-    <!-- Tasks -->
+    <!-- ═══ Tasks ═══ -->
     <div class="step-screen max-w-2xl mx-auto" id="screen-tasks">
         <h2 class="text-3xl font-bold text-white mb-2">Describe your typical day</h2>
-        <p class="text-slate-400 mb-6">The more detail you give, the more specific and useful your prompts will be. We read this to detect exactly which AI tools to build for you.</p>
+        <p class="text-slate-400 mb-6">We read your description to identify the exact tasks where AI can help. The more detail, the more specific your results.</p>
         <div class="glass-card rounded-xl p-4 mb-4">
             <p class="text-cyan-400 text-sm font-semibold mb-3">&#128172; Include things like...</p>
             <div class="grid grid-cols-2 gap-y-1 gap-x-4 text-slate-400 text-sm">
                 <span>&bull; Writing emails and reports</span><span>&bull; Meetings you run or attend</span>
                 <span>&bull; Documents or slides you create</span><span>&bull; Data or numbers you work with</span>
                 <span>&bull; Training or teaching others</span><span>&bull; Dealing with customers or clients</span>
-                <span>&bull; Planning and organising</span><span>&bull; Reviews, feedback, appraisals</span>
+                <span>&bull; Planning and organising work</span><span>&bull; Reviews, feedback, appraisals</span>
             </div>
         </div>
-        <textarea id="tasksInput" class="custom-input" rows="7" placeholder="Example: I start my morning going through about 30 emails. I chair a daily team standup and take notes on actions. I write a weekly performance report for my director, pulling data from our CRM. I also run onboarding sessions for new starters and create training materials. In the afternoons I usually review documents, give feedback to the team, and handle any customer escalations that come in..." oninput="document.getElementById('charCount').textContent=this.value.length+' characters'"></textarea>
+        <textarea id="tasksInput" class="custom-input" rows="7" placeholder="Example: I spend my mornings going through about 30 emails. I chair a daily team standup and take notes on actions. I write a weekly performance report for my director. I also run onboarding sessions for new starters and create training materials. In the afternoons I review documents and handle any escalations..." oninput="document.getElementById('charCount').textContent=this.value.length+' characters'"></textarea>
         <div class="flex justify-between text-xs text-slate-600 mt-2 mb-6">
-            <span>More detail = more specific prompts</span>
+            <span>More detail = more specific results</span>
             <span id="charCount">0 characters</span>
         </div>
         <div class="flex gap-3">
@@ -125,10 +136,10 @@
         </div>
     </div>
 
-    <!-- Goals -->
+    <!-- ═══ Goals ═══ -->
     <div class="step-screen max-w-2xl mx-auto" id="screen-goals">
         <h2 class="text-3xl font-bold text-white mb-2">What matters most to you?</h2>
-        <p class="text-slate-400 mb-8">Select all that apply &mdash; we&rsquo;ll build a set of prompts for each area.</p>
+        <p class="text-slate-400 mb-8">Select all that apply — you&rsquo;ll get a full set of prompts and examples for each area.</p>
         <div class="grid grid-cols-2 gap-4 mb-8">
             <div class="goal-card" data-goal="productivity" onclick="toggleGoal(this)"><div class="text-4xl mb-3">&#9889;</div><h3 class="text-white font-bold text-lg mb-1">Productivity</h3><p class="text-slate-400 text-sm">Do more in less time. Let AI handle the repetitive work so you can focus on what matters.</p></div>
             <div class="goal-card" data-goal="creativity" onclick="toggleGoal(this)"><div class="text-4xl mb-3">&#128161;</div><h3 class="text-white font-bold text-lg mb-1">Creativity</h3><p class="text-slate-400 text-sm">Generate fresh ideas, new angles, and creative solutions whenever you need them.</p></div>
@@ -141,23 +152,38 @@
         </div>
     </div>
 
-    <!-- Results -->
+    <!-- ═══ Results ═══ -->
     <div class="step-screen" id="screen-results">
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-green-500/30 bg-green-500/5 text-green-400 text-sm font-medium mb-4">
-                <span>&#10003;</span><span id="promptCount">Personalised prompts ready</span>
+
+        <!-- Personalised hero -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-400 flex items-center justify-center text-black font-extrabold text-sm flex-shrink-0">AI</div>
+                <div class="flex-1">
+                    <p class="text-white font-semibold mb-1" id="heroHeadline">Your AI Advantage Playbook is ready</p>
+                    <p class="text-slate-400 text-sm mb-4" id="heroSub">Personalised for your role and tasks</p>
+                    <div class="flex flex-wrap gap-2 mb-4" id="detectedChips"></div>
+                    <div class="bg-slate-900/60 rounded-xl p-4 border border-slate-700/50">
+                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-3">&#128073; How to use any prompt below</p>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="flex items-center gap-2 text-sm text-slate-400"><span class="step-pill">1</span> Click <strong class="text-cyan-400">Copy Prompt</strong></div>
+                            <div class="flex items-center gap-2 text-sm text-slate-400"><span class="step-pill">2</span> Open <strong class="text-cyan-400">claude.ai</strong> (free)</div>
+                            <div class="flex items-center gap-2 text-sm text-slate-400"><span class="step-pill">3</span> Paste &amp; press Enter</div>
+                            <div class="flex items-center gap-2 text-sm text-slate-400"><span class="step-pill">4</span> <strong class="text-white">AI does the work</strong></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h2 class="text-3xl font-bold text-white mb-2">Your AI Advantage Playbook</h2>
-            <p class="text-slate-400 mb-5" id="resultsSubtitle">Built specifically for your role and tasks</p>
-            <div class="flex flex-wrap gap-2 justify-center" id="detectedBadges"></div>
         </div>
+
         <div class="flex flex-wrap gap-2 mb-6 justify-center" id="promptTabs"></div>
         <div id="promptContent"></div>
+
         <div class="glass-card rounded-xl p-6 mt-8 text-center">
-            <p class="text-white font-semibold mb-1">Ready to put these to work?</p>
-            <p class="text-slate-400 text-sm mb-5">Copy any prompt, open Claude, paste it in &mdash; your AI session starts immediately.</p>
+            <p class="text-white font-semibold mb-1">Ready to start?</p>
+            <p class="text-slate-400 text-sm mb-5">Copy any prompt above and paste it into Claude. Your AI session begins immediately.</p>
             <div class="flex flex-wrap gap-3 justify-center">
-                <a href="https://claude.ai" target="_blank" rel="noopener" class="btn-primary">Open Claude &#8599;</a>
+                <a href="https://claude.ai" target="_blank" rel="noopener" class="btn-primary">Open Claude (Free) &#8599;</a>
                 <button class="btn-secondary" onclick="startOver()">Start Over</button>
             </div>
         </div>
@@ -165,26 +191,18 @@
 
 </main>
 
-<div id="toast" class="fixed bottom-6 right-6 bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl transition-all duration-300 z-50" style="transform:translateY(80px);opacity:0">&#10003; Copied to clipboard!</div>
+<div id="toast" class="fixed bottom-6 right-6 bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl transition-all duration-300 z-50" style="transform:translateY(80px);opacity:0">&#10003; Copied! Now paste into Claude.</div>
 
 <script>
 const state={role:'',tasks:'',goals:[]};
-
 const POPULAR_ROLES=['Teacher','Nurse','Project Manager','Sales Representative','HR Manager','Marketing Manager','Admin Assistant','Customer Service Rep','Financial Analyst','Operations Manager','Social Worker','Accountant','Recruitment Consultant','Office Manager','Team Leader','GP / Doctor','Solicitor / Lawyer','Estate Agent','Events Coordinator','Business Analyst','Retail Manager','School Leader','Care Worker','IT Support'];
 
-// ── Navigation ────────────────────────────────────────────────
 function showScreen(n){
     const ids=['screen-welcome','screen-role','screen-tasks','screen-goals','screen-results'];
     document.querySelectorAll('.step-screen').forEach(s=>s.classList.remove('active'));
-    const el=document.getElementById(ids[n]);
-    el.classList.add('active','fade-in');
+    const el=document.getElementById(ids[n]);el.classList.add('active','fade-in');
     const prog=document.getElementById('progressContainer');
-    if(n>0&&n<4){
-        prog.style.display='block';
-        document.getElementById('stepLabel').textContent='Step '+n+' of 3';
-        document.getElementById('stepTitle').textContent=['','Your Role','Your Tasks','Your Goals'][n];
-        document.getElementById('progressFill').style.width=[0,33,66,100][n]+'%';
-    }else{prog.style.display='none';}
+    if(n>0&&n<4){prog.style.display='block';document.getElementById('stepLabel').textContent='Step '+n+' of 3';document.getElementById('stepTitle').textContent=['','Your Role','Your Tasks','Your Goals'][n];document.getElementById('progressFill').style.width=[0,33,66,100][n]+'%';}else{prog.style.display='none';}
     window.scrollTo({top:0,behavior:'smooth'});
 }
 function startJourney(){renderRoleChips(POPULAR_ROLES);showScreen(1);}
@@ -193,465 +211,538 @@ function nextStep(to){
     if(to===3){const v=document.getElementById('tasksInput').value.trim();if(v.length<20){highlight('tasksInput');return;}state.tasks=v;}
     showScreen(to);
 }
-function highlight(id){
-    const el=document.getElementById(id);
-    el.style.borderColor='#f87171';el.style.boxShadow='0 0 0 3px rgba(248,113,113,.15)';el.focus();
-    setTimeout(()=>{el.style.borderColor='';el.style.boxShadow='';},2000);
-}
+function highlight(id){const el=document.getElementById(id);el.style.borderColor='#f87171';el.style.boxShadow='0 0 0 3px rgba(248,113,113,.15)';el.focus();setTimeout(()=>{el.style.borderColor='';el.style.boxShadow='';},2000);}
+function renderRoleChips(roles){document.getElementById('roleChips').innerHTML=roles.map(r=>`<span class="role-chip" onclick="selectRole('${r.replace(/'/g,"&apos;")}')">${r}</span>`).join('');}
+function selectRole(role){document.getElementById('roleInput').value=role;state.role=role;document.querySelectorAll('.role-chip').forEach(c=>c.classList.toggle('selected',c.textContent===role));}
+function filterRoles(q){const f=POPULAR_ROLES.filter(r=>r.toLowerCase().includes(q.toLowerCase()));renderRoleChips(f.length?f:POPULAR_ROLES);}
+function toggleGoal(el){const goal=el.dataset.goal;el.classList.toggle('selected');state.goals=el.classList.contains('selected')?[...new Set([...state.goals,goal])]:state.goals.filter(g=>g!==goal);document.getElementById('generateBtn').disabled=!state.goals.length;}
 
-// ── Role chips ────────────────────────────────────────────────
-function renderRoleChips(roles){
-    document.getElementById('roleChips').innerHTML=roles.map(r=>`<span class="role-chip" onclick="selectRole('${r.replace(/'/g,"&apos;")}')">${r}</span>`).join('');
-}
-function selectRole(role){
-    document.getElementById('roleInput').value=role;state.role=role;
-    document.querySelectorAll('.role-chip').forEach(c=>c.classList.toggle('selected',c.textContent===role));
-}
-function filterRoles(q){
-    const f=POPULAR_ROLES.filter(r=>r.toLowerCase().includes(q.toLowerCase()));
-    renderRoleChips(f.length?f:POPULAR_ROLES);
-}
-
-// ── Goals ─────────────────────────────────────────────────────
-function toggleGoal(el){
-    const goal=el.dataset.goal;
-    el.classList.toggle('selected');
-    state.goals=el.classList.contains('selected')?[...new Set([...state.goals,goal])]:state.goals.filter(g=>g!==goal);
-    const btn=document.getElementById('generateBtn');
-    btn.disabled=!state.goals.length;
-}
-
-// ── Task Detection ────────────────────────────────────────────
+// ── Task detection ───────────────────────────────────────────────────────────
 const TASK_PATTERNS=[
-    {key:'email',    label:'Emails',        icon:'&#9993;',  re:/email|inbox|reply|correspond|outlook|message/i},
-    {key:'meeting',  label:'Meetings',      icon:'&#128101;',re:/meeting|agenda|minutes|standup|zoom|teams|call/i},
-    {key:'report',   label:'Reports',       icon:'&#128196;',re:/report|write.?up|status update|briefing|newsletter/i},
-    {key:'data',     label:'Data & Numbers',icon:'&#128202;',re:/data|spreadsheet|excel|figures|numbers|metrics|kpi|dashboard|crm/i},
-    {key:'teaching', label:'Teaching',      icon:'&#127979;',re:/student|lesson|class|curriculum|marking|grade|assessment|pupil|scheme/i},
-    {key:'clinical', label:'Clinical Care', icon:'&#129657;',re:/patient|clinical|care plan|handover|sbar|medication|ward|nursing|nhs/i},
-    {key:'customer', label:'Customer Service',icon:'&#128172;',re:/customer|client|complaint|enquiry|service|ticket|support/i},
-    {key:'content',  label:'Content',       icon:'&#128247;',re:/social media|post|blog|content|marketing|campaign|copy/i},
-    {key:'presentation',label:'Presentations',icon:'&#128202;',re:/presentation|slides|deck|powerpoint|pitch/i},
-    {key:'training', label:'Training',      icon:'&#127891;',re:/train|onboard|induct|workshop|learning|develop/i},
-    {key:'finance',  label:'Finance',       icon:'&#128178;',re:/budget|financ|invoice|cost|expenditure|forecast|account/i},
-    {key:'recruitment',label:'Recruitment', icon:'&#128101;',re:/recruit|hire|interview|candidate|job desc|cv|application/i},
-    {key:'planning', label:'Planning',      icon:'&#128197;',re:/plan|schedul|rota|calendar|priorit|organis|project/i},
-    {key:'feedback', label:'Feedback',      icon:'&#128172;',re:/feedback|review|appraisal|performance|1.?1|one.to.one/i},
+    {key:'email',    label:'Emails',          icon:'&#9993;',  re:/email|inbox|reply|correspond|outlook/i},
+    {key:'meeting',  label:'Meetings',         icon:'&#128101;',re:/meeting|agenda|minutes|standup|zoom|teams/i},
+    {key:'report',   label:'Reports',          icon:'&#128196;',re:/report|write.?up|status update|briefing|newsletter/i},
+    {key:'data',     label:'Data & Numbers',   icon:'&#128202;',re:/data|spreadsheet|excel|figures|numbers|metrics|kpi|dashboard|crm/i},
+    {key:'teaching', label:'Teaching',         icon:'&#127979;',re:/student|lesson|class|curriculum|marking|grade|assessment|pupil/i},
+    {key:'clinical', label:'Clinical Care',    icon:'&#129657;',re:/patient|clinical|care plan|handover|sbar|medication|ward|nursing/i},
+    {key:'customer', label:'Customer Service', icon:'&#128172;',re:/customer|client|complaint|enquiry|service|ticket|support/i},
+    {key:'content',  label:'Content Creation', icon:'&#128247;',re:/social media|post|blog|content|marketing|campaign|copy/i},
+    {key:'presentation',label:'Presentations', icon:'&#128204;',re:/presentation|slides|deck|powerpoint|pitch/i},
+    {key:'training', label:'Training',         icon:'&#127891;',re:/train|onboard|induct|workshop|learning|develop/i},
+    {key:'finance',  label:'Finance',          icon:'&#128178;',re:/budget|financ|invoice|cost|expenditure|forecast|account/i},
+    {key:'recruitment',label:'Recruitment',    icon:'&#128101;',re:/recruit|hire|interview|candidate|job desc|cv|application/i},
+    {key:'planning', label:'Planning',         icon:'&#128197;',re:/plan|schedul|rota|calendar|priorit|organis|project/i},
+    {key:'feedback', label:'Feedback',         icon:'&#128172;',re:/feedback|review|appraisal|performance|1.?1|one.to.one/i},
 ];
 
-function detectTaskTypes(tasks){
-    const hits=TASK_PATTERNS.filter(p=>p.re.test(tasks));
-    return hits.length?hits:[{key:'general',label:'General Work',icon:'&#9889;'}];
+function detectTaskTypes(tasks){const hits=TASK_PATTERNS.filter(p=>p.re.test(tasks));return hits.length?hits:[{key:'general',label:'General Work',icon:'&#9889;'}];}
+
+function extractHighlights(tasks){
+    const found=new Set();
+    const numRe=/(\d+[-–]?\d*)\s+(email|meeting|report|student|patient|client|call|ticket|document|request|hour)/gi;
+    let m;
+    while((m=numRe.exec(tasks))!==null)found.add(m[0].toLowerCase());
+    const freqRe=/(daily|weekly|monthly|every\s+\w+)\s+(\w+\s+)?(report|update|meeting|review|summary|email|brief|standup)/gi;
+    while((m=freqRe.exec(tasks))!==null)found.add(m[0].toLowerCase());
+    ['status report','meeting notes','onboarding','training material','performance review','email response','project update','data analysis','lesson plan','care plan','handover note','social media post','budget report','job description','appraisal'].forEach(a=>{if(tasks.toLowerCase().includes(a))found.add(a);});
+    return [...found].slice(0,6);
 }
 
-// ── Master Prompt Library ─────────────────────────────────────
-// Each entry: {key}[goal](role,tasks) => {title, desc, prompt}
+// ── Prompt + Example Library ─────────────────────────────────────────────────
 const P={
     email:{
         productivity:(r,t)=>({
             title:'AI Email Drafter',
-            desc:'Paste rough notes and get a polished, professional email in seconds — every time.',
-            prompt:`You are my personal email assistant. I am a ${r}.\n\nEvery time I give you rough notes, bullet points, or a situation, you write me a polished professional email immediately. No questions — just draft it.\n\nRules for every email:\n• Subject line: specific and compelling (never vague like "Following up")\n• Opening: acknowledge context directly — never "I hope this email finds you well"\n• Body: maximum 3 short paragraphs, each making one clear point\n• Closing: always ends with a specific next step or ask\n• Tone: professional but human — confident, not corporate\n\nMy first email to write:\n[DESCRIBE THE SITUATION AND WHAT YOU NEED TO COMMUNICATE — e.g. "chase Sarah about the Q3 report due Tuesday, hasn't sent it, need it by Friday, she's been slow before so be polite but direct"]`
+            savings:'1-2 hrs/week',
+            desc:'Type rough notes — get a polished, ready-to-send email in seconds every time.',
+            exampleInput:'"follow up with James on Q4 budget proposal, sent last week, no reply, need sign-off by Friday or we miss the deadline"',
+            example:`Subject: Q4 Budget Proposal — Sign-off needed by Friday\n\nHi James,\n\nI wanted to follow up on the Q4 budget proposal I sent over last week. I haven't heard back, and I need sign-off by Friday to keep the project timeline on track.\n\nCould you take a look when you get a moment? Happy to talk through any questions — just let me know what works.\n\nThanks,\n[Your name]\n\n─────────────────────────────────────\nTime taken: 4 seconds. Normally: 8-10 minutes.`,
+            prompt:`You are my personal email assistant. I am a ${r}.\n\nEvery time I give you rough notes, a situation, or bullet points — write me a polished, professional email immediately. No questions. Just draft it.\n\nRules for every email:\n• Subject: specific and compelling (never "Following up" or "Quick question")\n• Opening: acknowledge the situation directly — never "I hope this email finds you well"\n• Body: maximum 3 short paragraphs, one clear point each\n• Close: always a specific next step or ask — never just "Kind regards"\n• Tone: professional but human — confident, not corporate\n\nMy first email to write:\n[DESCRIBE THE SITUATION — e.g. "chase Sarah about the Q3 report, due Monday, still nothing, need it before Friday board meeting"]`
         }),
         creativity:(r,t)=>({
             title:'Emails That Get Responses',
-            desc:'Write emails that cut through inbox noise and compel people to actually reply.',
-            prompt:`You are a persuasion and influence specialist. I am a ${r} and I need help writing emails that people actually respond to — not ignore.\n\nWhen I give you an email situation, apply these principles:\n1. Lead with what matters to THEM, not to me\n2. One clear ask only — never multiple requests in one email\n3. Make the action completely frictionless — tell them exactly what to do\n4. Create mild urgency without pressure\n5. Short enough to read in 20 seconds\n\nFor every email, give me TWO versions:\n• Version A — Safe and professional\n• Version B — Bolder, more direct, likely to get a faster response\n\nI will tell you which worked and you will learn my style over time.\n\nFirst email situation:\n[DESCRIBE WHAT YOU NEED TO COMMUNICATE, WHO TO, AND THE RESULT YOU NEED]`
+            savings:'saves chasing time',
+            desc:'Write emails that cut through inbox noise and get replies — not silence.',
+            prompt:`You are a persuasion specialist. I am a ${r} and I need emails that people actually respond to.\n\nWhen I give you an email situation, apply these principles:\n1. Lead with what matters to THEM, not to me\n2. One clear ask only — never multiple requests\n3. Make the action completely frictionless\n4. Short enough to read in 20 seconds\n\nFor every email, give me TWO versions:\n• Version A — safe and professional\n• Version B — bolder, more direct, likely to get a faster response\n\nFirst email situation:\n[DESCRIBE WHAT YOU NEED TO COMMUNICATE, WHO TO, AND THE RESULT YOU NEED]`
         }),
         success:(r,t)=>({
             title:'Executive-Level Communications',
-            desc:'Write communications that position you as a strategic, senior-minded professional.',
-            prompt:`You are a senior communications advisor. I am a ${r} and I want every written communication to reflect the thinking of someone who is strategic, decisive, and clear.\n\nWhen you write or rewrite anything for me, apply these rules:\n• Lead with the bottom line — put the conclusion first, detail last\n• Use outcome language: "this will result in..." not "I have been working on..."\n• Be direct and confident — cut hedging phrases like "I think" or "perhaps"\n• Maximum one paragraph per point\n• End every communication with a clear next step or specific ask\n• Never use filler phrases: "Please find attached", "As per my previous email", "Hope you're well"\n\nPlease rewrite or draft the following so it sounds like it came from someone more senior than my current level:\n[PASTE YOUR DRAFT OR DESCRIBE WHAT YOU NEED TO COMMUNICATE]`
+            savings:'elevates perception',
+            desc:'Every written communication positions you as strategic, decisive, and senior-minded.',
+            prompt:`You are a senior communications advisor. I am a ${r} and I want every written communication to reflect the thinking of someone strategic and decisive.\n\nRules for everything you write for me:\n• Lead with the bottom line — conclusion first, detail last\n• Outcome language: "this will result in..." not "I have been working on..."\n• Be direct — cut every hedge like "I think", "perhaps", "maybe"\n• Maximum one paragraph per point\n• End with a specific next step or ask\n• Never: "Please find attached", "As per my previous email", "Hope you're well"\n\nPlease rewrite or draft the following so it sounds like it came from someone one level more senior:\n[PASTE YOUR DRAFT OR DESCRIBE WHAT YOU NEED TO COMMUNICATE]`
         }),
         freetime:(r,t)=>({
             title:'Personal Email Template Library',
-            desc:'Build templates for your most common email types so you never write from scratch again.',
-            prompt:`You are my email efficiency consultant. I am a ${r}.\n\nBased on my role and the fact that I regularly: ${t.substring(0,200)}\n\nIdentify the 6 types of emails I almost certainly write repeatedly and build me a personal template for each.\n\nFor every template:\n1. Name — what situation this template covers\n2. Subject line formula — with [VARIABLES] I change each time\n3. Complete email body — with [BRACKETS] for the only specifics I need to fill in\n4. Time to complete — should be under 90 seconds to personalise and send\n\nMake the templates feel human, not corporate. Someone receiving these should feel they were written personally for them, not generated from a template.`
+            savings:'2-3 hrs/week',
+            desc:'Never write a common email from scratch again — build your personal template bank.',
+            prompt:`You are my email efficiency consultant. I am a ${r}.\n\nBased on my role and the fact that I regularly: ${t.substring(0,200)}\n\nIdentify the 6 email types I almost certainly write repeatedly and build me a personal template for each.\n\nFor every template:\n1. Name — what situation triggers this template\n2. Subject line formula — with [VARIABLES] I change each time\n3. Complete email body — with [BRACKETS] for only the specifics I fill in\n4. Personalisation tip — one thing to change so it never feels automated\n\nEach template should take under 90 seconds to personalise and send. Make them feel human, not corporate.`
         })
     },
     meeting:{
         productivity:(r,t)=>({
             title:'Meeting Notes → Action Plan',
-            desc:'Paste any meeting notes and get a structured summary, action list, and follow-up email instantly.',
-            prompt:`You are my meeting intelligence assistant. I am a ${r}.\n\nEvery time I paste meeting notes, process them immediately into:\n\n**DECISIONS MADE** (bullet points — only things that were decided, not discussed)\n\n**ACTION ITEMS**\n| Action | Who owns it | Deadline | Priority (High/Med/Low) |\n\n**BLOCKERS** (anything that could prevent progress)\n\n**FOLLOW-UP EMAIL** (ready to send to attendees — professional, concise, covers decisions and actions only)\n\nCritical rule: distinguish DECISIONS from DISCUSSIONS. Only decisions go in the summary. Everything else is noise.\n\nPaste your meeting notes now:`
+            savings:'1-2 hrs/week',
+            desc:'Paste any meeting notes — get a structured summary, action list, and follow-up email instantly.',
+            exampleInput:'raw scribbled notes from a 45-minute team meeting',
+            example:`DECISIONS MADE\n• Q4 campaign budget approved at £62k\n• Launch date confirmed: 17 November\n\nACTION ITEMS\n┌──────────────────────────┬─────────┬──────────┬──────────┐\n│ Action                   │ Owner   │ Deadline │ Priority │\n├──────────────────────────┼─────────┼──────────┼──────────┤\n│ Finalise creative brief  │ Sarah   │ Thursday │ HIGH     │\n│ Brief design agency      │ Tom     │ Friday   │ HIGH     │\n│ Update board on changes  │ You     │ Monday   │ MED      │\n└──────────────────────────┴─────────┴──────────┴──────────┘\n\nBLOCKER: Website migration may conflict with launch date.\nDecision needed by Wednesday.\n\nFOLLOW-UP EMAIL (ready to send):\nHi all — great session today. Key decisions and actions below...\n─────────────────────────────────────\nTime taken: 8 seconds. Normally: 25-30 minutes.`,
+            prompt:`You are my meeting intelligence assistant. I am a ${r}.\n\nEvery time I paste meeting notes, process them immediately into:\n\n**DECISIONS MADE** (bullet points — only things that were DECIDED, not discussed)\n\n**ACTION ITEMS** (table format):\n| Action | Owner | Deadline | Priority |\n\n**BLOCKERS** (anything preventing progress)\n\n**FOLLOW-UP EMAIL** (ready to send to all attendees — covers decisions and actions only)\n\nCritical rule: only decisions go in the summary. Discussions are noise.\n\nPaste your meeting notes now:`
         }),
         creativity:(r,t)=>({
             title:'Agenda That Drives Decisions',
-            desc:'Design meetings that reach real decisions instead of just sharing information.',
-            prompt:`You are a meeting design expert. I am a ${r} and my meetings often end without clear decisions or next steps.\n\nHelp me design a meeting that actually works.\n\nMeeting purpose: [THE SPECIFIC OUTCOME THIS MEETING MUST ACHIEVE]\nAttendees: [WHO WILL BE THERE AND THEIR ROLES]\nTime available: [LENGTH]\nThe ONE decision that must be made: [BE SPECIFIC — not "discuss the project" but "decide whether to extend the deadline by 2 weeks"]\n\nCreate:\n1. A timed agenda that opens with the decision needed (not with updates)\n2. Explicit "decision point" moments — not just "discussion" slots\n3. A pre-read list so people arrive informed, not learning\n4. 3 facilitator moves to keep the meeting on track if it drifts\n5. A closing ritual that ensures everyone leaves knowing exactly what happens next`
+            savings:'stops wasted meetings',
+            desc:'Design meetings that end with clear decisions — not just more to discuss.',
+            prompt:`You are a meeting design expert. I am a ${r} and my meetings often end without decisions.\n\nMeeting purpose: [THE SPECIFIC OUTCOME THIS MEETING MUST ACHIEVE]\nAttendees: [WHO AND THEIR ROLES]\nTime available: [LENGTH]\nThe ONE decision that must be made: [BE SPECIFIC]\n\nCreate:\n1. A timed agenda that opens with the decision needed (not with updates)\n2. Explicit decision points — not just "discussion" slots\n3. A pre-read list so people arrive informed, not learning\n4. 3 facilitator moves to keep it on track if it drifts\n5. A closing ritual that ensures everyone leaves with clear next steps`
         }),
         success:(r,t)=>({
             title:'Meeting Summary for Leadership',
-            desc:'Write summaries that demonstrate your value and move decisions up the chain.',
-            prompt:`You are a strategic communications expert. I am a ${r} writing meeting summaries for senior leadership.\n\nBad meeting summaries describe what happened. Great ones drive decisions.\n\nHere are my raw meeting notes:\n[PASTE YOUR NOTES]\n\nWrite a leadership-ready summary that:\n• Opens with the single most important outcome or decision required\n• Applies "so what?" thinking to every point — tells leaders what it means for THEM\n• Flags decisions required from leadership in a clearly marked section\n• Is formatted for scanning: bold key phrases, bullet points, nothing longer than 2 lines\n• Could be forwarded by a senior leader to their director without editing\n\nMaximum one page. Every word must earn its place.`
+            savings:'builds your reputation',
+            desc:'Write meeting summaries that demonstrate your strategic thinking to senior leaders.',
+            prompt:`You are a strategic communications expert. I am a ${r}.\n\nBad summaries describe what happened. Great ones drive decisions.\n\nHere are my raw meeting notes:\n[PASTE YOUR NOTES]\n\nWrite a leadership-ready summary that:\n• Opens with the single most important outcome or decision needed\n• Applies "so what?" thinking — tells leaders what it means for THEM\n• Flags decisions required from leadership in a clearly marked section\n• Is formatted for scanning: bold key phrases, nothing longer than 2 lines\n• Could be forwarded by a senior leader without editing\n\nMaximum one page. Every word earns its place.`
         }),
         freetime:(r,t)=>({
             title:'Recurring Meeting Template Pack',
-            desc:'Create reusable pre/during/post templates for your most common meeting types.',
-            prompt:`You are a meeting systems designer. I am a ${r}.\n\nI run or attend the same types of meetings repeatedly. Build me a template pack for my 4 most likely recurring meeting types based on my role.\n\nFor each meeting type, create:\n1. **Pre-meeting template** — the agenda structure and prep checklist I send 24 hours ahead\n2. **Live notes template** — a structured format I use during the meeting to capture only what matters\n3. **Post-meeting email** — ready to send within 30 minutes of the meeting ending\n\nEach template should take under 5 minutes to complete. I should never write a meeting document from scratch again after having this pack.`
+            savings:'5 min per meeting',
+            desc:'Pre/during/post templates for your most common meetings — never write from scratch again.',
+            prompt:`You are a meeting systems designer. I am a ${r}.\n\nI run or attend the same types of meetings repeatedly. Build me a template pack for my 4 most likely recurring meeting types.\n\nFor each type, create:\n1. Pre-meeting template — agenda structure and prep checklist (sent 24hrs ahead)\n2. Live notes template — structured format I use during the meeting\n3. Post-meeting email — ready to send within 30 minutes\n\nEach template: under 5 minutes to complete. I never write a meeting document from scratch again.`
         })
     },
     report:{
         productivity:(r,t)=>({
-            title:'Bullet Points → Professional Report',
-            desc:'Give me rough notes or bullets and I will produce a complete, polished report immediately.',
-            prompt:`You are my professional report writer. I am a ${r}.\n\nWhen I give you rough notes, bullet points, or fragmented thoughts, you produce a complete, polished report. No asking for more information — use what I give you and make reasonable professional judgements about the rest.\n\nEvery report structure:\n• **Executive Summary** — 3 sentences: situation, significance, recommended action\n• **Background** — only what the reader needs to understand the findings\n• **Key Findings** — numbered, most important first, each with its evidence\n• **Recommendations** — numbered, specific, and actionable (not "consider" or "explore")\n• **Next Steps** — who does what, by when\n\nTone: authoritative and direct. Write as a confident expert, not someone seeking approval.\n\nPaste your rough notes now:`
+            title:'Bullet Points → Full Report',
+            savings:'2-3 hrs/week',
+            desc:'Give rough notes or bullets — get a complete, polished professional report immediately.',
+            exampleInput:'"Q3 good, up 8%. Lost 2 clients in Sept. New hire not working out. Budget on track."',
+            example:`EXECUTIVE SUMMARY\nQ3 delivered 8% growth with budget performance on track. Two client losses and a\nnew hire requiring development represent near-term risks needing immediate action.\n\nRECOMMENDATION\nInitiate a client retention review for September losses and implement a formal\nsupport plan for the new hire within two weeks.\n\nKEY FINDINGS\n1. Sales up 8% vs Q2 — driven by 3 new enterprise account wins in August\n2. Two established clients exited in September — root cause not yet understood\n3. New team member showing early performance concerns; structured support needed\n4. Budget tracking within 3% of plan across all categories\n\nNEXT STEPS\n• You: Brief leadership on client exits by [date]\n• Line manager: Initiate new hire support plan this week\n─────────────────────────────────────\nTime taken: 6 seconds. Normally: 45-60 minutes.`,
+            prompt:`You are my professional report writer. I am a ${r}.\n\nWhen I give you rough notes, bullet points, or fragmented thoughts — produce a complete, polished report immediately. No clarifying questions. Make reasonable professional judgements.\n\nEvery report:\n• Executive Summary — 3 sentences: situation, significance, recommended action\n• Background — only what the reader needs to understand the findings\n• Key Findings — numbered, most important first, each with evidence\n• Recommendations — specific and actionable (never "consider" or "explore")\n• Next Steps — who does what, by when\n\nTone: authoritative and direct. Write as a confident expert, not someone seeking approval.\n\nPaste your rough notes now:`
         }),
         creativity:(r,t)=>({
             title:'Data Storyteller',
-            desc:'Turn dry facts and figures into a narrative that actually engages and persuades.',
-            prompt:`You are a data storytelling expert. I am a ${r} who needs to make information compelling, not just accurate.\n\nThe most powerful reports don't present data — they tell a story that makes the audience feel something and want to act.\n\nHere is my information, data, or findings:\n[PASTE YOUR DATA OR KEY POINTS]\n\nAudience: [WHO WILL READ THIS]\nWhat I need them to DO after reading: [DESIRED DECISION OR ACTION]\n\nTransform this into a narrative that:\n1. Opens with a surprising insight or provocative question — not with background\n2. Builds tension: what is at risk if nothing changes?\n3. Uses data as evidence for a story, not as data for its own sake\n4. Includes one powerful analogy that makes abstract numbers concrete\n5. Closes with a clear, specific, emotionally resonant call to action\n\nGive me the full narrative, ready to use.`
+            savings:'makes reports matter',
+            desc:'Transform dry facts and figures into a narrative that actually engages and persuades.',
+            prompt:`You are a data storytelling expert. I am a ${r}.\n\nHere is my information, data, or findings:\n[PASTE YOUR DATA OR KEY POINTS]\n\nAudience: [WHO WILL READ THIS]\nWhat I need them to DO: [DESIRED DECISION OR ACTION]\n\nTransform this into a narrative that:\n1. Opens with a surprising insight or provocative question — not with background\n2. Builds tension: what is at risk if nothing changes?\n3. Uses data as evidence for a story, not as data for its own sake\n4. Includes one powerful analogy that makes abstract numbers concrete\n5. Closes with a specific, emotionally resonant call to action\n\nGive me the full narrative, ready to use.`
         }),
         success:(r,t)=>({
-            title:'Report That Gets Read and Acted On',
-            desc:'Structure your reports so senior leaders read every word and make the decision you need.',
-            prompt:`You are a senior business writing expert. I am a ${r}. Most reports are skimmed for 30 seconds. Mine need to land differently.\n\nPlease review and restructure the following so that:\n1. The recommendation comes first — never buried at the end\n2. Every section header is a conclusion, not a label (e.g. "Revenue at risk" not "Revenue Update")\n3. The executive summary stands alone in 3 sentences\n4. No section exceeds 5 bullet points\n5. The final ask is specific: one decision, clearly stated\n\n[PASTE YOUR DRAFT OR BULLET POINTS]\n\nAfter restructuring, tell me: what were the 2 most important structural changes you made and why?`
+            title:'Report That Gets Read',
+            savings:'influences decisions',
+            desc:'Structure your reports so senior leaders read every word and act on what you say.',
+            prompt:`You are a senior business writing expert. I am a ${r}. Most reports are skimmed for 30 seconds. Mine need to land differently.\n\nPlease restructure the following so that:\n1. The recommendation comes first — never buried at the end\n2. Every section header is a conclusion, not a label\n   (e.g. "Revenue at risk" not "Revenue Update")\n3. The executive summary stands alone in 3 sentences\n4. No section exceeds 5 bullet points\n5. The final ask is specific: one decision, clearly stated\n\n[PASTE YOUR DRAFT OR BULLET POINTS]`
         }),
         freetime:(r,t)=>({
             title:'My Personal Report Template',
-            desc:'Build a template and sentence bank that cuts your report-writing time by 60%.',
-            prompt:`You are a productivity systems expert. I am a ${r} who writes similar reports regularly.\n\nBased on my role and work (${t.substring(0,200)}), build me a personal report-writing system:\n\n1. **Master template** — the standard skeleton for my most common report type, with section headers, word-count targets, and a description of what goes in each section\n2. **Sentence starter bank** — 25 professional openers I can use to avoid the blank page (e.g. "Analysis indicates...", "A key finding is...", "The data suggests...")\n3. **Executive summary formula** — a 4-field structure I complete in 3 minutes that automatically produces a strong exec summary\n4. **Pre-send quality checklist** — 8 questions I ask before sending any report\n\nGoal: my next report takes half the time this one took.`
+            savings:'60% less writing time',
+            desc:'Build a template and sentence bank that eliminates the blank-page problem forever.',
+            prompt:`You are a productivity systems expert. I am a ${r} who writes similar reports regularly.\n\nBased on my work (${t.substring(0,200)}):\n\n1. Master template — skeleton for my most common report type with section headers and word-count targets\n2. Sentence starter bank — 25 professional openers to avoid the blank page (e.g. "Analysis indicates...", "A key finding is...")\n3. Executive summary formula — a 4-field structure I complete in 3 minutes\n4. Pre-send checklist — 8 questions I ask before sending any report\n\nGoal: my next report takes half the time this one took.`
         })
     },
     data:{
         productivity:(r,t)=>({
             title:'Instant Data Interpreter',
-            desc:'Share any data or figures and get a clear, plain-language analysis immediately.',
-            prompt:`You are my data analysis partner. I am a ${r}.\n\nWhen I share data — as a table, bullet points, or description — you immediately tell me:\n\n1. **What it means** in plain language (not what the numbers ARE, but what they MEAN)\n2. **The single most significant finding** — the one thing above everything else\n3. **Anomalies** — anything unexpected, unusual, or worth investigating\n4. **The so what** — why does this matter for a ${r}?\n5. **3 follow-up questions** this data should make me ask\n\nDo not describe the data back to me. I can see it. Tell me what it is telling us.\n\nMy data:\n[PASTE YOUR FIGURES, TABLE, OR DATA DESCRIPTION]\n\nContext (what period this covers, what it measures): [YOUR CONTEXT]`
+            savings:'1-2 hrs/week',
+            desc:'Share any figures — get a plain-language insight that tells you what they actually mean.',
+            exampleInput:'"Jan 43k, Feb 51k, Mar 38k, Apr 62k, May 57k, Jun 44k — budget was 50k each month"',
+            example:`WHAT THIS DATA MEANS\nRevenue is volatile — swinging ±30% month to month with no consistent trend.\nYou've hit budget in only 2 of 6 months (February and April).\n\nTHE MOST IMPORTANT FINDING\nApril's spike to £62k is your best month by far. Understanding exactly what drove\nit is the single most valuable thing you can do with this data right now.\n\nTHE RED FLAG\nMarch and June are your weakest months. If there's a pattern or cause, it's\npredictable — and therefore fixable.\n\nTHREE QUESTIONS TO INVESTIGATE:\n1. What happened differently in April vs your worst months?\n2. Is the £50k/month budget realistic given this level of variance?\n3. Are February and May peaks connected to the same driver?\n─────────────────────────────────────\nTime taken: 5 seconds. Normally: 20-30 minutes of analysis.`,
+            prompt:`You are my data analysis partner. I am a ${r}.\n\nWhen I share data — as a table, bullets, or description — tell me immediately:\n\n1. What it MEANS in plain language (not what the numbers are — what they mean)\n2. The single most important finding\n3. Anomalies — anything unexpected or worth investigating\n4. The so what — why does this matter for a ${r}?\n5. Three questions this data should make me ask\n\nDo not describe the data back to me. I can see it. Tell me what it is telling us.\n\nMy data:\n[PASTE YOUR FIGURES, TABLE, OR DATA DESCRIPTION]\n\nContext (what period, what it measures): [YOUR CONTEXT]`
         }),
         creativity:(r,t)=>({
             title:'Find the Hidden Insight',
-            desc:'Discover the non-obvious story your data contains that you might be too close to see.',
-            prompt:`You are a data detective. I am a ${r} and I need fresh eyes on my data.\n\nI want you to look at this with complete scepticism and find the insight that isn't immediately obvious — the finding that becomes important once noticed.\n\nMy data / metrics:\n[PASTE YOUR DATA OR KEY FIGURES]\n\nWhat we currently think this data shows: [YOUR CURRENT INTERPRETATION]\n\nNow challenge that. Please:\n1. **Question my assumptions** — what am I taking for granted about this data that might be wrong?\n2. **Find the counter-intuitive finding** — what does the data show that contradicts expectations?\n3. **Identify what's missing** — what isn't being measured that might explain what I'm seeing?\n4. **Make the uncomfortable case** — what does this data suggest that people might not want to hear?\n5. **Name the real story** — if this data were evidence in a court case, what case would it make?`
+            savings:'competitive advantage',
+            desc:'Discover what your data is actually trying to tell you — the thing hiding in plain sight.',
+            prompt:`You are a data detective. I am a ${r} and I need fresh eyes on my data.\n\nMy data: [PASTE YOUR FIGURES OR METRICS]\nWhat we currently think this data shows: [YOUR INTERPRETATION]\n\nNow challenge that:\n1. Question my assumptions — what am I taking for granted?\n2. Find the counter-intuitive finding — what does the data show that contradicts expectations?\n3. Identify what's missing — what isn't being measured that might explain what I see?\n4. Make the uncomfortable case — what does this suggest that people might not want to hear?\n5. Name the real story — if this data were evidence in a case, what case would it make?`
         }),
         success:(r,t)=>({
             title:'Data Presentation for Leaders',
-            desc:'Turn your data into a decision-driving narrative for senior leadership.',
-            prompt:`You are a strategic data communications expert. I am a ${r} presenting data to senior leaders who do not have time to interpret it themselves.\n\nMy data and context:\n[PASTE YOUR DATA, FIGURES, OR KEY METRICS]\n\nWhat I need leadership to DECIDE or DO after seeing this:\n[THE SPECIFIC OUTCOME YOU NEED]\n\nCreate:\n1. **The headline** — one sentence that leads with implication, not number (e.g. "We are on track to miss our target by 23% unless we act this week" not "Q3 numbers are below target")\n2. **The narrative arc** — how to present this as problem → evidence → recommendation\n3. **3 talking points** — each linking a data point to a business consequence in one sentence\n4. **The recommendation slide** — clear statement of what should be decided and why, formatted for a slide\n5. **Anticipated challenges** — the 3 questions they will raise and the exact response to each`
+            savings:'drives faster decisions',
+            desc:'Turn your data into a leadership-ready narrative that drives the decision you need.',
+            prompt:`You are a strategic data communications expert. I am a ${r}.\n\nMy data and context: [PASTE YOUR DATA]\nWhat I need leadership to DECIDE or DO: [THE SPECIFIC OUTCOME]\n\nCreate:\n1. The headline — one sentence leading with implication, not number\n   (e.g. "We are on track to miss target by 23% unless we act this week" not "Q3 numbers are below target")\n2. Narrative arc — problem → evidence → recommendation\n3. 3 talking points — each linking a data point to business consequence\n4. The recommendation slide — what to decide and why\n5. Anticipated challenges — the 3 questions they'll raise, with responses`
         }),
         freetime:(r,t)=>({
-            title:'Standing Data Review System',
-            desc:'Build a weekly or monthly data review framework that produces insights in 20 minutes.',
-            prompt:`You are a data systems expert. I am a ${r} who spends too long on data review with no consistent approach.\n\nBased on my role and work (${t.substring(0,200)}), design my standing data review framework:\n\n1. **Review template** — the standard questions I ask every cycle, with the metrics that answer them\n2. **Traffic light criteria** — simple red/amber/green thresholds for my key metrics (I will fill in specific numbers)\n3. **Insight generation prompts** — 6 questions I ask myself to find meaning, not just report numbers\n4. **Distribution report skeleton** — a 5-section structure I complete in 20 minutes that's ready to send\n5. **Escalation triggers** — specific data thresholds that require immediate action or escalation\n\nThis becomes my repeatable routine: same structure, different numbers, every cycle.`
+            title:'Weekly Data Review System',
+            savings:'cuts review time by 60%',
+            desc:'Build a standing framework that produces useful insights in 20 minutes every time.',
+            prompt:`You are a data systems expert. I am a ${r} who spends too long on data review.\n\nBased on my work (${t.substring(0,200)}), design my standing data review system:\n\n1. Review template — standard questions I ask every cycle\n2. Traffic light criteria — red/amber/green for my key metrics\n3. Insight generation prompts — 6 questions that force me to find meaning, not just report numbers\n4. Distribution report skeleton — 5-section template I complete in 20 minutes\n5. Escalation triggers — specific thresholds requiring immediate action`
         })
     },
     teaching:{
         productivity:(r,t)=>({
             title:'Complete Lesson Plan Generator',
-            desc:'Get a fully detailed, ready-to-deliver lesson plan in under 2 minutes.',
-            prompt:`You are an experienced curriculum designer and master teacher. I am a ${r}.\n\nWhen I give you a subject, topic, and year group, produce a complete lesson plan that a supply teacher could deliver with no further instruction.\n\nEvery plan must include:\n1. **Learning Objectives** — Must / Should / Could (3 levels)\n2. **Starter** (5-7 mins) — exact teacher instructions\n3. **Main Activity** (25-30 mins) — step-by-step teacher and student instructions\n4. **Differentiation** — specific adaptations for lower, middle, and higher ability\n5. **Plenary** (5 mins) — checks understanding against the objectives\n6. **Exit Ticket** — 3 questions students answer before leaving\n7. **Homework** — clear, purposeful, 20 minutes max\n8. **Resources needed** — complete list\n\nMy first request:\nSubject: [YOUR SUBJECT]\nTopic: [YOUR TOPIC]\nYear group / age: [YOUR CLASS]\nAny context: [EXAM PREP / INTRODUCTION / REVISION / OTHER]`
+            savings:'1-2 hrs per lesson',
+            desc:'Get a fully detailed, delivery-ready lesson plan in under 2 minutes.',
+            exampleInput:'"Year 8, photosynthesis, 50 minutes, they find it really boring"',
+            example:`LESSON: The Secret Life of Plants — Photosynthesis (Year 8, 50 mins)\n\nLEARNING OBJECTIVES\nMust: Explain what photosynthesis is and name its inputs and outputs\nShould: Write the word equation for photosynthesis from memory\nCould: Explain why photosynthesis is essential to all life on Earth\n\nSTARTER — The Survival Challenge (7 mins)\nDisplay: "You're stranded on a desert island with only seeds and sunlight.\nHow do you survive for 6 months?" Students discuss in pairs (2 mins),\nthen share. Teacher reveal: "Plants solved this exact problem 3 billion years\nago — and today you're going to learn how."\n\nMAIN ACTIVITY: Build a Photosynthesis Factory (28 mins)\n[Full instructions, differentiation, and group activity follow...]\n─────────────────────────────────────\nTime taken: 90 seconds. Normally: 45-60 minutes.`,
+            prompt:`You are an experienced curriculum designer and master teacher. I am a ${r}.\n\nWhen I give you a subject, topic, and year group — produce a complete lesson plan that a supply teacher could deliver with no further instruction.\n\nEvery plan:\n1. Learning Objectives — Must / Should / Could (3 levels)\n2. Starter (5-7 mins) — exact teacher instructions\n3. Main Activity (25-30 mins) — step-by-step teacher and student instructions\n4. Differentiation — for lower, middle, and higher ability\n5. Plenary (5 mins) — checks against objectives\n6. Exit Ticket — 3 questions students answer before leaving\n7. Homework — clear, purposeful, 20 mins max\n8. Resources needed — complete list\n\nMy first request:\nSubject: [YOUR SUBJECT]\nTopic: [YOUR TOPIC]\nYear group / age: [YOUR CLASS]\nAny context: [EXAM PREP / INTRODUCTION / REVISION / OTHER]`
         }),
         creativity:(r,t)=>({
-            title:'Make Any Topic Genuinely Engaging',
-            desc:'Transform dry content into lessons students actually want to be in.',
-            prompt:`You are a master of student engagement. I am a ${r} and I need to make a topic compelling rather than something students endure.\n\nTopic: [YOUR TOPIC]\nYear group / age: [YOUR CLASS]\nThe engagement problem: [WHY THIS TOPIC STRUGGLES TO LAND]\n\nGive me:\n1. **A hook** — the opening 60 seconds that creates genuine curiosity (a question, provocation, or surprise that makes students need to know more)\n2. **The real-world connection** — exactly where this topic appears in students' actual lives, framed in their language\n3. **The debate angle** — a genuine controversy or unresolved question in this topic area\n4. **The active experience** — something they DO rather than watch or copy (specific instructions)\n5. **The story** — a brief narrative, case study, or human example that makes this memorable\n6. **The challenge** — something ambitious enough that students feel proud when they achieve it\n\nEvery element should be usable in the next lesson I teach, not a theoretical suggestion.`
+            title:'Make Any Topic Engaging',
+            savings:'better outcomes',
+            desc:'Transform content students dread into lessons they actually want to be in.',
+            prompt:`You are a master of student engagement. I am a ${r}.\n\nTopic: [YOUR TOPIC]\nYear group: [YOUR CLASS]\nThe problem: [WHY THIS TOPIC STRUGGLES TO LAND]\n\nGive me:\n1. A hook — the opening 60 seconds that creates genuine curiosity\n2. The real-world connection — where this appears in students' actual lives, in their language\n3. The debate angle — a genuine controversy with no easy answer\n4. The active experience — something they DO rather than watch or copy\n5. The story — a brief narrative that makes the content memorable\n6. The challenge — ambitious enough that students feel proud to achieve it`
         }),
         success:(r,t)=>({
             title:'Assessment & Feedback Creator',
-            desc:'Build high-quality, differentiated assessments and time-saving feedback tools.',
-            prompt:`You are an expert in assessment design. I am a ${r} who needs high-quality assessment materials without spending hours creating them.\n\nAssessment details:\nSubject: [SUBJECT]\nTopic: [TOPIC BEING ASSESSED]\nYear group: [CLASS]\nAssessment type: [TEST / ESSAY / PROJECT / MIXED]\nTime allowed: [DURATION]\n\nCreate:\n1. **Full assessment** — complete with all questions, mark scheme, and model answers\n2. **Three differentiated versions** — Foundation (heavily scaffolded), Standard, and Extension\n3. **Feedback comment bank** — 15 specific, actionable written comments I can select and personalise (covering strengths and areas to improve)\n4. **WWW / EBI statements** — 10 topic-specific "What Went Well" and "Even Better If" prompts\n\nEverything should be ready to print or share immediately.`
+            savings:'hours per class set',
+            desc:'Build differentiated assessments and a feedback comment bank in minutes.',
+            prompt:`You are an assessment design expert. I am a ${r}.\n\nAssessment details:\nSubject: [SUBJECT]\nTopic: [TOPIC]\nYear group: [CLASS]\nType: [TEST / ESSAY / PROJECT / MIXED]\nTime: [DURATION]\n\nCreate:\n1. Full assessment — complete with questions, mark scheme, and model answers\n2. Three differentiated versions — Foundation (scaffolded), Standard, Extension\n3. Feedback comment bank — 15 specific, actionable comments\n4. WWW/EBI statements — 10 topic-specific prompts for written feedback`
         }),
         freetime:(r,t)=>({
             title:'Full Term Plan in One Session',
-            desc:'Plan an entire term\'s teaching efficiently so you never start from scratch again.',
-            prompt:`You are a curriculum planning expert. I am a ${r} who wants to plan a full term quickly and thoroughly.\n\nSubject: [SUBJECT]\nYear group: [CLASS]\nTerm length: [NUMBER OF WEEKS]\nCore topic or unit: [WHAT YOU ARE COVERING]\nEnd goal: [EXAM / PERFORMANCE / PORTFOLIO / COURSEWORK]\nLessons per week: [NUMBER]\n\nProduce:\n1. **Scheme of Work** — week-by-week overview: topic, key learning, and assessment focus\n2. **Assessment calendar** — when formative and summative assessments happen and why\n3. **Homework sequence** — a progressive homework plan that builds skills across the term\n4. **Resources to source** — what I need to find or create before term starts\n5. **Key dates** — deadlines, events, and planning constraints that affect the scheme\n\nFormat as a clear grid I can share with my department head or line manager.`
+            savings:'half a day of planning',
+            desc:'Plan an entire term efficiently — scheme of work, assessments, and homework all at once.',
+            prompt:`You are a curriculum planning expert. I am a ${r}.\n\nSubject: [SUBJECT] | Year group: [CLASS] | Term length: [WEEKS]\nUnit: [WHAT YOU ARE COVERING] | End goal: [EXAM / PORTFOLIO / PERFORMANCE]\nLessons per week: [NUMBER]\n\nProduce:\n1. Scheme of Work — week-by-week: topic, key learning, assessment focus\n2. Assessment calendar — when formative and summative assessments happen\n3. Homework sequence — progressive plan that builds skills across the term\n4. Resources to source — what I need before term starts\n5. Key dates — events and constraints affecting planning`
         })
     },
     clinical:{
         productivity:(r,t)=>({
             title:'Clinical Documentation Writer',
+            savings:'20-30 min per shift',
             desc:'Turn rough observations into professional, structured clinical notes immediately.',
-            prompt:`You are a specialist clinical documentation assistant trained in professional healthcare standards. I am a ${r}.\n\nWhen I give you rough observations or notes, structure them into clear, accurate, professional documentation.\n\nDefault format for every entry:\n• **Date/Time:**\n• **Assessment:** (objective observations — what I saw, measured, or heard)\n• **Intervention:** (what I did and why)\n• **Response:** (how the patient responded)\n• **Plan:** (next steps, review time, escalation triggers)\n\nNon-negotiable rules:\n• Precise clinical language — no vague terms\n• Flag immediately if anything sounds like urgent escalation is needed\n• Factual and defensible — written as if it will be read in a review\n• Never document what wasn't observed or done\n\nPaste your rough notes now:`
+            exampleInput:'"Mrs P, 78, confused this morning, BP 142/88, HR 94, temp 37.9, RR 18, sats 96%. Gave paracetamol, doc aware"',
+            example:`DATE/TIME: [To be completed]\n\nASSESSMENT\n78-year-old female presenting with new onset confusion. Observations: BP 142/88mmHg,\nHR 94bpm, Temp 37.9°C, RR 18, O₂ Sats 96% on air. Clinical picture consistent\nwith possible early infection or delirium.\n\nINTERVENTION\n1g Paracetamol administered as prescribed for pyrexia. Medical team informed\nof deterioration in observations and onset of confusion.\n\nRESPONSE\nPatient remains confused at time of documentation. No acute deterioration\nfollowing intervention observed.\n\nPLAN\nContinue 4-hourly observations. Medical review pending. Escalate immediately\nif NEWS score increases or patient shows signs of rapid deterioration.\n\n⚠ Flag: Temp 37.9°C + new onset confusion — consider infection screen.\n─────────────────────────────────────\nTime taken: 8 seconds. Normally: 10-15 minutes.`,
+            prompt:`You are a specialist clinical documentation assistant. I am a ${r}.\n\nWhen I give you rough observations or notes — structure them into clear, accurate, professional documentation immediately.\n\nDefault format:\n• Date/Time:\n• Assessment: (objective observations — what I saw, measured, or heard)\n• Intervention: (what I did and why)\n• Response: (how the patient responded)\n• Plan: (next steps, review time, escalation triggers)\n\nNon-negotiable rules:\n• Precise clinical language — no vague terms\n• Flag anything that sounds like urgent escalation is needed\n• Factual and defensible — written as if read in a review\n• Never document what wasn't observed or done\n\nPaste your rough notes now:`
         }),
         creativity:(r,t)=>({
             title:'Patient Education Materials',
-            desc:'Create plain-language patient information that people actually understand and use.',
-            prompt:`You are a health literacy specialist. I am a ${r} and I need patient-facing materials written so people genuinely understand them.\n\nTopic: [CONDITION / PROCEDURE / MEDICATION / SELF-CARE INSTRUCTIONS]\nPatient profile: [AGE GROUP, ANY LITERACY OR LANGUAGE CONSIDERATIONS]\nTheir main concern: [WHAT THEY ARE MOST WORRIED ABOUT]\nWhat they need to DO: [THE SPECIFIC ACTIONS YOU NEED THEM TO TAKE]\n\nCreate:\n1. **One-page information sheet** — what it is, what to expect, what to do, when to seek help — plain English, no jargon, reading age 10\n2. **3 key messages** — the most important things they must remember if they forget everything else\n3. **FAQ section** — the 5 questions this type of patient always asks, with honest, clear answers\n4. **Warning signs card** — specific symptoms that mean "call us / go to A&E" in simple, unambiguous language`
+            savings:'hours of writing time',
+            desc:'Create plain-language patient information that people actually understand and act on.',
+            prompt:`You are a health literacy specialist. I am a ${r}.\n\nTopic: [CONDITION / PROCEDURE / MEDICATION / SELF-CARE]\nPatient profile: [AGE GROUP, LITERACY CONSIDERATIONS]\nMain concern: [WHAT THEY ARE MOST WORRIED ABOUT]\nWhat they need to DO: [SPECIFIC ACTIONS]\n\nCreate:\n1. One-page information sheet — plain English, reading age 10, no jargon\n2. 3 key messages — the most important things if they forget everything else\n3. FAQ — the 5 questions this type of patient always asks, honestly answered\n4. Warning signs card — specific symptoms meaning "call us / go to A&E" in simple language`
         }),
         success:(r,t)=>({
-            title:'Incident & Escalation Report Writer',
+            title:'Incident & Escalation Reports',
+            savings:'protects you professionally',
             desc:'Write thorough, professional reports that protect patients, staff, and the organisation.',
-            prompt:`You are a clinical governance and documentation expert. I am a ${r} and I need to document an incident or escalation professionally.\n\nThe situation:\n[DESCRIBE WHAT HAPPENED — include timeline, who was involved, what you observed, and what actions were taken]\n\nWrite a professional report that includes:\n1. **Chronological account** — what happened, in time order, factually stated\n2. **Clinical observations** — objective findings at each stage\n3. **Actions taken** — what was done, by whom, with times\n4. **Communication log** — who was informed, when, and what was communicated\n5. **Current status** — where things stand now\n6. **Immediate learning** — what would be done differently\n\nTone: factual, non-blaming, written for a clinical and governance audience. No speculation.`
+            prompt:`You are a clinical governance expert. I am a ${r}.\n\nThe situation:\n[DESCRIBE WHAT HAPPENED — include timeline, who was involved, what you observed, actions taken]\n\nWrite a professional report:\n1. Chronological account — factual, time-ordered\n2. Clinical observations — objective findings\n3. Actions taken — what was done, by whom, with times\n4. Communication log — who was informed, when, what was said\n5. Current status\n6. Immediate learning — what would be done differently\n\nTone: factual, non-blaming, written for clinical and governance audiences. No speculation.`
         }),
         freetime:(r,t)=>({
             title:'SBAR Handover Template Library',
-            desc:'Build a personal library of SBAR templates for your most common handover scenarios.',
-            prompt:`You are a clinical handover specialist. I am a ${r}.\n\nHandover documentation takes significant time at the end of every shift. Build me a personal SBAR template library for the 6 scenarios I am most likely to encounter in my role.\n\nFor each scenario, provide an SBAR template where I only need to insert specific patient details:\n\n**Situation:** [pre-structured with fill-in fields]\n**Background:** [pre-structured with fill-in fields]\n**Assessment:** [pre-structured with fill-in fields]\n**Recommendation:** [pre-structured with fill-in fields]\n\nEach template should be completable in under 3 minutes. Also include one blank generic template for scenarios not covered.\n\nBase the 6 scenarios on what a ${r} typically encounters.`
+            savings:'3 min per handover',
+            desc:'Build personal SBAR templates for your most common scenarios so handovers take 3 minutes.',
+            prompt:`You are a clinical handover specialist. I am a ${r}.\n\nBuild me a personal SBAR library for the 6 scenarios I am most likely to encounter.\n\nFor each scenario — an SBAR template where I only insert the specific patient details:\n\nSituation: [pre-structured with fill-in fields]\nBackground: [pre-structured with fill-in fields]\nAssessment: [pre-structured with fill-in fields]\nRecommendation: [pre-structured with fill-in fields]\n\nEach template completable in under 3 minutes. Include one blank generic template for anything not covered.`
         })
     },
     customer:{
         productivity:(r,t)=>({
             title:'Customer Response Drafter',
-            desc:'Paste any customer message and get a professional, ready-to-send response immediately.',
-            prompt:`You are my customer communications specialist. I am a ${r}.\n\nEvery time I paste a customer email, complaint, or enquiry, you draft a professional response immediately — no clarifying questions.\n\nEvery response must:\n• Open by acknowledging their specific concern (never a generic opener)\n• Show I have read and understood their actual situation\n• Be clear about what happens next and by when\n• Set realistic expectations — never over-promise\n• Close warmly but professionally\n\nTone calibration:\n• Routine enquiry: efficient and helpful\n• Complaint: empathetic first, solution-focused second\n• Angry/escalated: calm, professional, decisive\n\nPaste the customer message now:`
+            savings:'1-2 hrs/week',
+            desc:'Paste any customer message — get a professional, empathetic, ready-to-send response.',
+            exampleInput:'"customer Emma, ordered 3 weeks ago, nothing arrived, wants refund, quite angry"',
+            example:`Subject: Your Order — I'm Sorry and Here's What I'm Doing Right Now\n\nDear Emma,\n\nI'm really sorry your order hasn't arrived after three weeks. I completely\nunderstand your frustration and I want to sort this out for you right now.\n\nI've looked into your order immediately. Here's what I'm doing:\n[If locatable]: I'm arranging express re-delivery at no charge — you'll\nreceive a confirmation within the next 2 hours.\n[If lost]: I've processed a full refund to your original payment method.\nThis will appear within 3-5 business days.\n\nYou shouldn't have had to wait this long or chase us. I'm sorry we let\nyou down, and I'll personally ensure this is resolved today.\n\n[Your name]\n─────────────────────────────────────\nTime taken: 5 seconds. Normally: 15-20 minutes.`,
+            prompt:`You are my customer communications specialist. I am a ${r}.\n\nEvery time I paste a customer email, complaint, or enquiry — draft a professional response immediately. No clarifying questions.\n\nEvery response must:\n• Open by acknowledging their specific concern (never a generic opener)\n• Show I have read and understood their actual situation\n• Be clear about what happens next and by when\n• Set realistic expectations — never over-promise\n• Close warmly but professionally\n\nTone calibration:\n• Routine enquiry: efficient and helpful\n• Complaint: empathetic first, solution-focused second\n• Angry/escalated: calm, professional, decisive\n\nPaste the customer message now:`
         }),
         creativity:(r,t)=>({
             title:'Turn Complaints Into Loyalty',
-            desc:'Transform difficult situations into the moments customers remember and tell others about.',
-            prompt:`You are a service recovery expert. I am a ${r}.\n\nResearch shows a well-handled complaint creates MORE loyalty than no complaint at all. Help me make the most of this situation.\n\nThe situation:\n[DESCRIBE THE COMPLAINT OR DIFFICULT SITUATION IN DETAIL]\n\nWhat the customer says they want: [THEIR STATED DEMAND]\nWhat actually went wrong: [THE REAL ROOT CAUSE]\nWhat I can realistically offer: [YOUR CONSTRAINTS AND AUTHORITY]\n\nGive me:\n1. **The disarming opener** — exact words to immediately reduce tension without admitting inappropriate liability\n2. **The unexpected gesture** — something slightly beyond what they asked for that turns this into a story they tell positively\n3. **The resolution** — a clear, fair outcome within my authority\n4. **The relationship close** — a closing that makes them feel genuinely valued, not processed\n5. **The complete response** — full message ready to send`
+            savings:'retains customers',
+            desc:'Transform your most difficult situations into moments customers tell others about positively.',
+            prompt:`You are a service recovery expert. I am a ${r}.\n\nThe situation: [DESCRIBE THE COMPLAINT IN DETAIL]\nWhat the customer says they want: [THEIR STATED DEMAND]\nWhat actually went wrong: [THE REAL ROOT CAUSE]\nWhat I can realistically offer: [YOUR CONSTRAINTS]\n\nGive me:\n1. The disarming opener — exact words to reduce tension immediately\n2. The unexpected gesture — something beyond what they asked for\n3. The resolution — clear, fair, within my authority\n4. The relationship close — makes them feel valued, not processed\n5. The complete response — full message, ready to send`
         }),
         success:(r,t)=>({
             title:'Professional Escalation Handler',
-            desc:'Handle high-stakes customer situations with structure, confidence, and professionalism.',
-            prompt:`You are a senior customer experience consultant. I am a ${r} handling a high-stakes escalation.\n\nSituation:\nWhat happened (customer perspective): [DESCRIBE THE ISSUE]\nEscalation level: [HOW UPSET THEY ARE]\nWhat they are demanding: [THEIR REQUEST OR THREAT]\nWhat has already been offered: [PREVIOUS ATTEMPTS]\nMy authority: [WHAT I CAN AND CANNOT OFFER]\n\nGive me:\n1. **Opening acknowledgement** — reduces anger without inappropriate admission of liability\n2. **Investigation statement** — buys time professionally while signalling I take this seriously\n3. **Resolution offer** — within my authority, specific and fair\n4. **Boundary statement** — how to explain what I cannot do without inflaming the situation\n5. **Escalation brief** — how to hand this to my manager if needed, including what to tell them\n6. **Documentation template** — what to record to protect all parties`
+            savings:'protects relationships',
+            desc:'Handle high-stakes customer situations with structure, confidence, and calm.',
+            prompt:`You are a senior customer experience consultant. I am a ${r}.\n\nSituation: [DESCRIBE THE ESCALATION]\nEscalation level: [HOW UPSET THEY ARE]\nWhat they're demanding: [THEIR REQUEST OR THREAT]\nWhat's been offered already: [PREVIOUS ATTEMPTS]\nMy authority: [WHAT I CAN AND CANNOT OFFER]\n\nGive me:\n1. Opening acknowledgement — reduces anger without inappropriate admission of liability\n2. Investigation statement — buys time professionally\n3. Resolution offer — specific and fair\n4. Boundary statement — explaining limits without inflaming things\n5. Escalation brief — how to hand to my manager with full context\n6. Documentation template — what to record to protect all parties`
         }),
         freetime:(r,t)=>({
             title:'Customer Response Template Library',
-            desc:'Build your personal library of templates for your 8 most common customer scenarios.',
-            prompt:`You are a customer service operations expert. I am a ${r} who writes the same types of customer responses repeatedly.\n\nBased on my role and the fact that I handle: ${t.substring(0,200)}\n\nCreate a template library for my 8 most common customer communication scenarios. For each:\n\n1. **Trigger** — when to use this template\n2. **Complete template** — with [BRACKETS] for the only specifics I need to change\n3. **Tone note** — one sentence on adjusting tone for different customers\n4. **What to avoid** — the one mistake people typically make in this scenario\n\nTemplates should feel personal and human, not automated. A customer receiving these should feel they were written specifically for them.`
+            savings:'2+ hrs/week',
+            desc:'Build templates for your 8 most common scenarios — personalise in under 90 seconds.',
+            prompt:`You are a customer service operations expert. I am a ${r}.\n\nBased on my role and work: ${t.substring(0,200)}\n\nBuild my template library for 8 common customer scenarios. For each:\n1. Trigger — when to use this template\n2. Complete template — with [BRACKETS] for only the specifics\n3. Tone note — how to adjust for different customers\n4. What to avoid — the one mistake people make in this scenario\n\nTemplates should feel personal and human — not automated.`
         })
     },
     presentation:{
         productivity:(r,t)=>({
             title:'Presentation Architect',
-            desc:'Go from rough idea to complete, slide-by-slide presentation structure in minutes.',
-            prompt:`You are my presentation architect. I am a ${r}.\n\nWhen I give you the details below, produce a complete, build-ready presentation blueprint immediately.\n\nMy presentation:\nPurpose: [WHAT THIS PRESENTATION MUST ACHIEVE]\nAudience: [WHO WILL BE IN THE ROOM AND THEIR KNOWLEDGE LEVEL]\nTime: [LENGTH]\nThe one thing they must leave knowing or deciding: [YOUR SINGLE CORE MESSAGE]\n\nProduce:\n1. **Narrative arc** — the story structure (not just a list of topics — a beginning, middle, and end)\n2. **Slide-by-slide outline** — each slide title written as a CONCLUSION not a topic label, plus 2-3 content bullets\n3. **Opening 30 seconds** — fully scripted\n4. **Closing 60 seconds** — fully scripted, ends with a specific ask\n5. **Transition lines** — what I say moving between each major section\n\nRule: no slide should just have a title and bullets. Every slide makes exactly one clear point.`
+            savings:'2-3 hrs prep time',
+            desc:'From rough idea to complete slide-by-slide structure — fully planned in minutes.',
+            prompt:`You are my presentation architect. I am a ${r}.\n\nMy presentation:\nPurpose: [WHAT IT MUST ACHIEVE]\nAudience: [WHO AND THEIR KNOWLEDGE LEVEL]\nTime: [LENGTH]\nThe one thing they must leave knowing or deciding: [YOUR CORE MESSAGE]\n\nProduce:\n1. Narrative arc — the story structure (beginning, middle, end — not a list of topics)\n2. Slide-by-slide outline — each title written as a CONCLUSION not a topic label, plus 2-3 content points\n3. Opening 30 seconds — fully scripted\n4. Closing 60 seconds — fully scripted, ends with a specific ask\n5. Transition lines — what I say moving between each major section`
         }),
         creativity:(r,t)=>({
-            title:'Presentation People Actually Remember',
-            desc:'Design a presentation with the structure, story, and moments that make it unforgettable.',
-            prompt:`You are a presentation coach who has trained TED speakers. I am a ${r} and I want to create a presentation people are still talking about a week later.\n\nMost presentations are forgotten within 24 hours. Help me design one that sticks.\n\nTopic: [YOUR TOPIC]\nAudience: [WHO WILL BE THERE]\nLength: [TIME AVAILABLE]\nThe change this presentation must create: [WHAT SHOULD BE DIFFERENT AFTER THEY'VE HEARD IT]\n\nGive me:\n1. **The provocative opening** — a counterintuitive statement, striking fact, or question with no easy answer\n2. **The central metaphor** — one analogy that makes the entire argument instantly understandable\n3. **The emotional anchor** — a brief story that makes this topic personally relevant to the audience\n4. **The memorable close** — an ending people repeat when they describe this presentation to others\n5. **The one-sentence takeaway** — if they forget everything else, they will remember this\n6. **Full opening paragraph** — the first 90 seconds, written out in full`
+            title:'Presentation People Remember',
+            savings:'lasting impact',
+            desc:'Design a presentation with the moments and structure that make it genuinely unforgettable.',
+            prompt:`You are a presentation coach. I am a ${r} who wants my presentations to be remembered a week later.\n\nTopic: [YOUR TOPIC] | Audience: [WHO] | Length: [TIME]\nThe change this must create: [WHAT SHOULD BE DIFFERENT AFTER THEY'VE HEARD IT]\n\nGive me:\n1. The provocative opening — counterintuitive statement, striking fact, or question with no easy answer\n2. The central metaphor — one analogy that makes the entire argument instantly understandable\n3. The emotional anchor — a brief story that makes this personally relevant\n4. The memorable close — people repeat this when they describe the presentation to others\n5. The one-sentence takeaway — if they forget everything else, they remember this\n6. Full opening paragraph — the first 90 seconds, written out completely`
         }),
         success:(r,t)=>({
             title:'Boardroom-Ready Presentation',
-            desc:'Present to senior leaders with the clarity and authority that gets decisions made.',
-            prompt:`You are an executive presentation coach. I am a ${r} presenting to senior leadership or a board.\n\nPresentation context:\nTopic: [WHAT YOU ARE PRESENTING]\nAudience seniority: [WHO WILL BE IN THE ROOM]\nDecision I need: [THE SPECIFIC OUTCOME — be precise]\nMy biggest concern: [WHAT YOU ARE MOST WORRIED ABOUT]\n\nGive me:\n1. **The executive structure** — recommendation first, evidence second, background last\n2. **Anticipated challenges** — the 5 hardest questions they will ask with exact responses for each\n3. **Authority language** — specific phrases that signal confidence and seniority (and the hedging phrases to cut)\n4. **Data framing** — how to present each key metric so it drives a decision, not a discussion\n5. **Closing the room** — exactly how to ask for the decision without it feeling like a demand\n6. **Recovery moves** — how to handle disengagement, a hostile room, or running out of time`
+            savings:'decisions made faster',
+            desc:'Present to senior leaders with the authority and structure that gets decisions made in the room.',
+            prompt:`You are an executive presentation coach. I am a ${r} presenting to senior leadership.\n\nTopic: [WHAT YOU ARE PRESENTING]\nAudience seniority: [WHO WILL BE IN THE ROOM]\nDecision I need: [THE SPECIFIC OUTCOME]\nMy biggest concern: [WHAT YOU'RE MOST WORRIED ABOUT]\n\nGive me:\n1. The executive structure — recommendation first, evidence second, background last\n2. Anticipated challenges — the 5 hardest questions with exact responses\n3. Authority language — phrases that signal confidence; hedges to cut\n4. Data framing — how to present each metric to drive a decision not a discussion\n5. Closing the room — exactly how to ask for the decision without demanding it\n6. Recovery moves — how to handle a hostile room or time running out`
         }),
         freetime:(r,t)=>({
             title:'Presentation Template System',
-            desc:'Build reusable structures so you never start from a blank slide again.',
-            prompt:`You are a presentation systems designer. I am a ${r} who creates presentations regularly.\n\nBased on my work (${t.substring(0,200)}), I probably use similar structures repeatedly.\n\nBuild my personal presentation template system:\n\n1. **Master structure** — a generic slide sequence that works for 80% of my presentations, with each slide's purpose clearly defined\n2. **4 opening options** — different ways to start depending on whether I need to inform, persuade, update, or inspire\n3. **Data slide formats** — 3 standard ways to present numbers (single metric, trend, comparison)\n4. **3 closing options** — for when I need a decision, an action, or to leave a strong lasting impression\n5. **The 3-slide emergency version** — when I have 5 minutes and need to make my core case\n\nThis system means my next presentation takes half the time to prepare.`
+            savings:'half the prep time',
+            desc:'Reusable structures so you never stare at a blank slide again.',
+            prompt:`You are a presentation systems designer. I am a ${r}.\n\nBased on my work (${t.substring(0,200)}), build my template system:\n\n1. Master structure — generic slide sequence for 80% of my presentations\n2. 4 opening options — for when I need to inform, persuade, update, or inspire\n3. Data slide formats — 3 standard ways to present numbers\n4. 3 closing options — for decision, action, or lasting impression\n5. The 3-slide emergency version — when I have 5 minutes to make my core case`
         })
     },
     training:{
         productivity:(r,t)=>({
             title:'Training Material Creator',
+            savings:'3-4 hrs per session',
             desc:'Build complete, ready-to-deliver training materials from a brief in minutes.',
-            prompt:`You are an expert instructional designer. I am a ${r} who creates and delivers training.\n\nWhen I give you a topic and audience, produce complete training materials immediately.\n\nTraining brief:\nTopic: [WHAT YOU ARE TRAINING PEOPLE ON]\nAudience: [WHO — ROLE, EXPERIENCE LEVEL, ANY CONTEXT]\nLearning outcome: [WHAT THEY SHOULD BE ABLE TO DO AFTER]\nDelivery: [IN-PERSON / VIRTUAL / SELF-PACED]\nDuration: [LENGTH]\n\nProduce:\n1. **Session outline** — timed breakdown of every section\n2. **Core content** — the essential information per section in plain language\n3. **Activity per section** — one practice activity (not just listening or copying)\n4. **Knowledge check** — 6 questions testing understanding at the end\n5. **Quick reference card** — one page they keep and use after the session\n6. **Facilitator notes** — specific tips for delivering each section`
+            prompt:`You are an expert instructional designer. I am a ${r}.\n\nBrief:\nTopic: [WHAT YOU ARE TRAINING ON]\nAudience: [WHO — ROLE, EXPERIENCE LEVEL]\nOutcome: [WHAT THEY SHOULD BE ABLE TO DO AFTER]\nDelivery: [IN-PERSON / VIRTUAL / SELF-PACED]\nDuration: [LENGTH]\n\nProduce:\n1. Session outline — timed breakdown of every section\n2. Core content — essential information per section in plain language\n3. One activity per section — practice, not just listening\n4. Knowledge check — 6 questions testing understanding\n5. Quick reference card — one page they keep and use after\n6. Facilitator notes — tips for delivering each section`
         }),
         creativity:(r,t)=>({
             title:'Training That Changes Behaviour',
-            desc:'Design learning that sticks and actually changes how people work — not just what they know.',
-            prompt:`You are a behaviour change and learning design specialist. I am a ${r} and my training is often forgotten within a week.\n\nInformation-heavy training rarely changes behaviour. Help me design something that does.\n\nWhat I am trying to change:\nTopic: [SUBJECT]\nCurrent behaviour: [WHAT PEOPLE DO NOW]\nDesired behaviour: [WHAT THEY SHOULD DO AFTER]\nReal barrier: [WHY DON'T THEY ALREADY DO IT — knowledge gap / confidence / habit / motivation?]\n\nDesign a training experience that:\n1. **Creates the need to know** — opens with an experience that makes participants FEEL the gap\n2. **Shows, doesn't tell** — replaces slides with demonstration and real examples\n3. **Practises, not discusses** — the core of the session is doing, not listening\n4. **Builds confidence** — structured practice with safe failure and immediate feedback\n5. **Creates commitment** — closes with a specific personal action plan, not a reflection\n\nFull session design please — not principles, but the actual session.`
+            savings:'real results from L&D',
+            desc:'Design learning that actually changes how people work — not just what they know.',
+            prompt:`You are a behaviour change specialist. I am a ${r}.\n\nTopic: [SUBJECT]\nCurrent behaviour: [WHAT PEOPLE DO NOW]\nDesired behaviour: [WHAT THEY SHOULD DO AFTER]\nReal barrier: [KNOWLEDGE GAP / CONFIDENCE / HABIT / MOTIVATION]\n\nDesign a session that:\n1. Creates the need to know — participants FEEL the gap before you fill it\n2. Shows, doesn't tell — replaces slides with demonstration\n3. Practises, not discusses — the core is doing, not listening\n4. Builds confidence — safe practice with immediate feedback\n5. Creates commitment — specific personal action plan, not just reflection\n\nFull session design please — not principles, the actual session.`
         }),
         success:(r,t)=>({
             title:'Prove Your Training Works',
-            desc:'Design a measurement approach that demonstrates real impact to stakeholders.',
-            prompt:`You are a learning measurement expert. I am a ${r} who needs to demonstrate the impact of my training to leadership.\n\nTraining to evaluate:\nProgramme: [WHAT TRAINING]\nBusiness objective: [WHY THIS EXISTS — what business problem it solves]\nScale: [NUMBER OF PEOPLE TRAINED]\nStakeholder audience: [WHO NEEDS TO SEE IMPACT — and what they care about]\n\nUsing Kirkpatrick's 4 levels, design my measurement approach:\n• **Level 1 — Reaction:** How do I measure this meaningfully (not just happiness scores)?\n• **Level 2 — Learning:** How do I prove skills or knowledge increased?\n• **Level 3 — Behaviour:** How do I track application back at work?\n• **Level 4 — Results:** How do I link training to business outcomes?\n\nAlso give me:\n1. A one-page impact report template for stakeholders\n2. The 3 most compelling data points to lead with\n3. How to answer: "How do you know it was the training that made the difference?"  `
+            savings:'justifies your L&D budget',
+            desc:'Design a measurement approach that demonstrates real business impact to leadership.',
+            prompt:`You are a learning measurement expert. I am a ${r}.\n\nProgramme: [WHAT TRAINING]\nBusiness objective: [WHY THIS EXISTS — what problem it solves]\nStakeholders: [WHO NEEDS TO SEE IMPACT]\n\nUsing Kirkpatrick's 4 levels:\n• Level 1 — Reaction: meaningful measurement (not just happiness scores)\n• Level 2 — Learning: prove skills or knowledge increased\n• Level 3 — Behaviour: track application back at work\n• Level 4 — Results: link training to business outcomes\n\nAlso give me:\n1. One-page impact report template for stakeholders\n2. The 3 most compelling data points to lead with\n3. How to answer: "How do you know it was the training?"  `
         }),
         freetime:(r,t)=>({
             title:'Training Asset Library',
-            desc:'Build a reusable bank of training assets you adapt and deploy for any topic.',
-            prompt:`You are a learning systems expert. I am a ${r} who builds similar training repeatedly.\n\nBased on my work (${t.substring(0,200)}), build me a personal training asset library:\n\n1. **Master session template** — a generic workshop structure for 60, 90, and 180-minute sessions\n2. **Activity bank** — 8 reusable activities for different learning objectives (ice-breaker, skill drill, case study, reflection, etc.) with facilitator instructions for each\n3. **Knowledge check template** — a 10-question quiz structure I populate with any topic's content\n4. **Participant workbook skeleton** — section headers and layout I complete for any topic\n5. **Feedback form** — 5 questions that give genuinely useful data (not just happiness scores)\n6. **30/60/90 day follow-up email templates** — check-ins that reinforce learning after the session`
+            savings:'reuse everything you build',
+            desc:'Build a bank of reusable training assets you adapt and deploy for any topic.',
+            prompt:`You are a learning systems expert. I am a ${r}.\n\nBased on my work (${t.substring(0,200)}):\n\n1. Master session template — generic workshop structure for 60, 90, and 180-minute sessions\n2. Activity bank — 8 reusable activities for different learning objectives with facilitator instructions\n3. Knowledge check template — 10-question structure I populate for any topic\n4. Participant workbook skeleton — section headers and layout for any topic\n5. Feedback form — 5 questions giving genuinely useful data\n6. 30/60/90 day follow-up email templates — reinforce learning after the session`
         })
     },
     finance:{
         productivity:(r,t)=>({
             title:'Financial Document Creator',
+            savings:'1-2 hrs per report',
             desc:'Turn your numbers and notes into professional financial communications immediately.',
-            prompt:`You are my financial communications specialist. I am a ${r}.\n\nWhen I share financial data, figures, or context, produce professional financial documentation immediately.\n\nWhat I need: [BUDGET REPORT / VARIANCE ANALYSIS / BUSINESS CASE / FINANCIAL SUMMARY]\nMy data and context: [PASTE YOUR NUMBERS OR DESCRIBE THE SITUATION]\nAudience: [FINANCE PROFESSIONALS / GENERAL MANAGEMENT / BOARD]\n\nProduce:\n1. **Headline summary** — the 3 most important financial facts in plain language\n2. **Variance narrative** — why the numbers are what they are (structured clearly, not a list of excuses)\n3. **Forward view** — what the current numbers suggest about the next period\n4. **Recommendations** — what the financials suggest should happen next\n5. **Formatted output** — ready to present or drop into a report`
+            prompt:`You are my financial communications specialist. I am a ${r}.\n\nWhat I need: [BUDGET REPORT / VARIANCE ANALYSIS / BUSINESS CASE / FINANCIAL SUMMARY]\nMy data: [PASTE YOUR NUMBERS OR DESCRIBE THE SITUATION]\nAudience: [FINANCE PROFESSIONALS / GENERAL MANAGEMENT / BOARD]\n\nProduce:\n1. Headline summary — the 3 most important financial facts in plain language\n2. Variance narrative — why the numbers are what they are, structured clearly\n3. Forward view — what current numbers suggest about the next period\n4. Recommendations — what the financials suggest should happen\n5. Formatted output — ready to present or drop into a report`
         }),
         creativity:(r,t)=>({
             title:'Financial Story for Non-Finance Audiences',
-            desc:'Make numbers compelling and meaningful for people who tune out at the sight of a spreadsheet.',
-            prompt:`You are a financial storytelling expert. I am a ${r} and I need financial information to land with an audience that doesn't engage with numbers naturally.\n\nMy financial information:\n[PASTE YOUR DATA, FIGURES, OR KEY FINANCIAL POINTS]\n\nAudience: [WHO WILL HEAR THIS — their relationship with financial information]\nWhat I need them to DO: [THE DECISION OR ACTION REQUIRED]\n\nTransform this into a narrative that:\n1. **Opens with meaning, not numbers** — what does this financial situation actually mean in human terms?\n2. **Uses a powerful analogy** — one comparison that makes the scale instantly understandable\n3. **Shows the real-world impact** — what does this mean for people, services, customers?\n4. **Creates the right urgency** — neither alarmist nor complacent\n5. **Ends with one clear ask** — the specific decision these numbers require\n\nFull narrative, ready to deliver.`
+            savings:'decisions made faster',
+            desc:'Make numbers compelling and understandable for people who tune out at spreadsheets.',
+            prompt:`You are a financial storytelling expert. I am a ${r}.\n\nMy financial information: [PASTE YOUR DATA]\nAudience: [WHO — their relationship with financial information]\nWhat I need them to DO: [THE DECISION OR ACTION]\n\nTransform this into a narrative that:\n1. Opens with meaning, not numbers — what does this mean in human terms?\n2. Uses one powerful analogy — makes the scale instantly understandable\n3. Shows real-world impact — what does this mean for people, services, customers?\n4. Creates appropriate urgency — neither alarmist nor complacent\n5. Ends with one clear ask — the specific decision these numbers require`
         }),
         success:(r,t)=>({
             title:'Business Case That Gets Approved',
+            savings:'unlocks budget and resource',
             desc:'Write a compelling investment or change proposal that decision-makers say yes to.',
-            prompt:`You are a senior management consultant. I am a ${r} building a business case for something I need approved.\n\nMy proposal:\nWhat I am asking for: [DESCRIBE THE INVESTMENT, CHANGE, OR DECISION]\nThe problem it solves: [WHAT HAPPENS IF NOTHING CHANGES]\nThe benefit: [WHAT IMPROVES — with specifics and numbers where possible]\nThe cost: [INVESTMENT REQUIRED — time, money, resource]\nWho approves this: [THE DECISION-MAKER AND WHAT THEY CARE ABOUT MOST]\n\nBuild a business case that:\n1. Opens by making the status quo feel unacceptable (evidence-based)\n2. Quantifies the benefit — financial return, time saved, risk reduced\n3. Addresses the risk of action — what could go wrong and how we'd manage it\n4. Addresses the risk of inaction — what we lose by not proceeding\n5. Presents a clear recommendation with confidence\n\nFull document, ready to present.`
+            prompt:`You are a senior management consultant. I am a ${r}.\n\nWhat I'm asking for: [DESCRIBE THE INVESTMENT OR CHANGE]\nThe problem it solves: [WHAT HAPPENS IF NOTHING CHANGES]\nThe benefit: [WHAT IMPROVES — with specifics and numbers where possible]\nThe cost: [INVESTMENT REQUIRED]\nWho approves this: [DECISION-MAKER AND WHAT THEY CARE ABOUT MOST]\n\nBuild a business case that:\n1. Opens by making the status quo feel unacceptable\n2. Quantifies the benefit — return, time saved, risk reduced\n3. Addresses risk of action — what could go wrong and how we'd manage it\n4. Addresses risk of inaction — what we lose by not proceeding\n5. Makes a clear, confident recommendation\n\nFull document, ready to present.`
         }),
         freetime:(r,t)=>({
-            title:'Financial Reporting Template Pack',
-            desc:'Build templates that cut your regular financial report production time significantly.',
-            prompt:`You are a financial reporting systems expert. I am a ${r} who produces regular financial reports.\n\nBased on my work (${t.substring(0,200)}), build my financial reporting template pack:\n\n1. **Master report template** — standard structure for my most common report type with all sections pre-defined\n2. **Executive summary formula** — a fill-in structure that always produces a strong 4-sentence summary\n3. **Commentary phrase bank** — 25 pre-written phrases I adapt for common scenarios (over budget, on track, risk identified, strong performance, etc.)\n4. **Visualisation brief guide** — for each type of financial data, the best way to show it and how to brief a colleague to build it\n5. **Pre-send checklist** — 10 questions I ask before sending any financial report\n\nGoal: my next report takes 30% less time to produce than this one.`
+            title:'Financial Reporting Templates',
+            savings:'30% less production time',
+            desc:'Build templates and a phrase bank that eliminate the blank-page problem for every report.',
+            prompt:`You are a financial reporting systems expert. I am a ${r}.\n\nBased on my work (${t.substring(0,200)}):\n\n1. Master report template — standard structure with all sections pre-defined\n2. Executive summary formula — fill-in structure producing a strong 4-sentence summary\n3. Commentary phrase bank — 25 pre-written phrases for common scenarios\n4. Visualisation brief guide — best way to show each data type\n5. Pre-send checklist — 10 questions before sending any financial report`
         })
     },
     planning:{
         productivity:(r,t)=>({
             title:'Instant Planning Partner',
-            desc:'Dump everything on your plate and get a clear, prioritised, realistic plan immediately.',
-            prompt:`You are my planning and prioritisation expert. I am a ${r}.\n\nI am going to give you everything currently on my plate — tasks, ideas, commitments, deadlines — and you will turn it into a workable plan immediately.\n\nWhen I share my list:\n1. Organise into: **Today** / **This Week** / **This Month** / **Backlog / Drop**\n2. Estimate realistic time for everything in Today and This Week\n3. Flag dependencies — things blocked by other things\n4. Name the ONE thing I must not let slip this week\n5. Identify 2 things I should defer, delegate, or cut entirely\n6. Build me a realistic time-blocked day for tomorrow\n\nEverything currently on my plate:\n[PASTE ALL YOUR TASKS, COMMITMENTS, AND IDEAS — nothing is too small or vague]`
+            savings:'mental clarity daily',
+            desc:'Dump everything on your plate — get a clear, prioritised, realistic plan immediately.',
+            prompt:`You are my planning partner. I am a ${r}.\n\nI am giving you everything on my plate and you will turn it into a workable plan:\n\n1. Organise into: Today / This Week / This Month / Backlog or Drop\n2. Estimate realistic time for Today and This Week items\n3. Flag dependencies — things blocked by other things\n4. Name the ONE thing I must not let slip this week\n5. Identify 2 things to defer, delegate, or cut entirely\n6. Build me a time-blocked day for tomorrow\n\nEverything currently on my plate:\n[PASTE ALL YOUR TASKS, COMMITMENTS, AND IDEAS — nothing too small or vague]`
         }),
         creativity:(r,t)=>({
             title:'Plan Like a Strategist',
+            savings:'resilient plans that work',
             desc:'Design plans that are ambitious, resilient, and built to survive contact with reality.',
-            prompt:`You are a strategic planning advisor. I am a ${r} and I need to plan for:\n[DESCRIBE WHAT YOU ARE PLANNING — project, initiative, event, goal]\n\nI don't want a task list with dates. Help me plan like a strategist.\n\n1. **Clarify the real goal** — what does success actually look like in concrete, measurable terms?\n2. **Work backwards** — what has to be true at each milestone for us to succeed at the end?\n3. **Pre-mortem** — imagine we are at the completion date and it failed. Name the top 3 reasons.\n4. **Constraint mapping** — what are the real limiting factors (not the obvious ones everyone talks about)?\n5. **Contingency design** — the 3 most likely disruptions and what Plan B is for each\n6. **Minimum viable version** — if I had half the time or resources, what version still achieves the core goal?\n\nContext: [TIMELINE, RESOURCES, STAKEHOLDERS, CONSTRAINTS]`
+            prompt:`You are a strategic planning advisor. I am a ${r} planning:\n[DESCRIBE WHAT YOU ARE PLANNING]\n\n1. Clarify the real goal — what does success look like in concrete, measurable terms?\n2. Work backwards — what has to be true at each milestone to succeed at the end?\n3. Pre-mortem — it's the completion date and the plan failed. Name the top 3 reasons.\n4. Constraint mapping — what are the REAL limiting factors (not the obvious ones)?\n5. Contingency design — the 3 most likely disruptions and Plan B for each\n6. Minimum viable version — if I had half the resources, what still achieves the core goal?\n\nContext: [TIMELINE, RESOURCES, STAKEHOLDERS, CONSTRAINTS]`
         }),
         success:(r,t)=>({
             title:'Stakeholder Communication Plan',
-            desc:'Create a clear plan for managing expectations and keeping the right people onside.',
-            prompt:`You are a stakeholder management expert. I am a ${r} managing a piece of work with multiple stakeholders.\n\nThe work I am doing:\n[DESCRIBE YOUR PROJECT, INITIATIVE, OR RESPONSIBILITY]\n\nKey stakeholders:\n[LIST THE MAIN PEOPLE OR GROUPS AND THEIR RELATIONSHIP TO THIS WORK]\n\nDesign a stakeholder communication plan:\n1. **Stakeholder map** — their level of interest, influence, and current attitude (supportive / neutral / resistant)\n2. **Communication matrix** — who gets what information, how often, and through which channel\n3. **Core message per group** — what does each type of stakeholder most need to hear?\n4. **Standard update template** — a progress update I can adapt and send on a regular schedule\n5. **Managing resistance** — how to handle the stakeholder most likely to push back\n6. **Quick wins communication** — how to share early progress to build confidence and buy-in`
+            savings:'avoids costly surprises',
+            desc:'Map your stakeholders and create a plan that keeps the right people onside.',
+            prompt:`You are a stakeholder management expert. I am a ${r}.\n\nThe work I am doing: [DESCRIBE YOUR PROJECT OR RESPONSIBILITY]\nKey stakeholders: [LIST THE MAIN PEOPLE OR GROUPS]\n\nDesign a stakeholder plan:\n1. Stakeholder map — interest, influence, and current attitude\n2. Communication matrix — who gets what, how often, which channel\n3. Core message per group — what each type needs to hear\n4. Standard update template — adaptable progress update\n5. Managing resistance — how to handle the most likely source of pushback\n6. Quick wins communication — sharing early progress to build buy-in`
         }),
         freetime:(r,t)=>({
             title:'Weekly Planning System',
-            desc:'Build a fast personal planning ritual that sets up your whole week in 15 minutes.',
-            prompt:`You are a personal productivity systems designer. I am a ${r} who wants a weekly planning system I will actually stick to — fast, simple, and genuinely useful.\n\nMy work context: ${t.substring(0,200)}\n\nDesign my personal planning system:\n\n1. **Monday morning ritual** (15 minutes) — the exact questions I answer and decisions I make, in order\n2. **Daily 5-minute check-in** — a prompt sequence to start each day focused on what matters\n3. **Friday close-down** (10 minutes) — how I end the week cleanly and prepare for next week\n4. **Weekly planning template** — one page I fill in each Monday that serves as my north star for the week\n5. **Interruption triage system** — a quick decision framework for when urgent things land unexpectedly\n\nNothing in this system should take more time than it saves. Keep it realistic for someone who is genuinely busy.`
+            savings:'15 min sets up your week',
+            desc:'Build a planning ritual so every week starts focused, not reactive.',
+            prompt:`You are a personal productivity systems designer. I am a ${r}.\n\nMy work context: ${t.substring(0,200)}\n\nDesign my personal planning system:\n1. Monday morning ritual (15 minutes) — exact questions and decisions, in order\n2. Daily 5-minute check-in — prompt sequence to start each day focused\n3. Friday close-down (10 minutes) — end the week cleanly, prepare for next\n4. Weekly planning template — one page I fill in each Monday\n5. Interruption triage — fast decision framework for when urgent things land\n\nNothing takes more time than it saves. Keep it realistic for someone genuinely busy.`
         })
     },
     feedback:{
         productivity:(r,t)=>({
             title:'Performance Feedback Writer',
-            desc:'Draft honest, constructive, professional feedback for any person or situation.',
-            prompt:`You are a performance management specialist. I am a ${r} who needs to give clear, professional feedback.\n\nFeedback context:\nPerson / situation: [WHO AND WHAT]\nWhat went well: [SPECIFIC POSITIVE OBSERVATIONS]\nArea to improve: [THE SPECIFIC BEHAVIOUR OR OUTCOME TO ADDRESS]\nImpact of the issue: [WHY IT MATTERS — on team, output, or stakeholders]\nDesired change: [WHAT YOU NEED TO BE DIFFERENT]\n\nWrite feedback that:\n• Is specific to behaviour, not personality\n• Describes observable impact, not judgement\n• Is honest without being harsh\n• Makes the development path clear\n• Could be said face-to-face or written in a review form\n\nProvide both a spoken version (for a 1:1) and a written version (for a formal record).`
+            savings:'30+ min per review',
+            desc:'Describe the situation — get honest, professional, ready-to-use feedback drafted.',
+            prompt:`You are a performance management specialist. I am a ${r}.\n\nFeedback context:\nPerson / situation: [WHO AND WHAT]\nWhat went well: [SPECIFIC POSITIVE OBSERVATIONS]\nArea to improve: [THE SPECIFIC BEHAVIOUR OR OUTCOME]\nImpact: [WHY IT MATTERS — on team, output, or stakeholders]\nDesired change: [WHAT YOU NEED TO BE DIFFERENT]\n\nWrite feedback that:\n• Is specific to behaviour, not personality\n• Describes observable impact, not judgement\n• Is honest without being harsh\n• Makes the development path clear\n\nProvide: a spoken version (for a 1:1) and a written version (for a formal record).`
         }),
         creativity:(r,t)=>({
-            title:'Feedback That Actually Changes Things',
-            desc:'Design feedback conversations that people respond to positively and act on.',
-            prompt:`You are an organisational psychology expert. I am a ${r} and I want my feedback to land well and create real change — not defensiveness or compliance.\n\nResearch shows most feedback conversations don't change behaviour. Help me design one that does.\n\nThe situation:\nWho: [ROLE AND RELATIONSHIP TO ME]\nThe issue: [WHAT BEHAVIOUR OR PERFORMANCE NEEDS TO CHANGE]\nPrevious attempts: [WHAT HAS BEEN TRIED BEFORE, IF ANYTHING]\nTheir likely reaction: [HOW DO YOU THINK THEY WILL RESPOND]\n\nDesign a feedback conversation that:\n1. Opens with genuine curiosity, not a judgement\n2. Creates psychological safety before raising the issue\n3. Invites their perspective before offering mine\n4. Connects the feedback to their own goals and values (not just mine)\n5. Ends with a commitment they make, not one I impose\n\nGive me the full conversation structure with suggested words for each stage.`
+            title:'Feedback That Creates Change',
+            savings:'better team performance',
+            desc:'Design feedback conversations that people respond to and genuinely act on.',
+            prompt:`You are an organisational psychology expert. I am a ${r}.\n\nWho: [ROLE AND RELATIONSHIP TO ME]\nThe issue: [WHAT NEEDS TO CHANGE]\nPrevious attempts: [WHAT HAS BEEN TRIED]\nLikely reaction: [HOW YOU THINK THEY WILL RESPOND]\n\nDesign a conversation that:\n1. Opens with genuine curiosity, not a judgement\n2. Creates psychological safety before raising the issue\n3. Invites their perspective before offering mine\n4. Connects to their own goals and values — not just mine\n5. Ends with a commitment they make, not one I impose\n\nFull conversation structure with suggested words for each stage.`
         }),
         success:(r,t)=>({
             title:'360 & Appraisal Writer',
+            savings:'defensible, professional reviews',
             desc:'Write structured, evidence-based appraisal content that holds up to scrutiny.',
-            prompt:`You are a performance management and HR expert. I am a ${r} completing a formal appraisal or 360 review.\n\nI need to write professional, evidence-based appraisal content that is specific, fair, and developmental.\n\nReview details:\nPerson being reviewed: [ROLE]\nReview period: [TIME PERIOD]\nKey achievements to highlight: [SPECIFIC EXAMPLES]\nDevelopment areas to address: [SPECIFIC OBSERVATIONS]\nOverall performance level: [EXCEEDS / MEETS / PARTIALLY MEETS / BELOW EXPECTATIONS]\n\nWrite:\n1. **Performance summary** — balanced, specific, 2-3 paragraphs\n2. **Achievements section** — 4 bullet points with evidence and impact\n3. **Development section** — 2-3 areas framed constructively with specific suggestions\n4. **Rating justification** — a defensible paragraph explaining the performance rating\n5. **Development objectives** — 3 SMART goals for the next review period`
+            prompt:`You are a performance management expert. I am a ${r} completing a formal appraisal.\n\nReview details:\nPerson being reviewed: [ROLE]\nReview period: [TIME PERIOD]\nKey achievements: [SPECIFIC EXAMPLES]\nDevelopment areas: [SPECIFIC OBSERVATIONS]\nOverall performance: [EXCEEDS / MEETS / PARTIALLY MEETS / BELOW]\n\nWrite:\n1. Performance summary — balanced, specific, 2-3 paragraphs\n2. Achievements section — 4 bullet points with evidence and impact\n3. Development section — 2-3 areas framed constructively with suggestions\n4. Rating justification — a defensible paragraph explaining the rating\n5. Development objectives — 3 SMART goals for the next period`
         }),
         freetime:(r,t)=>({
             title:'Feedback Template Pack',
-            desc:'Build a set of ready-to-use feedback structures for your most common situations.',
-            prompt:`You are a performance management systems expert. I am a ${r} who gives feedback regularly.\n\nBased on my role (${t.substring(0,150)}), I likely give similar types of feedback repeatedly.\n\nBuild me a personal feedback template pack for 6 common scenarios:\n\n1. **Template** — a structure with prompts that guide me to the right content\n2. **Opening line options** — 3 ways to start the conversation depending on the situation\n3. **What to avoid** — the one thing people typically get wrong in this type of feedback\n\nScenarios to cover based on my role:\n• Strong performance — recognition and stretch\n• Missed deadline or deliverable\n• Behaviour affecting the team\n• Underperformance requiring formal acknowledgement\n• Development conversation (growth-focused)\n• Post-project / end-of-assignment debrief`
+            savings:'half the time per review cycle',
+            desc:'Ready-to-use structures for your 6 most common feedback situations.',
+            prompt:`You are a performance management systems expert. I am a ${r}.\n\nBuild me a feedback template pack for 6 common scenarios:\n• Strong performance — recognition and stretch\n• Missed deadline or deliverable\n• Behaviour affecting the team\n• Underperformance requiring formal acknowledgement\n• Development conversation (growth-focused)\n• Post-project debrief\n\nFor each: template with prompts, 3 opening line options, and the one mistake to avoid.`
         })
     },
     content:{
         productivity:(r,t)=>({
             title:'Content Multiplier',
-            desc:'Turn one idea or piece of content into multiple formats in a single session.',
-            prompt:`You are my content production partner. I am a ${r}.\n\nContent multiplication: when I give you one idea, topic, or piece of content, you produce it in multiple formats immediately.\n\nMy source content or topic:\n[YOUR IDEA, KEY MESSAGE, OR PIECE OF CONTENT]\n\nProduce:\n1. **LinkedIn post** — professional, insight-led, 150-200 words, ends with a question\n2. **Short email newsletter intro** — 3 sentences that make people want to read on\n3. **3 punchy social posts** — different angles on the same topic, ready to schedule\n4. **5 talking points** — for using this content in conversation or presentations\n5. **Blog post outline** — headline, 5 subheadings, key point per section\n\nMake each feel native to its format — not the same content copy-pasted.`
+            savings:'hours of content creation',
+            desc:'One idea → LinkedIn post, email, social posts, talking points, blog outline — instantly.',
+            prompt:`You are my content production partner. I am a ${r}.\n\nContent multiplication: one idea or piece of content → multiple formats.\n\nMy source content or topic:\n[YOUR IDEA, KEY MESSAGE, OR PIECE OF CONTENT]\n\nProduce:\n1. LinkedIn post — professional, insight-led, 150-200 words, ends with a question\n2. Short email newsletter intro — 3 sentences that make people read on\n3. 3 punchy social posts — different angles, ready to schedule\n4. 5 talking points — for conversation or presentations\n5. Blog post outline — headline, 5 subheadings, key point per section\n\nMake each feel native to its format.`
         }),
         creativity:(r,t)=>({
             title:'Content That Stops the Scroll',
-            desc:'Create content with the hooks, angles, and structure that gets real attention.',
-            prompt:`You are a digital content strategist. I am a ${r} who wants content that actually gets engagement, not just polite likes.\n\nTopic / expertise area: [WHAT YOU WANT TO CREATE CONTENT ABOUT]\nPlatform: [LINKEDIN / INSTAGRAM / NEWSLETTER / OTHER]\nAudience: [WHO YOU WANT TO REACH]\nDesired response: [WHAT SHOULD HAPPEN AFTER THEY SEE IT]\n\nGive me:\n1. **5 hook options** — opening lines that stop mid-scroll (try: counterintuitive, bold claim, specific number, question, "Most people don't know...")\n2. **The angle no one else is taking** — a unique perspective that makes my content different from everything else in this space\n3. **A content series concept** — 5 connected pieces that build a reputation over time\n4. **Engagement triggers** — specific structural elements that reliably drive comments and shares\n5. **The fully written piece** — take your best hook and write the complete post`
+            savings:'real reach and engagement',
+            desc:'Create content with hooks, angles, and structure that gets genuine attention.',
+            prompt:`You are a digital content strategist. I am a ${r}.\n\nTopic: [WHAT YOU WANT TO CREATE CONTENT ABOUT]\nPlatform: [LINKEDIN / INSTAGRAM / NEWSLETTER / OTHER]\nAudience: [WHO YOU WANT TO REACH]\nDesired response: [WHAT SHOULD HAPPEN AFTER THEY SEE IT]\n\nGive me:\n1. 5 hook options — openings that stop mid-scroll\n2. The angle no one else is taking — unique perspective on this topic\n3. A content series concept — 5 connected pieces building a reputation\n4. Engagement triggers — elements that reliably drive comments and shares\n5. The fully written piece — best hook, complete post`
         }),
         success:(r,t)=>({
             title:'Thought Leadership Content',
-            desc:'Create content that builds genuine professional reputation and positions you as an expert.',
-            prompt:`You are a personal brand strategist. I am a ${r} who wants to be genuinely known for expertise in my field.\n\nMy expertise and perspective:\n[DESCRIBE WHAT YOU KNOW, YOUR UNIQUE EXPERIENCE, OR YOUR HONEST POINT OF VIEW]\n\nAudience I want to reach: [WHO]\nGoal: [WHAT BEING KNOWN FOR THIS WOULD DO FOR YOUR CAREER]\n\nHelp me create thought leadership that:\n1. **Expresses a clear point of view** — not reporting what others think, but what I actually believe and why\n2. **Is grounded in real experience** — draws on insights from my actual work\n3. **Takes a stance** — something I could defend in a professional debate\n4. **Builds a reputation over time** — a 6-post content arc that develops one coherent theme\n\nWrite the first thought leadership piece in full, based on the expertise and perspective I have described.`
+            savings:'builds career-changing reputation',
+            desc:'Create content that positions you as a genuine expert in your field.',
+            prompt:`You are a personal brand strategist. I am a ${r}.\n\nMy expertise and perspective:\n[DESCRIBE WHAT YOU KNOW, YOUR UNIQUE EXPERIENCE, YOUR HONEST POINT OF VIEW]\n\nAudience: [WHO] | Goal: [WHAT BEING KNOWN FOR THIS WOULD DO FOR YOUR CAREER]\n\nHelp me create thought leadership that:\n1. Expresses a clear point of view — what I actually believe and why\n2. Is grounded in real experience — insights from my actual work\n3. Takes a stance — something I could defend in a professional debate\n4. Builds reputation over time — a 6-post arc developing one coherent theme\n\nWrite the first thought leadership piece in full.`
         }),
         freetime:(r,t)=>({
             title:'90-Day Content System',
-            desc:'Build a content plan and batch-creation system that runs with minimal weekly effort.',
-            prompt:`You are a content systems expert. I am a ${r} who wants consistent content output without it consuming my time.\n\nMy content context:\nPlatforms: [WHERE YOU PUBLISH]\nTopic areas: [WHAT YOU TALK ABOUT]\nTime available per week: [REALISTIC HOURS]\nTarget: [HOW MUCH YOU WANT TO PUBLISH]\n\nDesign my 90-day content system:\n\n1. **Content pillars** — 4 core themes that cover my expertise and audience's interests\n2. **90-day calendar** — specific topics mapped to each week, balanced across pillars\n3. **2-hour batch session workflow** — how to create 2 weeks of content in one sitting\n4. **Repurposing rules** — when and how to reuse each piece across formats\n5. **3 core format templates** — ready-to-fill structures that cut creation time\n6. **Curation strategy** — how to fill gaps with quality curated content when I have nothing original ready`
+            savings:'consistent output, minimal effort',
+            desc:'Build a content plan and batching system that runs with minimal weekly effort.',
+            prompt:`You are a content systems expert. I am a ${r}.\n\nPlatforms: [WHERE YOU PUBLISH]\nTopic areas: [WHAT YOU TALK ABOUT]\nTime available: [REALISTIC HOURS/WEEK]\nTarget output: [HOW MUCH YOU WANT TO PUBLISH]\n\nDesign my 90-day system:\n1. Content pillars — 4 core themes covering expertise and audience interests\n2. 90-day calendar — topics mapped to each week, balanced across pillars\n3. 2-hour batch session workflow — 2 weeks of content in one sitting\n4. Repurposing rules — when and how to reuse each piece\n5. 3 core format templates — ready-to-fill structures\n6. Curation strategy — filling gaps with quality curated content`
         })
     },
     recruitment:{
         productivity:(r,t)=>({
             title:'Recruitment Document Creator',
-            desc:'Produce job descriptions, interview questions, and assessment materials immediately.',
-            prompt:`You are a specialist recruitment consultant. I am a ${r} who needs professional recruitment materials fast.\n\nRole I am recruiting for:\nJob title: [TITLE]\nTeam / department: [CONTEXT]\nKey responsibilities: [WHAT THEY WILL DO — 5-6 core duties]\nMust-have requirements: [NON-NEGOTIABLES]\nNice to have: [DESIRABLE BUT NOT ESSENTIAL]\nCulture fit: [WHAT KIND OF PERSON THRIVES IN THIS TEAM]\n\nProduce:\n1. **Job description** — compelling, specific, honest about the reality of the role\n2. **Person specification** — essential and desirable criteria clearly separated\n3. **Interview question bank** — 15 questions (mix of competency, situational, and values-based)\n4. **Scoring guide** — what a strong, acceptable, and weak answer looks like for the 5 most important questions\n5. **Candidate comparison scorecard** — a structured grid for evaluating candidates fairly`
+            savings:'2-3 hrs per hire',
+            desc:'Produce job descriptions, interview questions, and scorecards immediately.',
+            prompt:`You are a specialist recruitment consultant. I am a ${r}.\n\nRole:\nJob title: [TITLE] | Team: [CONTEXT]\nKey responsibilities: [5-6 CORE DUTIES]\nMust-have requirements: [NON-NEGOTIABLES]\nNice to have: [DESIRABLE NOT ESSENTIAL]\nCulture fit: [WHAT KIND OF PERSON THRIVES HERE]\n\nProduce:\n1. Job description — compelling, specific, honest\n2. Person specification — essential and desirable clearly separated\n3. Interview question bank — 15 questions (competency, situational, values-based)\n4. Scoring guide — strong/acceptable/weak answer criteria for top 5 questions\n5. Candidate comparison scorecard — structured grid for fair evaluation`
         }),
         creativity:(r,t)=>({
             title:'Job Advert That Attracts the Right People',
+            savings:'better candidate quality',
             desc:'Write adverts that attract great candidates — not just whoever is available.',
-            prompt:`You are a talent attraction specialist. I am a ${r} who is not attracting the quality of candidates I need.\n\nThe problem: most job adverts look identical and attract anyone available. I want mine to reach the right person specifically.\n\nRole: [JOB TITLE AND KEY DETAILS]\nThe person I actually want: [THEIR MINDSET, VALUES, AMBITIONS — not just their CV]\nWhat is genuinely great about this role: [HONEST POSITIVES]\nWhat is honestly challenging: [THE REAL DIFFICULTIES — good candidates appreciate honesty]\n\nWrite a job advert that:\n1. Leads with why this opportunity is compelling (not "we are looking for...")\n2. Speaks directly to the right candidate in their language\n3. Is honest about the challenge — positions it as an exciting problem to solve\n4. Reads differently from every other advert for this type of role\n5. Closes with a call to apply that feels like an obvious next step, not a form to fill`
+            prompt:`You are a talent attraction specialist. I am a ${r}.\n\nRole: [JOB TITLE AND KEY DETAILS]\nThe person I actually want: [THEIR MINDSET, VALUES, AMBITIONS — not just their CV]\nWhat's genuinely great here: [HONEST POSITIVES]\nWhat's honestly challenging: [THE REAL DIFFICULTIES]\n\nWrite an advert that:\n1. Leads with why this opportunity is compelling\n2. Speaks directly to the right candidate in their language\n3. Is honest about the challenge — positions it as an exciting problem\n4. Reads differently from every other advert in this space\n5. Closes with an application call-to-action that feels obvious`
         }),
         success:(r,t)=>({
             title:'Structured Interview System',
-            desc:'Design a selection process that reliably identifies your best candidates.',
-            prompt:`You are an occupational psychologist. I am a ${r} and I want interviews that predict performance, not just identify people who interview well.\n\nRole I am hiring for: [JOB TITLE]\nThe 5 most critical competencies for success: [LIST THEM]\nCurrent interview weakness: [WHAT GOES WRONG — gut feeling decisions, talking too much, halo effect?]\n\nDesign a structured interview system:\n1. **Competency framework** — for each competency, the specific behaviours that define excellent, acceptable, and poor performance\n2. **Question bank** — 3 STAR-format behavioural questions per competency\n3. **Scoring guide** — a 1-5 scale with clear anchors for each answer quality\n4. **Panel roles** — how to divide responsibilities between interviewers\n5. **Consensus process** — how to debrief and make a fair, defensible hiring decision\n6. **Bias checklist** — the 8 most common interview biases and how to counteract each`
+            savings:'better hires, less risk',
+            desc:'Design a process that reliably identifies great candidates — not great interviewees.',
+            prompt:`You are an occupational psychologist. I am a ${r}.\n\nRole: [JOB TITLE]\n5 critical competencies for success: [LIST THEM]\nCurrent interview weakness: [WHAT GOES WRONG — gut feeling, halo effect?]\n\nDesign:\n1. Competency framework — behaviours defining excellent/acceptable/poor for each competency\n2. Question bank — 3 STAR-format behavioural questions per competency\n3. Scoring guide — 1-5 scale with clear answer-quality anchors\n4. Panel roles — how to divide responsibilities\n5. Consensus process — fair, defensible hiring decision process\n6. Bias checklist — 8 most common interview biases and how to counteract them`
         }),
         freetime:(r,t)=>({
             title:'Recruitment Process Toolkit',
-            desc:'Build a complete, reusable recruitment system for your most common roles.',
-            prompt:`You are a recruitment operations expert. I am a ${r} who recruits regularly.\n\nRoles I hire most commonly: [LIST 2-3 ROLES YOU HIRE REGULARLY]\n\nBuild my personal recruitment toolkit:\n\n1. **Role briefing template** — the questions I ask hiring managers before I start\n2. **CV screening scorecard** — a one-page structured review template with clear criteria\n3. **Candidate communication templates** — interview invite, confirmation, rejection at CV stage, rejection post-interview, offer letter framework\n4. **Interview scheduling checklist** — everything I confirm before the interview happens\n5. **Onboarding handover** — what I give the hiring manager when the candidate accepts\n\nThis becomes my repeatable system — same quality every time, half the admin.`
+            savings:'consistent quality, less admin',
+            desc:'A complete, reusable system for every stage of your most common hires.',
+            prompt:`You are a recruitment operations expert. I am a ${r}.\n\nRoles I hire most commonly: [LIST 2-3]\n\nBuild my toolkit:\n1. Role briefing template — questions I ask hiring managers before starting\n2. CV screening scorecard — structured one-page review with clear criteria\n3. Candidate communication templates — invite, confirmation, rejection (CV stage and post-interview), offer framework\n4. Interview day checklist — everything confirmed before the interview\n5. Onboarding handover — what I give the hiring manager when candidate accepts`
         })
     },
     general:{
         productivity:(r,t)=>({
             title:'Your Dedicated AI Work Assistant',
-            desc:'Set Claude up with full context of your role so it can help with anything immediately.',
-            prompt:`You are my dedicated work assistant. I am a ${r}.\n\nHere is the context of my work so you can help me effectively without me repeating it every session:\n\nMy daily responsibilities include: ${t}\n\nFor every task I bring you:\n• Do it immediately — don't ask clarifying questions unless genuinely necessary. Make reasonable assumptions and note them.\n• Produce complete, ready-to-use output — not outlines or suggestions\n• Match the professional standard expected of a ${r}\n• Be direct and confident — I want results, not hedging\n\nYou now have everything you need. What would you like to start with?`
+            savings:'hours reclaimed every week',
+            desc:'Set Claude up with your full context so it helps with anything, immediately.',
+            prompt:`You are my dedicated work assistant. I am a ${r}.\n\nMy work context so you can help me without me repeating it:\n${t}\n\nFor every task I bring you:\n• Do it immediately — don't ask clarifying questions unless genuinely essential. Make reasonable assumptions and note them.\n• Produce complete, ready-to-use output — not outlines or suggestions\n• Match the professional standard expected of a ${r}\n• Be direct and confident — I want results, not hedging\n\nYou now have full context. What's the first task?`
         }),
         creativity:(r,t)=>({
-            title:'Thinking Partner & Idea Generator',
-            desc:'Use Claude as a sounding board that challenges your thinking and pushes your ideas further.',
-            prompt:`You are my thinking partner. I am a ${r}.\n\nYour job is not to agree with me — it is to help me think better.\n\nWhen I share an idea, plan, approach, or problem, please:\n1. **Steel-man it first** — make the strongest case FOR my thinking before any critique\n2. **Challenge my assumptions** — what am I taking for granted that might not be true?\n3. **Play devil's advocate** — what would a smart, informed critic say against this?\n4. **Offer the alternative** — what is a fundamentally different approach I haven't considered?\n5. **Give your honest view** — what do you actually think is the strongest path forward?\n\nI don't want encouragement. I want sharper thinking.\n\nHere is what I am working on:\n[DESCRIBE YOUR IDEA, PLAN, OR CHALLENGE]`
+            title:'Thinking Partner',
+            savings:'sharper decisions',
+            desc:'A sounding board that challenges your thinking and pushes your ideas further.',
+            prompt:`You are my thinking partner. I am a ${r}.\n\nYour job is not to agree with me — it's to help me think better.\n\nWhen I share an idea, plan, or problem:\n1. Steel-man it first — the strongest case FOR my thinking\n2. Challenge my assumptions — what am I taking for granted?\n3. Devil's advocate — what would a smart critic say against this?\n4. The alternative — a fundamentally different approach I haven't considered\n5. Your honest view — what do you actually think is the best path?\n\nI want sharper thinking, not encouragement.\n\nHere's what I'm working on: [DESCRIBE YOUR IDEA OR CHALLENGE]`
         }),
         success:(r,t)=>({
             title:'Career Performance Coach',
-            desc:'Get honest, expert coaching on how to perform and be recognised at a higher level.',
-            prompt:`You are a senior executive coach with deep experience working with people in roles like ${r}. I want to perform at a significantly higher level.\n\nMy situation:\nCurrent performance level: [YOUR HONEST SELF-ASSESSMENT]\nBiggest strength: [WHAT YOU DO WELL]\nBiggest gap: [WHERE YOU KNOW YOU COULD BE BETTER]\nWhat holds me back: [THE REAL OBSTACLE]\nWhere I want to be in 12-18 months: [YOUR AMBITION]\n\nGive me:\n1. **Honest diagnosis** — based on what I've shared, what is really limiting me?\n2. **3 highest-leverage changes** — if I only changed 3 things, which would have the biggest impact?\n3. **90-day plan** — specific, realistic actions with measurable outcomes\n4. **The mindset shift** — what do I need to start believing about myself or my role to operate at the next level?\n5. **One action for this week** — something I can do in the next 5 days that starts the change\n\nBe direct. I want real advice.`
+            savings:'accelerates your trajectory',
+            desc:'Get honest, expert coaching on performing and being recognised at a higher level.',
+            prompt:`You are a senior executive coach working with ${r} professionals. I want to perform at a significantly higher level.\n\nMy situation:\nCurrent level: [YOUR HONEST SELF-ASSESSMENT]\nBiggest strength: [WHAT YOU DO WELL]\nBiggest gap: [WHERE YOU COULD BE BETTER]\nWhat holds me back: [THE REAL OBSTACLE]\nWhere I want to be in 12-18 months: [YOUR AMBITION]\n\nGive me:\n1. Honest diagnosis — what's really limiting me?\n2. 3 highest-leverage changes — the most impactful things to shift\n3. 90-day plan — specific, realistic, measurable\n4. The mindset shift — what I need to believe to operate at the next level\n5. One action this week — something in the next 5 days that starts the change`
         }),
         freetime:(r,t)=>({
             title:'Work Efficiency Audit',
+            savings:'2-5 hrs/week reclaimed',
             desc:'Find the hidden time in your week and build a system to protect and expand it.',
-            prompt:`You are a work efficiency expert. I am a ${r} and I want to reclaim significant time in my working week.\n\nMy current work involves: ${t}\n\nPlease conduct an efficiency audit:\n\n1. **Time drain identification** — which activities are most likely consuming disproportionate time based on what I've described?\n2. **80/20 analysis** — which 20% of my activities probably create 80% of my real value?\n3. **Automation opportunities** — which tasks could be partially or fully handled by AI right now?\n4. **Delegation audit** — what am I doing that someone or something else could handle?\n5. **Week redesign** — how should I restructure my typical week to protect my highest-value work?\n6. **Energy management** — which types of tasks should I schedule at which times of day?\n\nGive me a practical plan I can start using this week, not a set of principles.`
+            prompt:`You are a work efficiency expert. I am a ${r}.\n\nMy current work: ${t}\n\nConduct an efficiency audit:\n1. Time drain identification — which activities consume disproportionate time?\n2. 80/20 analysis — which 20% of activities create 80% of my real value?\n3. Automation opportunities — what can AI handle partially or fully right now?\n4. Delegation audit — what am I doing that someone or something else could handle?\n5. Week redesign — how should I restructure my week to protect highest-value work?\n6. Energy management — which task types at which times of day?\n\nPractical plan I can start this week — not principles.`
         })
     }
 };
 
-function buildPrompts(role, tasks, goal){
-    const detected = detectTaskTypes(tasks);
-    const results = [];
-    const used = new Set();
-    // Pull one prompt per detected task type for this goal
+function buildPrompts(role,tasks,goal){
+    const detected=detectTaskTypes(tasks);
+    const results=[];const used=new Set();
     for(const d of detected){
-        if(P[d.key] && P[d.key][goal] && !used.has(d.key)){
-            results.push(P[d.key][goal](role, tasks));
-            used.add(d.key);
-            if(results.length >= 4) break;
+        if(P[d.key]&&P[d.key][goal]&&!used.has(d.key)){
+            results.push(P[d.key][goal](role,tasks));used.add(d.key);
+            if(results.length>=4)break;
         }
     }
-    // Pad with general if needed
-    if(results.length < 4 && !used.has('general')){
-        results.push(P.general[goal](role, tasks));
-    }
+    if(results.length<4&&!used.has('general'))results.push(P.general[goal](role,tasks));
     return results.slice(0,4);
 }
 
-// ── Generate & Render ─────────────────────────────────────────
+// ── Render ───────────────────────────────────────────────────────────────────
 function generatePrompts(){
-    state.role = document.getElementById('roleInput').value.trim() || state.role;
-    state.tasks = document.getElementById('tasksInput').value.trim();
+    state.role=document.getElementById('roleInput').value.trim()||state.role;
+    state.tasks=document.getElementById('tasksInput').value.trim();
 
-    const detected = detectTaskTypes(state.tasks);
+    const detected=detectTaskTypes(state.tasks);
+    const highlights=extractHighlights(state.tasks);
 
-    // Show detected badges
-    const badges = document.getElementById('detectedBadges');
-    badges.innerHTML = '<span class="text-slate-500 text-xs mr-2">Detected in your description:</span>' +
-        detected.slice(0,6).map(d=>`<span class="task-badge">${d.icon} ${d.label}</span>`).join('');
+    // Personalised hero
+    document.getElementById('heroHeadline').textContent=`Here's your AI playbook, ${state.role}`;
+    document.getElementById('heroSub').textContent=`We found ${detected.length} areas in your description where AI can help you right now.`;
 
-    const tabsEl = document.getElementById('promptTabs');
-    const contentEl = document.getElementById('promptContent');
-    tabsEl.innerHTML = '';
-    contentEl.innerHTML = '';
+    const chips=document.getElementById('detectedChips');
+    chips.innerHTML=detected.slice(0,7).map(d=>`<span class="highlight-chip">${d.icon} ${d.label}</span>`).join('');
+    if(highlights.length){
+        chips.innerHTML+=`<div class="w-full mt-2 text-xs text-slate-600">From your description: ${highlights.map(h=>`<em class="text-slate-500">${h}</em>`).join(', ')}</div>`;
+    }
+
+    const tabsEl=document.getElementById('promptTabs');
+    const contentEl=document.getElementById('promptContent');
+    tabsEl.innerHTML='';contentEl.innerHTML='';
 
     const GOAL_META={productivity:{label:'Productivity',icon:'&#9889;'},creativity:{label:'Creativity',icon:'&#128161;'},success:{label:'Work Success',icon:'&#127942;'},freetime:{label:'Free Time',icon:'&#9200;'}};
-    let total=0, first=true;
+    let first=true,total=0;
 
     state.goals.forEach(goal=>{
         const meta=GOAL_META[goal];
-        const prompts=buildPrompts(state.role, state.tasks, goal);
+        const prompts=buildPrompts(state.role,state.tasks,goal);
         total+=prompts.length;
+
         const tab=document.createElement('button');
         tab.className='prompt-tab'+(first?' active-tab':'');
         tab.dataset.tab=goal;
         tab.innerHTML=meta.icon+' '+meta.label;
         tab.onclick=()=>switchTab(goal);
         tabsEl.appendChild(tab);
+
         const panel=document.createElement('div');
         panel.className='tab-content'+(first?' active':'');
         panel.id='tab-'+goal;
-        panel.innerHTML=prompts.map((p,i)=>`
-            <div class="prompt-card">
-                <div class="flex items-start justify-between gap-4 mb-3">
-                    <div>
-                        <h4 class="text-white font-semibold text-base mb-1">${p.title}</h4>
-                        <p class="text-slate-400 text-sm">${p.desc}</p>
-                    </div>
-                    <button class="copy-btn flex-shrink-0" onclick="copyPrompt(this,${JSON.stringify(p.prompt)})">Copy</button>
-                </div>
-                <div class="bg-slate-900/70 rounded-lg p-4 border border-slate-700/50 mt-2">
-                    <pre class="text-slate-300 text-sm whitespace-pre-wrap font-sans leading-relaxed">${escHtml(p.prompt)}</pre>
-                </div>
-            </div>
-        `).join('');
+        panel.innerHTML=prompts.map(p=>buildCard(p)).join('');
         contentEl.appendChild(panel);
         first=false;
     });
 
-    document.getElementById('promptCount').textContent=total+' personalised prompts ready for you';
-    document.getElementById('resultsSubtitle').textContent='Built for a '+state.role+' based on your actual tasks';
     showScreen(4);
+}
+
+function buildCard(p){
+    const savBadge=p.savings?`<span class="savings-badge">&#9201; Saves ${p.savings}</span>`:'';
+    const exBlock=p.example?`
+        <div class="example-block">
+            <div class="example-label">&#128064; See it in action — real before &amp; after:</div>
+            ${p.exampleInput?`<div class="example-input-box">You type: ${escHtml(p.exampleInput)}</div><div class="example-arrow">&darr; AI produces in seconds:</div>`:''}
+            <div class="example-output-box"><pre>${escHtml(p.example)}</pre></div>
+        </div>`:'';
+    return `
+    <div class="prompt-card">
+        <div class="flex items-start justify-between gap-4 mb-3">
+            <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <h4 class="text-white font-semibold text-base">${p.title}</h4>
+                    ${savBadge}
+                </div>
+                <p class="text-slate-400 text-sm">${p.desc}</p>
+            </div>
+            <button class="copy-btn flex-shrink-0" onclick="copyPrompt(this,${JSON.stringify(p.prompt)})">Copy Prompt</button>
+        </div>
+        ${exBlock}
+        <details>
+            <summary class="prompt-toggle">&#128196; Show the full prompt to copy into Claude &darr;</summary>
+            <div class="prompt-text-box"><pre>${escHtml(p.prompt)}</pre></div>
+        </details>
+    </div>`;
 }
 
 function switchTab(goal){
@@ -662,34 +753,14 @@ function switchTab(goal){
 }
 
 function copyPrompt(btn,text){
-    const fallback=()=>{
-        const ta=document.createElement('textarea');
-        ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    };
+    const fallback=()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);};
     (navigator.clipboard?navigator.clipboard.writeText(text).catch(fallback):Promise.reject()).catch(fallback);
-    btn.textContent='✓ Copied';btn.classList.add('copied');showToast();
-    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2200);
+    btn.textContent='✓ Copied!';btn.classList.add('copied');showToast();
+    setTimeout(()=>{btn.textContent='Copy Prompt';btn.classList.remove('copied');},2500);
 }
-
-function showToast(){
-    const t=document.getElementById('toast');
-    t.style.transform='translateY(0)';t.style.opacity='1';
-    setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},2400);
-}
-
-function escHtml(s){
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function startOver(){
-    state.role='';state.tasks='';state.goals=[];
-    document.getElementById('roleInput').value='';
-    document.getElementById('tasksInput').value='';
-    document.getElementById('charCount').textContent='0 characters';
-    document.querySelectorAll('.goal-card').forEach(c=>c.classList.remove('selected'));
-    document.getElementById('generateBtn').disabled=true;
-    showScreen(0);
-}
+function showToast(){const t=document.getElementById('toast');t.style.transform='translateY(0)';t.style.opacity='1';setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},2800);}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function startOver(){state.role='';state.tasks='';state.goals=[];document.getElementById('roleInput').value='';document.getElementById('tasksInput').value='';document.getElementById('charCount').textContent='0 characters';document.querySelectorAll('.goal-card').forEach(c=>c.classList.remove('selected'));document.getElementById('generateBtn').disabled=true;showScreen(0);}
 </script>
 </body>
 </html>
