@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover how AI can transform your workday. Enter your job role, describe your tasks, and get personalised AI prompts to boost productivity, creativity, and free time.">
+    <title>AI Advantage — Your Personal AI Productivity Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #22d3ee, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background-color: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            transition: all 0.3s ease-in-out;
+        }
+        .step-screen { display: none; }
+        .step-screen.active { display: block; }
+        .role-chip {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            background: rgba(17, 24, 39, 0.5);
+            color: #94a3b8;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .role-chip:hover { border-color: #22d3ee; color: #22d3ee; background: rgba(34,211,238,0.05); }
+        .role-chip.selected { border-color: #22d3ee; color: #22d3ee; background: rgba(34,211,238,0.1); }
+        .goal-card {
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid rgba(51, 65, 85, 0.6);
+            background: rgba(17, 24, 39, 0.5);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+        .goal-card:hover { transform: translateY(-2px); }
+        .goal-card.selected { transform: translateY(-2px); }
+        .goal-card[data-goal="productivity"].selected { border-color: #22d3ee; background: rgba(34,211,238,0.08); box-shadow: 0 0 30px rgba(34,211,238,0.1); }
+        .goal-card[data-goal="creativity"].selected { border-color: #a5b4fc; background: rgba(165,180,252,0.08); box-shadow: 0 0 30px rgba(165,180,252,0.1); }
+        .goal-card[data-goal="success"].selected { border-color: #34d399; background: rgba(52,211,153,0.08); box-shadow: 0 0 30px rgba(52,211,153,0.1); }
+        .goal-card[data-goal="freetime"].selected { border-color: #fb923c; background: rgba(251,146,60,0.08); box-shadow: 0 0 30px rgba(251,146,60,0.1); }
+        .custom-input {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 18px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+        .custom-input:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34,211,238,0.1); }
+        .custom-input::placeholder { color: #475569; }
+        .btn-primary {
+            background: linear-gradient(135deg, #22d3ee, #818cf8);
+            color: #0a0a0a;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+            letter-spacing: 0.01em;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(34,211,238,0.25); }
+        .btn-secondary {
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 500;
+            padding: 14px 32px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(51,65,85,0.8);
+            font-size: 1rem;
+        }
+        .btn-secondary:hover { border-color: #94a3b8; color: #e2e8f0; }
+        .prompt-tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid transparent;
+            color: #64748b;
+            background: transparent;
+        }
+        .prompt-tab.active-tab { background: rgba(34,211,238,0.1); border-color: rgba(34,211,238,0.4); color: #22d3ee; }
+        .prompt-card { background: rgba(15,23,42,0.8); border: 1px solid rgba(51,65,85,0.6); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .copy-btn { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.3); color: #22d3ee; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 500; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(34,211,238,0.2); }
+        .copy-btn.copied { background: rgba(52,211,153,0.15); border-color: rgba(52,211,153,0.4); color: #34d399; }
+        .progress-bar { height: 3px; background: rgba(51,65,85,0.5); border-radius: 9999px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #22d3ee, #a5b4fc); border-radius: 9999px; transition: width 0.4s ease; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeInUp 0.4s ease forwards; }
+        .glow-text { text-shadow: 0 0 60px rgba(34,211,238,0.2); }
+    </style>
+</head>
+<body class="text-slate-300 min-h-screen">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800/50 px-6 py-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-400 flex items-center justify-center text-black font-extrabold text-sm">AI</div>
+                <span class="font-bold text-white text-lg">AI Advantage</span>
+            </div>
+            <a href="/" class="text-slate-500 hover:text-slate-300 text-sm transition-colors">&larr; Back to site</a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+
+        <!-- Progress Bar -->
+        <div class="mb-10 max-w-2xl mx-auto" id="progressContainer" style="display:none">
+            <div class="flex justify-between text-xs text-slate-500 mb-2">
+                <span id="stepLabel">Step 1 of 3</span>
+                <span id="stepTitle">Your Role</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width:33%"></div>
+            </div>
+        </div>
+
+        <!-- ═══ SCREEN 0: Welcome ═══ -->
+        <div class="step-screen active text-center fade-in" id="screen-welcome">
+            <div class="mb-10">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-sm font-medium mb-8">
+                    <span>&#10022;</span>
+                    <span>For every worker &mdash; no tech knowledge needed</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-5 glow-text leading-tight">
+                    Discover Your<br><span class="text-gradient">AI Advantage</span>
+                </h1>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-3">
+                    Tell us your job and what you do every day. We&rsquo;ll show you exactly how AI can save you hours each week &mdash; and give you ready-to-use prompts to start right now.
+                </p>
+                <p class="text-slate-500 text-sm">Takes 2 minutes &middot; Free &middot; No sign-up required</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto mb-12">
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <div class="text-3xl mb-2">&zap;</div>
+                    <div class="text-white font-semibold text-sm">More Productive</div>
+                    <div class="text-slate-500 text-xs mt-1">Get more done, faster</div>
+                </div>
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <div class="text-3xl mb-2">&#128161;</div>
+                    <div class="text-white font-semibold text-sm">More Creative</div>
+                    <div class="text-slate-500 text-xs mt-1">Fresh ideas on demand</div>
+                </div>
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <div class="text-3xl mb-2">&#127942;</div>
+                    <div class="text-white font-semibold text-sm">More Successful</div>
+                    <div class="text-slate-500 text-xs mt-1">Stand out at work</div>
+                </div>
+                <div class="glass-card rounded-xl p-5 text-center">
+                    <div class="text-3xl mb-2">&#9200;</div>
+                    <div class="text-white font-semibold text-sm">More Free Time</div>
+                    <div class="text-slate-500 text-xs mt-1">Reclaim your day</div>
+                </div>
+            </div>
+
+            <button class="btn-primary text-lg px-12 py-4" onclick="startJourney()">
+                Find My AI Advantage &rarr;
+            </button>
+        </div>
+
+        <!-- ═══ SCREEN 1: Job Role ═══ -->
+        <div class="step-screen max-w-2xl mx-auto" id="screen-role">
+            <h2 class="text-3xl font-bold text-white mb-2">What&rsquo;s your job title?</h2>
+            <p class="text-slate-400 mb-8">This helps us tailor AI strategies that actually fit your work.</p>
+
+            <input
+                type="text"
+                id="roleInput"
+                class="custom-input text-lg mb-5"
+                placeholder="e.g. Teacher, Nurse, Project Manager, Sales Rep..."
+                oninput="filterRoles(this.value)"
+                onkeydown="if(event.key==='Enter') nextStep(2)"
+            >
+
+            <div class="mb-8">
+                <p class="text-slate-500 text-sm mb-3">Popular roles &mdash; click to select:</p>
+                <div class="flex flex-wrap gap-2" id="roleChips"></div>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="btn-secondary" onclick="showScreen(0)">&larr; Back</button>
+                <button class="btn-primary flex-1" onclick="nextStep(2)">Continue &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ═══ SCREEN 2: Daily Tasks ═══ -->
+        <div class="step-screen max-w-2xl mx-auto" id="screen-tasks">
+            <h2 class="text-3xl font-bold text-white mb-2">Describe your typical day</h2>
+            <p class="text-slate-400 mb-6">What do you actually do at work? The more detail, the better your AI prompts will be.</p>
+
+            <div class="glass-card rounded-xl p-4 mb-4">
+                <p class="text-cyan-400 text-sm font-semibold mb-3">&#128172; Think about things like...</p>
+                <div class="grid grid-cols-2 gap-y-1 gap-x-4 text-slate-400 text-sm">
+                    <span>&bull; Writing emails and reports</span>
+                    <span>&bull; Attending meetings</span>
+                    <span>&bull; Creating documents or slides</span>
+                    <span>&bull; Answering questions</span>
+                    <span>&bull; Analysing data or numbers</span>
+                    <span>&bull; Planning and organising</span>
+                    <span>&bull; Training or teaching others</span>
+                    <span>&bull; Dealing with customers</span>
+                </div>
+            </div>
+
+            <textarea
+                id="tasksInput"
+                class="custom-input"
+                rows="7"
+                placeholder="Example: I spend my mornings checking and replying to about 30 emails. I have 2-3 meetings a day where I take notes and follow up on actions. I write weekly status reports for senior management. I also create training materials and onboard new staff. A lot of my afternoon is spent reviewing documents and giving feedback..."
+                oninput="document.getElementById('charCount').textContent = this.value.length + ' characters'"
+            ></textarea>
+            <div class="flex justify-between text-xs text-slate-600 mt-2 mb-6">
+                <span>More detail = better prompts</span>
+                <span id="charCount">0 characters</span>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="btn-secondary" onclick="showScreen(1)">&larr; Back</button>
+                <button class="btn-primary flex-1" onclick="nextStep(3)">Continue &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ═══ SCREEN 3: Goals ═══ -->
+        <div class="step-screen max-w-2xl mx-auto" id="screen-goals">
+            <h2 class="text-3xl font-bold text-white mb-2">What matters most to you?</h2>
+            <p class="text-slate-400 mb-8">Select all that apply &mdash; we&rsquo;ll create prompts for every area you choose.</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="goal-card" data-goal="productivity" onclick="toggleGoal(this)">
+                    <div class="text-4xl mb-3">&zap;</div>
+                    <h3 class="text-white font-bold text-lg mb-1">Productivity</h3>
+                    <p class="text-slate-400 text-sm">Do more in less time. Automate repetitive tasks and work smarter every day.</p>
+                </div>
+                <div class="goal-card" data-goal="creativity" onclick="toggleGoal(this)">
+                    <div class="text-4xl mb-3">&#128161;</div>
+                    <h3 class="text-white font-bold text-lg mb-1">Creativity</h3>
+                    <p class="text-slate-400 text-sm">Generate fresh ideas, new perspectives, and creative solutions on demand.</p>
+                </div>
+                <div class="goal-card" data-goal="success" onclick="toggleGoal(this)">
+                    <div class="text-4xl mb-3">&#127942;</div>
+                    <h3 class="text-white font-bold text-lg mb-1">Work Success</h3>
+                    <p class="text-slate-400 text-sm">Communicate better, make smarter decisions, and get noticed by the right people.</p>
+                </div>
+                <div class="goal-card" data-goal="freetime" onclick="toggleGoal(this)">
+                    <div class="text-4xl mb-3">&#9200;</div>
+                    <h3 class="text-white font-bold text-lg mb-1">Free Time</h3>
+                    <p class="text-slate-400 text-sm">Reclaim hours every week by letting AI handle the heavy lifting for you.</p>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="btn-secondary" onclick="showScreen(2)">&larr; Back</button>
+                <button class="btn-primary flex-1" id="generateBtn" onclick="generatePrompts()" disabled style="opacity:0.4;cursor:not-allowed">
+                    Generate My AI Prompts &rarr;
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══ SCREEN 4: Results ═══ -->
+        <div class="step-screen" id="screen-results">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-green-500/30 bg-green-500/5 text-green-400 text-sm font-medium mb-4">
+                    <span>&#10003;</span>
+                    <span id="promptCount">Personalised prompts ready</span>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-2">Your AI Advantage Playbook</h2>
+                <p class="text-slate-400" id="resultsSubtitle">Prompts tailored to your role and daily tasks</p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-6 justify-center" id="promptTabs"></div>
+            <div id="promptContent"></div>
+
+            <div class="glass-card rounded-xl p-6 mt-8 text-center">
+                <p class="text-white font-semibold mb-1">Ready to put these to work?</p>
+                <p class="text-slate-400 text-sm mb-5">Copy any prompt above, then open Claude to start your AI session instantly.</p>
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <a href="https://claude.ai" target="_blank" rel="noopener" class="btn-primary">Open Claude &#8599;</a>
+                    <button class="btn-secondary" onclick="startOver()">Start Over</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl transition-all duration-300 z-50" style="transform:translateY(80px);opacity:0">
+        &#10003; Copied to clipboard!
+    </div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const state = { role: '', tasks: '', goals: [] };
+
+const POPULAR_ROLES = [
+    'Teacher','Nurse','Project Manager','Sales Representative',
+    'HR Manager','Marketing Manager','Admin Assistant','Customer Service Rep',
+    'Financial Analyst','Operations Manager','Social Worker','Accountant',
+    'Recruitment Consultant','Office Manager','Team Leader','GP / Doctor',
+    'Solicitor / Lawyer','Estate Agent','Events Coordinator','Business Analyst',
+    'Retail Manager','School Leader','Care Worker','IT Support'
+];
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function showScreen(n) {
+    const ids = ['screen-welcome','screen-role','screen-tasks','screen-goals','screen-results'];
+    document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(ids[n]);
+    el.classList.add('active');
+    el.classList.add('fade-in');
+    // progress
+    const prog = document.getElementById('progressContainer');
+    if (n > 0 && n < 4) {
+        prog.style.display = 'block';
+        document.getElementById('stepLabel').textContent = 'Step ' + n + ' of 3';
+        document.getElementById('stepTitle').textContent = ['','Your Role','Your Tasks','Your Goals'][n];
+        document.getElementById('progressFill').style.width = [0,33,66,100][n] + '%';
+    } else {
+        prog.style.display = 'none';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startJourney() {
+    renderRoleChips(POPULAR_ROLES);
+    showScreen(1);
+}
+
+function nextStep(to) {
+    if (to === 2) {
+        const v = document.getElementById('roleInput').value.trim();
+        if (!v) { highlight('roleInput'); return; }
+        state.role = v;
+    }
+    if (to === 3) {
+        const v = document.getElementById('tasksInput').value.trim();
+        if (v.length < 20) { highlight('tasksInput'); return; }
+        state.tasks = v;
+    }
+    showScreen(to);
+}
+
+function highlight(id) {
+    const el = document.getElementById(id);
+    el.style.borderColor = '#f87171';
+    el.style.boxShadow = '0 0 0 3px rgba(248,113,113,0.15)';
+    el.focus();
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2000);
+}
+
+// ── Role Chips ────────────────────────────────────────────────────────────────
+function renderRoleChips(roles) {
+    document.getElementById('roleChips').innerHTML = roles
+        .map(r => `<span class="role-chip" onclick="selectRole('${r.replace(/'/g,"&apos;")}')">${r}</span>`)
+        .join('');
+}
+
+function selectRole(role) {
+    document.getElementById('roleInput').value = role;
+    state.role = role;
+    document.querySelectorAll('.role-chip').forEach(c =>
+        c.classList.toggle('selected', c.textContent === role)
+    );
+}
+
+function filterRoles(q) {
+    const filtered = POPULAR_ROLES.filter(r => r.toLowerCase().includes(q.toLowerCase()));
+    renderRoleChips(filtered.length ? filtered : POPULAR_ROLES);
+}
+
+// ── Goals ─────────────────────────────────────────────────────────────────────
+function toggleGoal(el) {
+    const goal = el.dataset.goal;
+    el.classList.toggle('selected');
+    state.goals = el.classList.contains('selected')
+        ? [...new Set([...state.goals, goal])]
+        : state.goals.filter(g => g !== goal);
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = state.goals.length === 0;
+    btn.style.opacity = state.goals.length ? '1' : '0.4';
+    btn.style.cursor = state.goals.length ? 'pointer' : 'not-allowed';
+}
+
+// ── Prompt Library ────────────────────────────────────────────────────────────
+function buildPrompts(role, tasks, goal) {
+    const short = tasks.length > 300 ? tasks.substring(0, 300) + '...' : tasks;
+    const lib = {
+        productivity: [
+            {
+                title: 'Automate My Repetitive Tasks',
+                desc: 'Identify which of your daily tasks AI can handle or dramatically speed up.',
+                prompt: `I am a ${role}. My typical day involves:\n\n${tasks}\n\nPlease act as my AI productivity consultant. Analyse my daily tasks and:\n\n1. Identify the TOP 5 tasks where AI can save me the most time\n2. For each task, give me the EXACT prompt I should copy and use with you\n3. Give a realistic estimate of time saved per week for each task\n4. Rank them from biggest to smallest time saving\n\nBe specific to my role as a ${role}. I want to start saving time today.`
+            },
+            {
+                title: 'Email & Communication Toolkit',
+                desc: 'Draft, summarise and respond to emails in a fraction of the time.',
+                prompt: `I am a ${role} and I want to dramatically reduce the time I spend on written communications.\n\nPlease build me a personal communication toolkit with:\n\n1. A reusable prompt template for drafting professional emails (formal and informal versions)\n2. A prompt for summarising long email threads into bullet points\n3. A prompt for responding to difficult or sensitive messages professionally\n4. A prompt for turning rough bullet-point notes into polished communications\n\nTailor each template to the type of communications a ${role} typically handles. Include clear fill-in-the-blank placeholders I can reuse every day.`
+            },
+            {
+                title: 'Meeting Notes to Action Plan',
+                desc: 'Transform messy meeting notes into polished summaries and follow-up emails instantly.',
+                prompt: `I am a ${role} who attends multiple meetings and needs to produce clear follow-up summaries quickly.\n\nI am going to paste my raw meeting notes below. Please:\n\n1. Write a concise summary of the key discussion points (3-5 bullets)\n2. Extract all action items with owner names and deadlines (where mentioned)\n3. Flag any unresolved issues or decisions still needed\n4. Draft a professional follow-up email I can send to all attendees\n\nMake the output ready to send with minimal editing.\n\n[PASTE YOUR MEETING NOTES HERE]`
+            },
+            {
+                title: 'Document Processor & Summariser',
+                desc: 'Summarise, extract key information, and analyse any document in seconds.',
+                prompt: `I am a ${role}. I regularly need to read and extract key information from documents, reports, and articles.\n\nPlease act as my personal document processor. Whenever I share a document with you, I need you to:\n\n1. Write a one-paragraph executive summary\n2. List the 5 most important points or findings\n3. Flag any actions, decisions, or deadlines that require my attention\n4. Answer any specific questions I have about the content\n\nConfirm you understand this role, and I will start sharing documents with you now.`
+            }
+        ],
+        creativity: [
+            {
+                title: 'Unlimited Brainstorming Partner',
+                desc: 'Generate more ideas than you ever could alone, then find the very best ones.',
+                prompt: `I am a ${role} and I need a dedicated brainstorming partner.\n\nWhenever I bring you a challenge, topic, or question, your job is to:\n\n1. Generate 15-20 diverse ideas (from safe and obvious through to bold and unconventional)\n2. Group them into 3-4 natural themes\n3. Highlight your top 3 ideas and explain why each has real potential\n4. For the single strongest idea, sketch a quick action outline so I can see how to make it real\n\nMy first brainstorming challenge is:\n[DESCRIBE YOUR CHALLENGE OR TOPIC HERE]\n\nThink beyond what a typical ${role} would suggest. Surprise me.`
+            },
+            {
+                title: 'Fresh Perspective Generator',
+                desc: 'Break out of your usual thinking with radically different angles on any problem.',
+                prompt: `I am a ${role} and I feel stuck in my usual way of thinking about this:\n\n[DESCRIBE YOUR PROBLEM OR SITUATION HERE]\n\nPlease give me 5 completely different perspectives on this, as if you were:\n1. A customer or service user seeing this for the very first time\n2. A startup founder who wants to completely disrupt the status quo\n3. A scientist who only cares about evidence and measurable outcomes\n4. A creative director from a top advertising agency\n5. A curious child who keeps asking "But why?"\n\nFor each perspective, give me 2-3 specific ideas or actions that emerge. I want to think in ways I have never thought before.`
+            },
+            {
+                title: 'Professional Content Creator',
+                desc: 'Create compelling presentations, reports, posts, and materials for any purpose.',
+                prompt: `I am a ${role} and I need to create professional content.\n\nType of content: [e.g. presentation, report, proposal, social media post, training material, newsletter]\nTopic or subject: [YOUR TOPIC]\nAudience: [WHO WILL READ OR SEE IT]\nKey message in one sentence: [WHAT YOU WANT THEM TO THINK, FEEL, OR DO]\nTone: [FORMAL / CONVERSATIONAL / INSPIRING / INFORMATIVE]\n\nPlease produce a complete draft I can edit and use immediately. Include a clear structure, compelling headings, and language appropriate for a ${role} communicating to this audience.`
+            },
+            {
+                title: 'Creative Problem Solver',
+                desc: 'Tackle your toughest work challenges with structured creative problem-solving methods.',
+                prompt: `I am a ${role} facing a difficult challenge and I need creative problem-solving support.\n\nThe situation is:\n[DESCRIBE YOUR CHALLENGE IN AS MUCH DETAIL AS YOU CAN]\n\nWhat I have already tried:\n[LIST WHAT YOU HAVE DONE SO FAR]\n\nMain obstacles:\n[WHAT IS BLOCKING YOU]\n\nPlease use the SCAMPER method to generate fresh solutions:\n- Substitute: What could I replace or swap?\n- Combine: What could I merge together?\n- Adapt: What could I borrow from a different context?\n- Modify: What could I change, scale up, or exaggerate?\n- Put to other use: How else could resources or processes be used?\n- Eliminate: What could I remove or simplify?\n- Reverse: What if I flipped this completely around?\n\nGive me 2-3 actionable ideas for each. Then tell me which approach you think is most promising and why.`
+            }
+        ],
+        success: [
+            {
+                title: 'Executive-Quality Writing',
+                desc: 'Make every report, proposal and document sound polished and authoritative.',
+                prompt: `I am a ${role} and I need to elevate my professional writing to executive standard.\n\nPlease review and rewrite the following text so that it is:\n- Clear, concise, and impactful — no unnecessary words\n- Appropriate for senior leadership and decision makers\n- Free of jargon and vague language\n- Well-structured with a clear beginning, middle, and conclusion\n- Ending with a specific ask, recommendation, or next step\n\n[PASTE YOUR TEXT HERE]\n\nAfter rewriting, briefly explain the 3 main changes you made and why, so I can learn and improve my own writing.`
+            },
+            {
+                title: 'Strategic Advisor',
+                desc: 'Get senior-level strategic advice on decisions, plans, and workplace challenges.',
+                prompt: `I am a ${role} and I need strategic advice on the following situation:\n\n[DESCRIBE YOUR SITUATION, DECISION, OR CHALLENGE]\n\nContext:\n- Organisation type: [SIZE AND TYPE OF YOUR WORKPLACE]\n- Key stakeholders involved: [KEY PEOPLE OR DEPARTMENTS]\n- Timeframe I am working to: [HOW LONG DO I HAVE]\n- Key constraints: [BUDGET, RESOURCES, POLITICS, OTHER LIMITS]\n\nPlease give me:\n1. Your clear assessment of the situation\n2. Three strategic options, each with honest pros and cons\n3. Your recommended approach with your reasoning\n4. The top 3 risks I need to watch for\n5. The first 3 concrete actions I should take this week\n\nThink like an experienced consultant advising a senior ${role}.`
+            },
+            {
+                title: 'Presentation & Pitch Builder',
+                desc: 'Create persuasive, memorable presentations that inspire the right people to act.',
+                prompt: `I am a ${role} and I need to create a powerful presentation.\n\nPurpose of this presentation: [WHAT YOU WANT TO ACHIEVE]\nAudience: [WHO WILL BE IN THE ROOM]\nTime I have: [LENGTH OF PRESENTATION]\nCore message in one sentence: [YOUR SINGLE MOST IMPORTANT POINT]\n\nPlease create:\n1. A compelling narrative structure (story arc, not just a list of slides)\n2. A slide-by-slide outline with the key point for each slide\n3. Three strong opening hooks I could choose from\n4. Relevant data points, examples, or stories that strengthen my case\n5. A closing call-to-action that drives the result I want\n\nAlso tell me one thing I can do to make this presentation genuinely memorable.`
+            },
+            {
+                title: 'Career Development Coach',
+                desc: 'Get honest, tailored advice on growing your skills, reputation, and career trajectory.',
+                prompt: `I am a ${role} and I want to accelerate my professional development and career.\n\nMy situation:\n- Experience level: [YEARS IN ROLE OR CAREER STAGE]\n- Key strengths: [WHAT YOU DO WELL]\n- Areas to improve: [WHERE YOU STRUGGLE]\n- Career goal: [WHERE YOU WANT TO BE IN 2-3 YEARS]\n\nPlease act as my career coach and give me:\n1. An honest assessment of my development priorities\n2. The 3 skills that will make the biggest difference for a ${role} at my stage\n3. Practical ways to build each skill (mix of free and paid options)\n4. Specific ways to increase my visibility and reputation in my current role\n5. How to position myself on my CV and professional profile to stand out\n\nBe direct and honest. I want real, actionable advice — not just encouragement.`
+            }
+        ],
+        freetime: [
+            {
+                title: 'Time Audit & Reclaim Plan',
+                desc: 'Find exactly where your time is going and get a concrete plan to reclaim it.',
+                prompt: `I am a ${role}. My typical work week involves:\n\n${tasks}\n\nPlease act as my time management consultant with a single goal: help me reclaim time.\n\n1. Identify which tasks I described are my biggest time drains\n2. Categorise every task as:\n   - AI can do this fully (I just review the output)\n   - AI can do 70-80% of this (significant time saving)\n   - AI can help a little (minor improvement)\n   - Human only (genuinely needs me)\n3. For the first two categories, give me the specific strategy and prompt to use\n4. Estimate how many hours per week I could realistically reclaim\n5. Build me a simple 30-day plan with weekly milestones\n\nBe ambitious. I want to be honest about what a ${role} really needs to do personally.`
+            },
+            {
+                title: 'Build My AI Delegation System',
+                desc: 'Identify everything you can hand off to AI so you only do what truly needs you.',
+                prompt: `I am a ${role}. Here are all the tasks I typically handle:\n\n${short}\n\nI want to build a personal AI delegation system. Please:\n\n1. Sort ALL my tasks into three clear buckets:\n   DELEGATE FULLY — AI does it, I just approve\n   AI-ASSISTED — I lead but AI cuts the time by 50% or more\n   HUMAN ONLY — genuinely needs my judgement or relationships\n\n2. For every task in the first two buckets, write the exact prompt or workflow I should use\n\n3. Design a simple weekly schedule showing which tasks I hand to AI and when\n\n4. Give me a realistic total of hours reclaimed per week\n\nMy goal: spend my working time only on things that truly need a human ${role}.`
+            },
+            {
+                title: 'Smart Priority System',
+                desc: 'Let AI help you plan your week, ruthlessly prioritise, and protect your personal time.',
+                prompt: `I am a ${role} and I struggle to prioritise effectively and protect my time.\n\nHere is everything on my plate right now:\n[LIST ALL YOUR CURRENT TASKS, PROJECTS, AND COMMITMENTS]\n\nPlease:\n1. Sort these tasks using the Eisenhower Matrix (urgent/important grid)\n2. Tell me clearly what to do TODAY, what to schedule THIS WEEK, and what can wait or be dropped\n3. Identify anything I should say no to, delegate, or stop doing entirely\n4. Design a realistic weekly schedule with protected deep-focus blocks\n5. Suggest 3 firm boundaries I should set immediately to protect my personal time\n\nAlso create a simple daily planning prompt I can use every morning to stay focused and on track.`
+            },
+            {
+                title: 'My Personal AI Playbook',
+                desc: 'Build a repeatable AI system so you never start from scratch — every single day.',
+                prompt: `I am a ${role} and I want to build a personal AI playbook — a ready-to-use system that saves me time consistently, every single day.\n\nMy key regular tasks include:\n${short}\n\nPlease design my personal AI playbook with:\n\n1. Five core \"starter prompts\" I will use most days (tailored specifically to my role)\n2. Reusable templates for my most common documents and communications\n3. A morning planning prompt that helps me plan my whole day in under 5 minutes\n4. A Friday wrap-up prompt to close the week cleanly and prepare for next week\n5. A \"stuck\" prompt I can use whenever I am blocked, overwhelmed, or unsure what to do next\n\nFormat this as a clean reference guide I can save and return to every day. I want AI to become my most reliable and consistent work assistant.`
+            }
+        ]
+    };
+    return lib[goal] || [];
+}
+
+// ── Generate & Render Results ─────────────────────────────────────────────────
+function generatePrompts() {
+    state.role = document.getElementById('roleInput').value.trim() || state.role;
+    state.tasks = document.getElementById('tasksInput').value.trim();
+
+    const tabsEl = document.getElementById('promptTabs');
+    const contentEl = document.getElementById('promptContent');
+    tabsEl.innerHTML = '';
+    contentEl.innerHTML = '';
+
+    const GOAL_META = {
+        productivity: { label: 'Productivity', icon: '&zap;' },
+        creativity:   { label: 'Creativity',   icon: '&#128161;' },
+        success:      { label: 'Work Success', icon: '&#127942;' },
+        freetime:     { label: 'Free Time',    icon: '&#9200;' }
+    };
+
+    let total = 0;
+    let first = true;
+
+    state.goals.forEach(goal => {
+        const meta = GOAL_META[goal];
+        const prompts = buildPrompts(state.role, state.tasks, goal);
+        total += prompts.length;
+
+        // Tab
+        const tab = document.createElement('button');
+        tab.className = 'prompt-tab' + (first ? ' active-tab' : '');
+        tab.dataset.tab = goal;
+        tab.innerHTML = meta.icon + ' ' + meta.label;
+        tab.onclick = () => switchTab(goal);
+        tabsEl.appendChild(tab);
+
+        // Content panel
+        const panel = document.createElement('div');
+        panel.className = 'tab-content' + (first ? ' active' : '');
+        panel.id = 'tab-' + goal;
+        panel.innerHTML = prompts.map((p, i) => `
+            <div class="prompt-card" style="animation-delay:${i*0.07}s">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                    <div>
+                        <h4 class="text-white font-semibold text-base mb-1">${p.title}</h4>
+                        <p class="text-slate-400 text-sm">${p.desc}</p>
+                    </div>
+                    <button class="copy-btn flex-shrink-0" onclick="copyPrompt(this, ${JSON.stringify(p.prompt)})">Copy</button>
+                </div>
+                <div class="bg-slate-900/70 rounded-lg p-4 border border-slate-700/50 mt-2">
+                    <pre class="text-slate-300 text-sm whitespace-pre-wrap font-sans leading-relaxed">${escHtml(p.prompt)}</pre>
+                </div>
+            </div>
+        `).join('');
+        contentEl.appendChild(panel);
+        first = false;
+    });
+
+    document.getElementById('promptCount').textContent = total + ' personalised prompts ready for you';
+    document.getElementById('resultsSubtitle').textContent = 'Tailored for a ' + state.role + ' based on your daily tasks';
+    showScreen(4);
+}
+
+function switchTab(goal) {
+    document.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active-tab'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector('[data-tab="' + goal + '"]').classList.add('active-tab');
+    document.getElementById('tab-' + goal).classList.add('active');
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+function copyPrompt(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        showToast();
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2200);
+    }).catch(() => {
+        // fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        showToast();
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2200);
+    });
+}
+
+function showToast() {
+    const t = document.getElementById('toast');
+    t.style.transform = 'translateY(0)';
+    t.style.opacity = '1';
+    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 2400);
+}
+
+function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function startOver() {
+    state.role = ''; state.tasks = ''; state.goals = [];
+    document.getElementById('roleInput').value = '';
+    document.getElementById('tasksInput').value = '';
+    document.getElementById('charCount').textContent = '0 characters';
+    document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed';
+    showScreen(0);
+}
+</script>
+</body>
+</html>
