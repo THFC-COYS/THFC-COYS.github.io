@@ -243,6 +243,37 @@
             <div class="section-fade-in">
                 <h2 class="text-4xl font-bold text-center mb-12 text-slate-100">AI & Prototyping Projects</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Unstuck -->
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col ring-1 ring-indigo-400/40">
+                        <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950/40 to-black relative overflow-hidden">
+                            <svg viewBox="0 0 100 100" width="76" height="76" class="relative">
+                                <defs><radialGradient id="unstuckPet" cx="50%" cy="38%"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#0e7490"/></radialGradient></defs>
+                                <path d="M50 14 C74 14 86 34 86 54 C86 76 70 88 50 88 C30 88 14 76 14 54 C14 34 26 14 50 14 Z" fill="url(#unstuckPet)"/>
+                                <path d="M44 14 Q50 2 56 14" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="40" cy="48" r="4.5" fill="#0a0a0a"/><circle cx="60" cy="48" r="4.5" fill="#0a0a0a"/>
+                                <circle cx="41.5" cy="46.5" r="1.5" fill="#fff"/><circle cx="61.5" cy="46.5" r="1.5" fill="#fff"/>
+                                <path d="M42 60 Q50 66 58 60" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute bottom-3 text-xs text-slate-400 tracking-widest uppercase">Too big to start? Blow it up.</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center gap-2 mb-2">
+                                <h3 class="text-2xl font-bold text-slate-100">Unstuck</h3>
+                                <span class="text-[10px] uppercase tracking-wider text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-2 py-0.5">New</span>
+                            </div>
+                            <div class="text-slate-400 mb-4 flex-grow">
+                                <p>An anti–task-paralysis app for ADHD and overwhelmed brains. Type the thing you're avoiding, and Unstuck detonates it into tiny 5-minute steps, guides you through one at a time, and grows your companion pet "Mote" with every step you finish.</p>
+                                <div class="research-section text-sm text-slate-400 space-y-1">
+                                    <p><strong class="text-slate-300">Hypothesis:</strong> The breakout consumer apps of 2025–26 (Focus Friend hitting #1, Finch's pet loyalty, Goblin Tools' viral task-breakdown) all answer one Reddit cry: "I can't start — tell me the next tiny step." Combining all three mechanics in one loop should compound their pull.</p>
+                                    <p><strong class="text-slate-300">Method:</strong> Built a client-side "task detonation" engine (12 domain playbooks + generic fallback), a one-step-at-a-time focus timer, and an evolving SVG companion with XP, streaks, and localStorage persistence. No backend, works offline.</p>
+                                    <p><strong class="text-slate-300">Insight:</strong> Task initiation — not task management — is the unserved wedge; the pet turns a utility into a daily habit, which is exactly the retention profile acquirers pay for.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 mt-auto self-start">
+                                <a href="unstuck/index.html" class="bg-cyan-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-cyan-700 transition-all">Launch App</a>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Gist -->
                     <div class="glass-card rounded-xl overflow-hidden flex flex-col ring-1 ring-cyan-500/30">
                         <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-black relative overflow-hidden">

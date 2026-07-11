@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Unstuck — for when the task is too big to start. Blow it up into tiny 5-minute steps, do one at a time, and grow your companion Mote while you do.">
+    <title>Unstuck — Too big to start? Blow it up.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #22d3ee, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background-color: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.7);
+        }
+        .fade-up { animation: fadeUp 0.45s ease-out both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(12px);} to {opacity:1; transform:translateY(0);} }
+        .bob { animation: bob 3s ease-in-out infinite; }
+        @keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-8px);} }
+        .blink { animation: blink 4s infinite; }
+        @keyframes blink { 0%,94%,100% { transform: scaleY(1);} 96% { transform: scaleY(0.1);} }
+        .confetti-bit { position: fixed; top: -12px; width: 10px; height: 14px; z-index: 100; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(720deg); opacity: 0.7; } }
+        .step-enter { animation: fadeUp 0.35s ease-out both; }
+        input::placeholder { color: #475569; }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-slate-300 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gradient">Unstuck</a>
+            <div class="flex items-center gap-4">
+                <span id="streakBadge" class="hidden sm:inline-flex items-center gap-1.5 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-full px-3 py-1"></span>
+                <a href="../index.html" class="text-sm border border-cyan-500 text-cyan-400 font-semibold py-2 px-4 rounded-lg hover:bg-cyan-500 hover:text-white transition-all">Portfolio</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-28 pb-20 max-w-4xl">
+
+        <!-- Hero -->
+        <section class="text-center mb-10">
+            <span class="inline-block text-xs tracking-widest uppercase text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-1 mb-6">For brains that can't start</span>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-100 mb-4">Too big to start? <span class="text-gradient">Blow it up.</span></h1>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto">Type the thing you're avoiding. Unstuck detonates it into tiny 5-minute steps, walks you through one at a time, and your companion <strong class="text-cyan-300">Mote</strong> grows with every step you finish.</p>
+        </section>
+
+        <!-- Pet -->
+        <section class="glass-card rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-center gap-6">
+            <div class="bob" id="petBox"></div>
+            <div class="flex-1 text-center sm:text-left">
+                <div class="flex items-baseline gap-2 justify-center sm:justify-start">
+                    <h2 id="petStage" class="text-xl font-bold text-slate-100">Mote</h2>
+                    <span id="petLevel" class="text-xs text-cyan-400"></span>
+                </div>
+                <p id="petSays" class="text-slate-400 text-sm mt-1 italic"></p>
+                <div class="mt-3">
+                    <div class="flex justify-between text-xs text-slate-500 mb-1"><span id="xpLabel">XP</span><span id="stepsToday"></span></div>
+                    <div class="w-full h-2 rounded-full bg-slate-700/60 overflow-hidden">
+                        <div id="xpBar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-indigo-400 transition-all duration-700" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input -->
+        <section class="glass-card rounded-2xl p-6 md:p-8">
+            <label for="taskInput" class="block text-sm text-slate-400 mb-2">What are you avoiding right now?</label>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input id="taskInput" type="text" maxlength="120" class="flex-1 bg-black/40 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-cyan-500" placeholder="clean my room · reply to that email · start the essay · do my taxes…">
+                <button id="blowUpBtn" class="bg-cyan-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-cyan-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">💥 Blow it up</button>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-4" id="chips"></div>
+        </section>
+
+        <!-- Steps -->
+        <section id="plan" class="hidden mt-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-slate-100">Your tiny steps</h2>
+                <span class="text-xs text-slate-500">each ≈ 5 min or less</span>
+            </div>
+            <ul id="stepList" class="space-y-3"></ul>
+            <p class="text-center mt-6">
+                <button id="startBtn" class="bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold py-3 px-10 rounded-xl hover:opacity-90 transition-all">Start with step 1 →</button>
+            </p>
+        </section>
+
+        <footer class="text-center text-xs text-slate-600 mt-16">
+            Built by Greg Lucas · Unstuck runs 100% in your browser. Your tasks and your Mote never leave your device.
+        </footer>
+    </main>
+
+    <!-- Focus overlay -->
+    <div id="focus" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="glass-card rounded-2xl p-8 md:p-12 max-w-xl w-full text-center fade-up">
+            <div id="focusDots" class="flex justify-center gap-2 mb-6"></div>
+            <p class="text-xs uppercase tracking-widest text-cyan-400 mb-3">Just this one thing</p>
+            <h2 id="focusStep" class="text-2xl md:text-3xl font-extrabold text-slate-100 leading-snug mb-6"></h2>
+            <div id="timer" class="text-6xl font-extrabold text-gradient tabular-nums mb-8">5:00</div>
+            <div class="flex flex-wrap justify-center gap-3">
+                <button id="doneBtn" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-emerald-700 transition-all">Done ✓</button>
+                <button id="moreTimeBtn" class="border border-slate-600 text-slate-300 font-semibold py-3 px-6 rounded-xl hover:border-cyan-500 hover:text-cyan-400 transition-all">+2 min</button>
+                <button id="skipBtn" class="text-slate-500 hover:text-slate-300 py-3 px-4 transition-all">skip</button>
+            </div>
+            <button id="exitFocus" class="mt-6 text-xs text-slate-600 hover:text-slate-400">exit focus</button>
+        </div>
+    </div>
+
+    <script>
+    const $ = id => document.getElementById(id);
+
+    /* ---------- Task detonation engine ---------- */
+    const PLAYBOOKS = [
+        { match: /clean|tidy|declutter|mess/i, steps: t => [
+            "Stand up and walk to where the mess is. That's the whole step.",
+            "Grab a trash bag and throw away 5 pieces of obvious garbage.",
+            "Pick up everything that's clothing. Pile it in ONE spot.",
+            "Clear one single surface (desk, nightstand, or floor patch).",
+            "Put 5 things back where they actually live.",
+            "Take a photo of the improved bit — proof for future you."
+        ]},
+        { match: /email|inbox|reply|respond|message/i, steps: t => [
+            "Open the email. Just open it — you don't have to answer yet.",
+            "Read it once and write down the ONE thing it's really asking.",
+            "Write a terrible first sentence. Bad is allowed.",
+            "Write the rest in bullet points — no polish.",
+            "Turn the bullets into 2–4 plain sentences.",
+            "Read it once out loud, then hit send before you re-doubt it."
+        ]},
+        { match: /essay|write|writing|report|paper|blog|article|draft/i, steps: t => [
+            "Open a blank doc and type the title. That's it.",
+            "Write one sentence saying what this is about, badly.",
+            "List 3 bullet points you already know you want to say.",
+            "Expand bullet #1 into a few ugly sentences.",
+            "Expand bullet #2. Still no editing allowed.",
+            "Expand bullet #3, then stop. Editing is a different day's job."
+        ]},
+        { match: /study|exam|revise|revision|homework|learn/i, steps: t => [
+            "Get the materials physically in front of you. Nothing else.",
+            "Write down the ONE topic that scares you most.",
+            "Read/skim that topic for 5 minutes — no notes yet.",
+            "Close the book and scribble everything you remember.",
+            "Check what you missed and mark it with a star.",
+            "Do 3 practice questions or re-explain it to your wall."
+        ]},
+        { match: /dish|kitchen|sink/i, steps: t => [
+            "Walk to the sink. Run the hot water for a second.",
+            "Clear the sink: stack everything on one side.",
+            "Wash just the cups and glasses.",
+            "Wash the plates and bowls.",
+            "Do the cutlery — it takes 90 seconds, promise.",
+            "Wipe the counter and admire the empty sink."
+        ]},
+        { match: /laundry|clothes|washing/i, steps: t => [
+            "Gather everything wearable off the floor into one pile.",
+            "Shove one load into the machine and start it. Done for now.",
+            "When it beeps: move it to the dryer or rack — 2 minutes.",
+            "Fold ONLY the easy stuff (towels, tees).",
+            "Put the folded pile away — one drawer at a time."
+        ]},
+        { match: /tax|form|paperwork|admin|bill|insurance|dmv|passport|visa|application form/i, steps: t => [
+            "Find the ONE document or website you need to start. Just find it.",
+            "Make a list of what info they're actually asking for.",
+            "Gather the pieces you already have (photos of docs count).",
+            "Fill in only the easy fields — name, address, dates.",
+            "Do ONE hard field. Guess if you must; flag it.",
+            "Save your progress and write down the single next blocker."
+        ]},
+        { match: /job|resume|résumé|cv|cover letter|apply|application/i, steps: t => [
+            "Open the job posting and copy it into a doc.",
+            "Highlight 3 phrases they repeat — that's what they want.",
+            "Update just the top summary line of your resume to echo them.",
+            "Tweak 2 bullet points to match the highlighted phrases.",
+            "Fill in the application's boring fields.",
+            "Attach, breathe, submit. Perfect is a trap."
+        ]},
+        { match: /workout|gym|exercise|run|jog|walk/i, steps: t => [
+            "Put on your workout clothes. You can stop after this, honestly.",
+            "Fill a water bottle and put your shoes on.",
+            "Do 2 minutes of anything — stretch, walk, one set.",
+            "Do 5 more minutes. Momentum is doing the work now.",
+            "Finish with one thing you actually like doing.",
+            "Log it somewhere — streaks feed Motes."
+        ]},
+        { match: /call|phone|dentist|doctor|appointment/i, steps: t => [
+            "Write down the ONE sentence you need to say first.",
+            "Find the phone number and put it in front of you.",
+            "Write the 2–3 details they might ask for (name, DOB, dates).",
+            "Do a 10-second fake rehearsal out loud. Feel silly. Good.",
+            "Dial. The hard part lasts about 8 seconds.",
+            "Write down what they said before you forget it."
+        ]},
+        { match: /pack|move|moving|suitcase|trip/i, steps: t => [
+            "Get one bag or box and put it open on the floor.",
+            "Pack only the things you use every single day.",
+            "Pack clothes for the days you'll actually be there.",
+            "Do the chargers-and-cables sweep.",
+            "Do the bathroom sweep — toothbrush, meds, glasses.",
+            "Zip it and put it by the door. Future you says thanks."
+        ]},
+        { match: /code|coding|bug|program|project|build|website|app/i, steps: t => [
+            "Open the project. Just get it on screen.",
+            "Write a one-line comment describing what 'done' means.",
+            "Find the exact file/function where the change starts.",
+            "Make the smallest possible edit — even a stub.",
+            "Run it. Watch it fail. Failing is information.",
+            "Fix the first error only, then reassess."
+        ]},
+    ];
+
+    const GENERIC = t => [
+        `Set the scene: clear one distraction and open what "${t}" needs.`,
+        `Write one sentence: what does "done" look like for ${t}?`,
+        `Do the smallest first physical action of ${t} — 2 minutes max.`,
+        "Keep going for 5 more minutes. You've already started — that was the boss fight.",
+        "Take a 2-minute break. Stand up, water, stretch.",
+        `Pick the next tiny piece of ${t} and do just that.`
+    ];
+
+    function detonate(task) {
+        for (const p of PLAYBOOKS) if (p.match.test(task)) return p.steps(task);
+        return GENERIC(task);
+    }
+
+    /* ---------- Mote (the pet) ---------- */
+    const STAGES = [
+        { at: 0,   name: "Egg",      say: "…something's in there. Finish one step to wake it." },
+        { at: 30,  name: "Sprout",   say: "Mote hatched! Every step you finish feeds it." },
+        { at: 100, name: "Wisp",     say: "Mote is glowing. It's proud of you and not subtle about it." },
+        { at: 250, name: "Beacon",   say: "Mote lights up the room. You're the kind of person who starts things now." },
+        { at: 500, name: "Radiant",  say: "Maximum Mote. It tells the other Motes about you." }
+    ];
+    const XP_PER_STEP = 10;
+
+    function loadState() {
+        try { return JSON.parse(localStorage.getItem('unstuck_state')) || {}; } catch { return {}; }
+    }
+    let state = Object.assign({ xp: 0, totalSteps: 0, stepsToday: 0, today: '', streak: 0, lastDay: '' }, loadState());
+    function saveState() { localStorage.setItem('unstuck_state', JSON.stringify(state)); }
+
+    function todayStr() { return new Date().toISOString().slice(0, 10); }
+    function rollDay() {
+        const t = todayStr();
+        if (state.today !== t) { state.today = t; state.stepsToday = 0; }
+    }
+    function bumpStreak() {
+        const t = todayStr();
+        if (state.lastDay === t) return;
+        const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+        state.streak = (state.lastDay === y) ? state.streak + 1 : 1;
+        state.lastDay = t;
+    }
+
+    function stageFor(xp) {
+        let s = STAGES[0], next = null;
+        for (let i = 0; i < STAGES.length; i++) {
+            if (xp >= STAGES[i].at) { s = STAGES[i]; next = STAGES[i + 1] || null; }
+        }
+        return { s, next };
+    }
+
+    function petSVG(stageIdx) {
+        const glow = ['#334155', '#22d3ee', '#22d3ee', '#a5b4fc', '#f0abfc'][stageIdx];
+        const size = [70, 80, 92, 104, 116][stageIdx];
+        if (stageIdx === 0) return `
+            <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+                <ellipse cx="50" cy="88" rx="26" ry="6" fill="rgba(0,0,0,0.4)"/>
+                <path d="M50 12 C72 12 82 42 82 60 C82 80 68 90 50 90 C32 90 18 80 18 60 C18 42 28 12 50 12 Z" fill="#1e293b" stroke="${glow}" stroke-width="2"/>
+                <path d="M34 50 l8 8 8-10 8 10 8-8" fill="none" stroke="${glow}" stroke-width="2" opacity="0.6"/>
+            </svg>`;
+        const eyes = `<g class="blink" style="transform-origin:50px 48px;">
+            <circle cx="40" cy="48" r="4.5" fill="#0a0a0a"/><circle cx="60" cy="48" r="4.5" fill="#0a0a0a"/>
+            <circle cx="41.5" cy="46.5" r="1.5" fill="#fff"/><circle cx="61.5" cy="46.5" r="1.5" fill="#fff"/></g>`;
+        const smile = stageIdx >= 2 ? `<path d="M42 60 Q50 ${64 + stageIdx * 2} 58 60" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>`
+                                    : `<circle cx="50" cy="61" r="2.5" fill="#0a0a0a"/>`;
+        const sparks = stageIdx >= 3 ? `<g fill="${glow}" opacity="0.9">
+            <circle cx="16" cy="30" r="2.5"><animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite"/></circle>
+            <circle cx="84" cy="24" r="2"><animate attributeName="opacity" values="1;0.2;1" dur="2.6s" repeatCount="indefinite"/></circle>
+            <circle cx="80" cy="70" r="2.5"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.2s" repeatCount="indefinite"/></circle></g>` : '';
+        return `
+            <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+                <defs><radialGradient id="pg${stageIdx}" cx="50%" cy="38%"><stop offset="0%" stop-color="${glow}"/><stop offset="100%" stop-color="#0e7490"/></radialGradient></defs>
+                <ellipse cx="50" cy="90" rx="28" ry="6" fill="rgba(0,0,0,0.4)"/>
+                <path d="M50 14 C74 14 86 34 86 54 C86 76 70 88 50 88 C30 88 14 76 14 54 C14 34 26 14 50 14 Z" fill="url(#pg${stageIdx})"/>
+                ${stageIdx >= 1 ? `<path d="M44 14 Q50 2 56 14" fill="none" stroke="${glow}" stroke-width="3" stroke-linecap="round"/>` : ''}
+                ${eyes}${smile}${sparks}
+            </svg>`;
+    }
+
+    function renderPet() {
+        rollDay();
+        const { s, next } = stageFor(state.xp);
+        const idx = STAGES.indexOf(s);
+        $('petBox').innerHTML = petSVG(idx);
+        $('petStage').textContent = 'Mote · ' + s.name;
+        $('petLevel').textContent = 'stage ' + (idx + 1) + '/' + STAGES.length;
+        $('petSays').textContent = '“' + s.say + '”';
+        const base = s.at, cap = next ? next.at : s.at + 1;
+        const pct = next ? Math.min(100, Math.round((state.xp - base) / (cap - base) * 100)) : 100;
+        $('xpBar').style.width = pct + '%';
+        $('xpLabel').textContent = next ? `${state.xp} XP · ${cap - state.xp} to ${next.name}` : `${state.xp} XP · max stage`;
+        $('stepsToday').textContent = state.stepsToday + ' step' + (state.stepsToday === 1 ? '' : 's') + ' today';
+        $('streakBadge').textContent = '🔥 ' + state.streak + '-day streak';
+        $('streakBadge').classList.toggle('hidden', state.streak < 1);
+        saveState();
+    }
+
+    /* ---------- Confetti ---------- */
+    function confetti() {
+        const colors = ['#22d3ee', '#a5b4fc', '#f0abfc', '#34d399', '#fbbf24'];
+        for (let i = 0; i < 36; i++) {
+            const c = document.createElement('div');
+            c.className = 'confetti-bit';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.background = colors[i % colors.length];
+            c.style.animationDuration = (1.4 + Math.random() * 1.4) + 's';
+            c.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 3200);
+        }
+    }
+
+    /* ---------- Plan & focus flow ---------- */
+    let steps = [], done = [], current = 0, timerId = null, remaining = 300;
+
+    function renderPlan() {
+        $('stepList').innerHTML = steps.map((s, i) => `
+            <li class="glass-card rounded-xl p-4 flex items-start gap-3 step-enter ${done[i] ? 'opacity-50' : ''}" style="animation-delay:${i * 60}ms">
+                <span class="mt-0.5 w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${done[i] ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-cyan-300'}">${done[i] ? '✓' : i + 1}</span>
+                <span class="flex-1 ${done[i] ? 'line-through text-slate-500' : 'text-slate-200'}">${s}</span>
+                ${done[i] ? '' : `<button data-i="${i}" class="focusOne text-xs text-cyan-400 border border-cyan-500/40 hover:bg-cyan-500/10 rounded-lg px-3 py-1.5 shrink-0">do this</button>`}
+            </li>`).join('');
+        document.querySelectorAll('.focusOne').forEach(b => b.addEventListener('click', e => openFocus(+e.target.dataset.i)));
+        const left = done.filter(d => !d).length;
+        $('startBtn').textContent = done.every(d => d) ? '🎉 All done — blow up another one' :
+            (done.some(d => d) ? `Keep going (${done.filter(d=>d).length}/${steps.length} done) →` : 'Start with step 1 →');
+    }
+
+    function fmt(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+    function openFocus(i) {
+        current = i;
+        remaining = 300;
+        $('focusStep').textContent = steps[i];
+        $('timer').textContent = fmt(remaining);
+        $('focusDots').innerHTML = steps.map((_, j) =>
+            `<span class="w-2.5 h-2.5 rounded-full ${done[j] ? 'bg-emerald-400' : j === i ? 'bg-cyan-400' : 'bg-slate-700'}"></span>`).join('');
+        $('focus').classList.remove('hidden');
+        clearInterval(timerId);
+        timerId = setInterval(() => {
+            remaining--;
+            $('timer').textContent = fmt(Math.max(0, remaining));
+            if (remaining <= 0) { clearInterval(timerId); $('timer').textContent = "time! ✓ it or +2"; }
+        }, 1000);
+    }
+    function closeFocus() { clearInterval(timerId); $('focus').classList.add('hidden'); }
+    function nextUndone(from) {
+        for (let j = 1; j <= steps.length; j++) { const k = (from + j) % steps.length; if (!done[k]) return k; }
+        return -1;
+    }
+
+    $('doneBtn').addEventListener('click', () => {
+        done[current] = true;
+        state.xp += XP_PER_STEP; state.totalSteps++; rollDay(); state.stepsToday++; bumpStreak();
+        confetti(); renderPet(); renderPlan();
+        const n = nextUndone(current);
+        if (n === -1) { closeFocus(); confetti(); } else openFocus(n);
+    });
+    $('skipBtn').addEventListener('click', () => { const n = nextUndone(current); if (n === -1 || n === current) closeFocus(); else openFocus(n); });
+    $('moreTimeBtn').addEventListener('click', () => { remaining += 120; $('timer').textContent = fmt(remaining); if (!timerId || remaining === 120) {} });
+    $('exitFocus').addEventListener('click', closeFocus);
+
+    function blowUp() {
+        const t = $('taskInput').value.trim();
+        if (t.length < 3) return;
+        steps = detonate(t);
+        done = steps.map(() => false);
+        $('plan').classList.remove('hidden');
+        renderPlan();
+        $('plan').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    $('blowUpBtn').addEventListener('click', blowUp);
+    $('taskInput').addEventListener('keydown', e => { if (e.key === 'Enter') blowUp(); });
+    $('startBtn').addEventListener('click', () => {
+        if (done.every(d => d)) { $('taskInput').value = ''; $('plan').classList.add('hidden'); $('taskInput').focus(); window.scrollTo({top:0, behavior:'smooth'}); return; }
+        openFocus(nextUndone(-1));
+    });
+
+    /* ---------- Quick chips ---------- */
+    const CHIPS = ['clean my room', 'reply to that email', 'start the essay', 'do the dishes', 'call the dentist', 'apply for the job'];
+    $('chips').innerHTML = CHIPS.map(c => `<button class="chip text-xs text-slate-400 border border-slate-700 hover:border-cyan-500 hover:text-cyan-300 rounded-full px-3 py-1.5 transition-all">${c}</button>`).join('');
+    document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { $('taskInput').value = b.textContent; blowUp(); }));
+
+    renderPet();
+    </script>
+</body>
+</html>
