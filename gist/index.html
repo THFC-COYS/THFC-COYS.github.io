@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gist — paste anything, get the gist. A private, in-browser summarizer that extracts key points, saves reading time, and reads the tone. Nothing ever leaves your device.">
+    <title>Gist — Paste anything. Get the gist.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #22d3ee, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background-color: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            transition: all 0.3s ease-in-out;
+        }
+        textarea::placeholder { color: #475569; }
+        .fade-up { animation: fadeUp 0.5s ease-out both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .meter-fill { transition: width 0.6s cubic-bezier(0.22,1,0.36,1); }
+        mark { background: rgba(34,211,238,0.18); color: #a5f3fc; padding: 0 2px; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-slate-300 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-black/50 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gradient">Gist</a>
+            <div class="flex items-center gap-4">
+                <span class="hidden sm:flex items-center gap-2 text-xs text-slate-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    100% on-device · nothing uploaded
+                </span>
+                <a href="../index.html" class="text-sm border border-cyan-500 text-cyan-400 font-semibold py-2 px-4 rounded-lg hover:bg-cyan-500 hover:text-white transition-all">Portfolio</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-28 pb-20 max-w-5xl">
+
+        <!-- Hero -->
+        <section class="text-center mb-12">
+            <span class="inline-block text-xs tracking-widest uppercase text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-1 mb-6">The next big app · acquire-ready</span>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-100 mb-4">Paste anything. <span class="text-gradient">Get the gist.</span></h1>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto">Articles, emails, meeting notes, research papers — Gist pulls out what matters in a second. Private by design: the algorithm runs entirely in your browser, so your text never touches a server.</p>
+        </section>
+
+        <!-- App -->
+        <section class="glass-card rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <label for="length" class="text-sm text-slate-400">Summary length</label>
+                    <input id="length" type="range" min="10" max="60" value="30" class="accent-cyan-400 w-40">
+                    <span id="lengthLabel" class="text-sm text-cyan-400 font-semibold w-16">Balanced</span>
+                </div>
+                <div class="flex gap-2">
+                    <button id="sampleBtn" class="text-sm text-slate-300 border border-slate-600 hover:border-cyan-500 hover:text-cyan-400 px-4 py-2 rounded-lg transition-all">Try a sample</button>
+                    <button id="clearBtn" class="text-sm text-slate-400 hover:text-slate-200 px-4 py-2 rounded-lg transition-all">Clear</button>
+                </div>
+            </div>
+
+            <textarea id="input" rows="9" class="w-full bg-black/40 border border-slate-700 rounded-xl p-4 text-slate-200 focus:outline-none focus:border-cyan-500 resize-y" placeholder="Paste an article, an email thread, meeting notes, anything with more words than you have time for…"></textarea>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 mt-3">
+                <span id="wordCount" class="text-xs text-slate-500">0 words</span>
+                <button id="gistBtn" class="bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-cyan-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">Get the Gist →</button>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section id="results" class="hidden mt-8 space-y-6">
+
+            <!-- Stat row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="statReduction" class="text-3xl font-extrabold text-gradient">—</div>
+                    <div class="text-xs text-slate-400 mt-1">Shorter</div>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="statTime" class="text-3xl font-extrabold text-gradient">—</div>
+                    <div class="text-xs text-slate-400 mt-1">Reading time saved</div>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="statSentences" class="text-3xl font-extrabold text-gradient">—</div>
+                    <div class="text-xs text-slate-400 mt-1">Key sentences</div>
+                </div>
+                <div class="glass-card rounded-xl p-4 text-center">
+                    <div id="statTone" class="text-3xl font-extrabold text-gradient">—</div>
+                    <div class="text-xs text-slate-400 mt-1">Overall tone</div>
+                </div>
+            </div>
+
+            <!-- Tone meter -->
+            <div class="glass-card rounded-xl p-5">
+                <div class="flex justify-between text-xs text-slate-400 mb-2">
+                    <span>Negative</span><span>Neutral</span><span>Positive</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-700/60 relative overflow-hidden">
+                    <div id="toneBar" class="meter-fill h-full rounded-full bg-gradient-to-r from-rose-500 via-slate-400 to-emerald-400" style="width:50%"></div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-slate-100">The Gist</h2>
+                    <button id="copyBtn" class="text-sm text-cyan-400 border border-cyan-500/40 hover:bg-cyan-500/10 px-4 py-1.5 rounded-lg transition-all">Copy</button>
+                </div>
+                <p id="summary" class="text-slate-200 leading-relaxed"></p>
+            </div>
+
+            <!-- Key points + keywords -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-bold text-slate-100 mb-4">Key points</h3>
+                    <ul id="keyPoints" class="space-y-3"></ul>
+                </div>
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-bold text-slate-100 mb-4">Top keywords</h3>
+                    <div id="keywords" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-xs text-slate-600 mt-16">
+            Built by Greg Lucas · Gist runs 100% in your browser — no accounts, no servers, no data leaves your device.
+        </footer>
+    </main>
+
+    <script>
+    const STOPWORDS = new Set("a an and are as at be but by for if in into is it no not of on or such that the their then there these they this to was will with i you he she we our your from has have had been being would could should about over under more most other some any can may also which who whom whose them his her its he's".split(" "));
+    const POSITIVE = new Set("good great excellent amazing love wonderful positive success successful win winning gain benefit improve improved growth strong best happy excited opportunity powerful boost advantage effective efficient breakthrough thrilled delighted promising confident".split(" "));
+    const NEGATIVE = new Set("bad worse worst terrible awful hate negative fail failure loss lose weak problem issue risk decline drop concern concerned difficult hard struggle poor disappointing crisis threat down broken angry frustrated fear worried".split(" "));
+
+    const $ = id => document.getElementById(id);
+    const input = $('input');
+
+    const SAMPLE = `Artificial intelligence is reshaping how knowledge work gets done, but the biggest bottleneck is no longer generating information — it is consuming it. Professionals now face an overwhelming volume of documents, emails, and reports every single day. Studies suggest the average knowledge worker spends more than two hours daily just reading and triaging text, much of which turns out to be low value. This is a costly and frustrating problem for busy teams.
+
+Traditional solutions have focused on cloud based tools that send your text to a remote server for processing. While powerful, these tools raise real privacy concerns, especially for sensitive legal, medical, and financial documents. Many companies simply cannot allow confidential material to leave their own systems, so they avoid these tools entirely and lose the productivity benefits.
+
+A new generation of on device tools promises the best of both worlds. By running summarization directly in the browser, they deliver instant results while guaranteeing that no data is ever uploaded. This approach is fast, private, and remarkably effective for the vast majority of everyday reading tasks. Early users report saving several hours each week and feeling far more in control of their information.
+
+The opportunity here is enormous. As privacy regulation tightens and users grow more skeptical of the cloud, on device intelligence is poised to become the default. The company that makes private, instant summarization feel effortless will own a critical piece of the future of work.`;
+
+    function splitSentences(text) {
+        return text.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]+|\S+$/g) || [];
+    }
+    function tokenize(text) {
+        return (text.toLowerCase().match(/[a-z']+/g) || []).filter(w => w.length > 2 && !STOPWORDS.has(w));
+    }
+
+    function summarize(text, ratio) {
+        const sentences = splitSentences(text).map(s => s.trim()).filter(s => s.length > 0);
+        if (sentences.length === 0) return null;
+
+        // Word frequencies
+        const freq = {};
+        tokenize(text).forEach(w => freq[w] = (freq[w] || 0) + 1);
+        const maxFreq = Math.max(1, ...Object.values(freq));
+
+        // Score each sentence
+        const scored = sentences.map((s, i) => {
+            const words = tokenize(s);
+            if (words.length === 0) return { s, i, score: 0 };
+            let score = words.reduce((sum, w) => sum + (freq[w] || 0) / maxFreq, 0) / Math.sqrt(words.length);
+            // Position bonus: intros and conclusions matter
+            if (i === 0) score *= 1.35;
+            else if (i < sentences.length * 0.15) score *= 1.15;
+            if (i >= sentences.length - 1) score *= 1.1;
+            return { s, i, score };
+        });
+
+        const keep = Math.max(1, Math.min(sentences.length, Math.round(sentences.length * ratio)));
+        const top = [...scored].sort((a, b) => b.score - a.score).slice(0, keep).sort((a, b) => a.i - b.i);
+
+        // Keywords
+        const keywords = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 8).map(e => e[0]);
+
+        // Tone
+        let pos = 0, neg = 0;
+        tokenize(text).forEach(w => { if (POSITIVE.has(w)) pos++; if (NEGATIVE.has(w)) neg++; });
+        const toneScore = (pos + neg) === 0 ? 0 : (pos - neg) / (pos + neg);
+
+        return {
+            sentences,
+            summary: top.map(t => t.s).join(' '),
+            keyPoints: [...scored].sort((a, b) => b.score - a.score).slice(0, Math.min(5, keep)).sort((a,b)=>a.i-b.i).map(t => t.s),
+            keywords,
+            toneScore,
+            origWords: tokenize(text).length + (text.match(/\s+/g)||[]).length,
+            totalWords: (text.trim().match(/\S+/g) || []).length
+        };
+    }
+
+    function highlight(text, keywords) {
+        if (!keywords.length) return text;
+        const esc = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        return text.replace(new RegExp('\\b(' + esc.join('|') + ')\\b', 'gi'), '<mark>$1</mark>');
+    }
+
+    function toneLabel(score) {
+        if (score > 0.25) return 'Positive';
+        if (score < -0.25) return 'Negative';
+        return 'Neutral';
+    }
+
+    const lengthLabels = [[0,'Tight'],[25,'Balanced'],[45,'Detailed']];
+    function updateLengthLabel() {
+        const v = +$('length').value;
+        let label = 'Balanced';
+        for (const [t, l] of lengthLabels) if (v >= t) label = l;
+        $('lengthLabel').textContent = label;
+    }
+
+    function updateWordCount() {
+        const n = (input.value.trim().match(/\S+/g) || []).length;
+        $('wordCount').textContent = n + ' word' + (n === 1 ? '' : 's');
+        $('gistBtn').disabled = n < 10;
+    }
+
+    function run() {
+        const text = input.value.trim();
+        if ((text.match(/\S+/g) || []).length < 10) return;
+        const ratio = +$('length').value / 100;
+        const r = summarize(text, ratio);
+        if (!r) return;
+
+        const summaryWords = (r.summary.match(/\S+/g) || []).length;
+        const reduction = Math.round((1 - summaryWords / r.totalWords) * 100);
+        const secsSaved = Math.max(0, Math.round((r.totalWords - summaryWords) / 238 * 60));
+        const mins = Math.floor(secsSaved / 60), secs = secsSaved % 60;
+
+        $('statReduction').textContent = reduction + '%';
+        $('statTime').textContent = mins > 0 ? mins + 'm ' + secs + 's' : secs + 's';
+        $('statSentences').textContent = r.keyPoints.length;
+        $('statTone').textContent = toneLabel(r.toneScore);
+
+        $('toneBar').style.width = Math.round((r.toneScore + 1) / 2 * 100) + '%';
+        $('summary').innerHTML = highlight(r.summary, r.keywords);
+
+        $('keyPoints').innerHTML = r.keyPoints.map(p => `
+            <li class="flex gap-3">
+                <span class="text-cyan-400 mt-1">▸</span>
+                <span class="text-slate-300">${p}</span>
+            </li>`).join('');
+
+        $('keywords').innerHTML = r.keywords.map(k => `
+            <span class="text-sm bg-slate-800/70 border border-slate-700 text-cyan-300 px-3 py-1 rounded-full">${k}</span>`).join('');
+
+        const results = $('results');
+        results.classList.remove('hidden');
+        results.classList.remove('fade-up'); void results.offsetWidth; results.classList.add('fade-up');
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    $('gistBtn').addEventListener('click', run);
+    $('sampleBtn').addEventListener('click', () => { input.value = SAMPLE; updateWordCount(); run(); });
+    $('clearBtn').addEventListener('click', () => { input.value = ''; updateWordCount(); $('results').classList.add('hidden'); input.focus(); });
+    $('length').addEventListener('input', () => { updateLengthLabel(); if (!$('results').classList.contains('hidden')) run(); });
+    input.addEventListener('input', updateWordCount);
+    $('copyBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText($('summary').textContent).then(() => {
+            const b = $('copyBtn'); const t = b.textContent; b.textContent = 'Copied ✓';
+            setTimeout(() => b.textContent = t, 1500);
+        });
+    });
+    input.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') run(); });
+
+    updateLengthLabel();
+    updateWordCount();
+    </script>
+</body>
+</html>
