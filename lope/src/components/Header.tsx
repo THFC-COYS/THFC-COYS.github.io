@@ -50,8 +50,8 @@ export default function Header() {
           <a className="hidden no-underline hover:text-ink md:inline" href="#platform">
             Platform
           </a>
-          <a className="hidden no-underline hover:text-ink md:inline" href="#audiences">
-            Online &amp; Ground
+          <a className="hidden no-underline hover:text-ink md:inline" href="#agents">
+            Agents
           </a>
           <a className="hidden no-underline hover:text-ink md:inline" href="#counselor">
             Counselors

@@ -11,6 +11,8 @@ export interface Lead {
   momentum: string[];
   signal: string;
   draft: string;
+  /** Set when the autonomous Stall-Watch agent has re-engaged this lead. */
+  autoNudged?: boolean;
 }
 
 export const STATUS_META: Record<LeadStatus, { cls: string; label: string }> = {

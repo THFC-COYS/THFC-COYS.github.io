@@ -110,14 +110,26 @@ export default function Hero({
             </button>
           ))}
         </div>
+        <div className="mt-5 flex justify-center">
+          <button
+            className="btn btn-ghost"
+            onClick={() => {
+              onPickPersona("teen");
+              window.dispatchEvent(new Event("lope:autoplay"));
+            }}
+          >
+            ▶ Watch Lope work{" "}
+            <span className="text-[13px] font-medium text-ink-faint">· auto-demo</span>
+          </button>
+        </div>
         <p className="mt-4 text-[13px] text-ink-faint">
           No forms. No phone tag. 60 seconds to a real answer.{" "}
           <a
-            href="#platform"
+            href="#agents"
             className="font-semibold no-underline"
             style={{ color: "var(--purple-bright)" }}
           >
-            How it works →
+            See the agents →
           </a>
         </p>
 

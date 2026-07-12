@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Concierge from "./components/Concierge";
 import Platform from "./components/Platform";
+import Agents from "./components/Agents";
 import MissionControl from "./components/MissionControl";
 import Audiences from "./components/Audiences";
 import Flow from "./components/Flow";
@@ -24,6 +25,7 @@ export default function App() {
         <Hero persona={persona} onPickPersona={setPersona} />
         <Concierge persona={persona} />
         <Platform />
+        <Agents />
         <MissionControl />
         <Audiences />
         <Flow />

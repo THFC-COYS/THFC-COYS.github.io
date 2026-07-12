@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { INTERESTS, OBSESSIONS, PROGRAMS, type Program } from "../data/programs";
 import type { Persona } from "../App";
 import type { Lead } from "../data/leads";
@@ -509,7 +509,7 @@ const THINK_INTERVAL_MS = 620;
 export default function Concierge({ persona }: { persona: Persona }) {
   const [step, setStep] = useState<Step>({ kind: "mode" });
   const [answers, setAnswers] = useState<Answers>(EMPTY);
-  const [thinkLine, setThinkLine] = useState("");
+  const [thinkIdx, setThinkIdx] = useState(0);
 
   /** Persona-adaptive copy: P(teenText, adultText[, neutralText]) */
   const P = (teen: string, adult: string, neutral?: string) =>
@@ -545,49 +545,109 @@ export default function Concierge({ persona }: { persona: Persona }) {
 
   const rankedPrograms = useMemo(() => ranked(answers), [answers]);
 
-  /* thinking animation → result */
+  /* thinking = agents working, one at a time, then → result */
   useEffect(() => {
     if (step.kind !== "thinking") return;
-    const stageLine: Record<Stage, string> = {
-      transfer: "Estimating transfer credit you could bring…",
-      some: "Looking at degree-completion paths…",
-      working: "Prioritizing flexible, evening-friendly options…",
-      military: "Checking military & veteran benefits…",
-      hs: "Mapping a first-time-student path…",
-    };
-    const lines = [
-      "Reading your answers…",
-      "Scanning 200+ programs…",
-      answers.mode === "online"
-        ? "Filtering for online formats…"
-        : answers.mode === "ground"
-          ? "Filtering for on-campus formats…"
-          : "Weighing online and on-campus options…",
-      answers.stage ? stageLine[answers.stage] : "Mapping your path…",
-      "Ranking your best fits…",
-    ];
-    const ob0 = OBSESSIONS.find((o) => o.id === answers.obsessions[0]);
-    if (ob0) lines.splice(2, 0, `Connecting ${ob0.label.toLowerCase()} to real careers…`);
+    setThinkIdx(0);
     let i = 0;
+    const total = 4;
     const id = setInterval(() => {
-      if (i < lines.length) {
-        setThinkLine(lines[i]);
-        i++;
-      } else {
+      i += 1;
+      setThinkIdx(i);
+      if (i >= total) {
         clearInterval(id);
-        setStep({ kind: "result", programId: rankedPrograms[0].id });
+        setTimeout(
+          () => setStep({ kind: "result", programId: rankedPrograms[0].id }),
+          400,
+        );
       }
     }, THINK_INTERVAL_MS);
     return () => clearInterval(id);
-  }, [step.kind, answers, rankedPrograms]);
+  }, [step.kind, rankedPrograms]);
 
   const restart = () => {
     setAnswers(EMPTY);
     setStep({ kind: "mode" });
   };
 
+  /* ---- auto-demo: drive the whole flow hands-free ---- */
+  const autoTimers = useRef<number[]>([]);
+  const [autoOn, setAutoOn] = useState(false);
+  const clearAuto = () => {
+    autoTimers.current.forEach((t) => clearTimeout(t));
+    autoTimers.current = [];
+  };
+  const stopAuto = () => {
+    clearAuto();
+    setAutoOn(false);
+  };
+  useEffect(() => {
+    const onAuto = () => {
+      clearAuto();
+      setAutoOn(true);
+      const a: Answers = {
+        mode: null,
+        interests: [],
+        obsessions: [],
+        custom: EMPTY_INTERPRETATION,
+        stage: null,
+        name: "",
+      };
+      setAnswers(a);
+      setStep({ kind: "mode" });
+      document.getElementById("meet")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const seq: [number, () => void][] = [
+        [500, () => { a.mode = "ground"; setAnswers({ ...a }); }],
+        [1100, () => setStep({ kind: "interests" })],
+        [1200, () => { a.interests = ["tech", "science"]; setAnswers({ ...a }); }],
+        [1100, () => setStep({ kind: "obsessions" })],
+        [1200, () => { a.custom = localInterpret("space and building rockets"); setAnswers({ ...a }); }],
+        [1100, () => setStep({ kind: "stage" })],
+        [1200, () => { a.stage = "hs"; setAnswers({ ...a }); }],
+        [1100, () => setStep({ kind: "name" })],
+        [1200, () => { a.name = "Jordan"; setAnswers({ ...a }); }],
+        [900, () => setStep({ kind: "thinking" })],
+        [4400, () => {
+          const program = ranked(a)[0];
+          dispatchLead(program, a, "teen", "counselor");
+          setStep({ kind: "handoff", via: "counselor" });
+          document.getElementById("counselor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }],
+        [1800, () => { window.dispatchEvent(new Event("lope:autonudge")); setAutoOn(false); }],
+      ];
+      let t = 0;
+      seq.forEach(([d, fn]) => {
+        t += d;
+        autoTimers.current.push(window.setTimeout(fn, t));
+      });
+    };
+    window.addEventListener("lope:autoplay", onAuto);
+    return () => {
+      window.removeEventListener("lope:autoplay", onAuto);
+      clearAuto();
+    };
+  }, []);
+
   return (
     <section className="py-[84px] scroll-mt-16" id="meet">
+      {autoOn && (
+        <div
+          className="fixed left-1/2 top-[68px] z-[60] flex -translate-x-1/2 items-center gap-3 rounded-full py-[9px] pl-4 pr-[10px] text-[13.5px] font-semibold text-white"
+          style={{
+            background: "color-mix(in srgb, var(--purple) 92%, black)",
+            boxShadow: "0 12px 30px -10px rgba(40,20,80,.55)",
+          }}
+        >
+          <span className="dot-bob h-2 w-2 rounded-full bg-white" /> Auto-demo playing
+          <button
+            className="cursor-pointer rounded-full border-none px-3 py-1.5 text-[12.5px] font-bold text-white"
+            style={{ background: "rgba(255,255,255,.16)", fontFamily: "inherit" }}
+            onClick={stopAuto}
+          >
+            Stop
+          </button>
+        </div>
+      )}
       <div className="wrap">
         <div className="reveal">
           <span className="kicker">Meet Lope</span>
@@ -928,24 +988,67 @@ export default function Concierge({ persona }: { persona: Persona }) {
               </div>
             )}
 
-            {step.kind === "thinking" && (
-              <div className="step-fade py-[30px] text-center" key="thinking">
-                <div className="mb-[18px] inline-flex gap-2">
-                  {[0, 1, 2].map((i) => (
-                    <i
-                      key={i}
-                      className="dot-bob block h-3 w-3 rounded-full"
-                      style={{ background: "var(--purple-bright)" }}
-                    />
-                  ))}
-                </div>
-                <p className="text-ink-soft">
-                  {answers.name ? `${answers.name.trim()}, matching` : "Matching"} you to
-                  the right GCU path…
-                </p>
-                <div className="mt-3.5 min-h-5 text-sm text-ink-faint">{thinkLine}</div>
-              </div>
-            )}
+            {step.kind === "thinking" &&
+              (() => {
+                const passion =
+                  answers.custom.labels[0]?.toLowerCase() ??
+                  OBSESSIONS.find((o) => o.id === answers.obsessions[0])?.label.toLowerCase();
+                const thinkAgents = [
+                  { ico: "🎧", name: "Listener", line: "Building your profile from your answers…" },
+                  { ico: "🧭", name: "Matcher", line: "Ranking 46 programs across 9 colleges…" },
+                  {
+                    ico: "🌱",
+                    name: "Outcomes",
+                    line: passion
+                      ? `Connecting ${passion} to real careers & companies…`
+                      : "Attaching careers, salaries & companies…",
+                  },
+                  { ico: "✍️", name: "Counselor", line: "Drafting your warm handoff…" },
+                ];
+                return (
+                  <div className="step-fade py-[30px] text-center" key="thinking">
+                    <div className="mb-[18px] inline-flex gap-2">
+                      {[0, 1, 2].map((i) => (
+                        <i
+                          key={i}
+                          className="dot-bob block h-3 w-3 rounded-full"
+                          style={{ background: "var(--purple-bright)" }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-ink-soft">
+                      {answers.name ? `${answers.name.trim()}, my` : "My"} agents are building
+                      your path…
+                    </p>
+                    <div className="mx-auto mt-4 grid max-w-[340px] gap-[7px] text-left">
+                      {thinkAgents.map((a, i) => {
+                        const on = thinkIdx >= i;
+                        return (
+                          <div
+                            key={a.name}
+                            className="flex items-center gap-2.5 text-[13px] transition-all"
+                            style={{ opacity: on ? 1 : 0.4, color: on ? "var(--ink-soft)" : "var(--ink-faint)" }}
+                          >
+                            <span
+                              className="grid h-4 w-4 flex-none place-items-center rounded-full text-[10px]"
+                              style={{
+                                background: on ? "var(--purple)" : "var(--surface-2)",
+                                border: `1px solid ${on ? "var(--purple)" : "var(--line)"}`,
+                                color: on ? "#fff" : "inherit",
+                              }}
+                            >
+                              {a.ico}
+                            </span>
+                            <b className="font-semibold">{a.name}</b>
+                            <span className="text-ink-faint">·</span>
+                            <span>{a.line}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
 
             {step.kind === "result" &&
               (() => {

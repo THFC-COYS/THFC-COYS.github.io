@@ -16,13 +16,23 @@ const BADGE_STYLES: Record<string, React.CSSProperties> = {
   },
 };
 
-function Badge({ status, sent }: { status: Lead["status"]; sent?: boolean }) {
+function Badge({
+  status,
+  sent,
+  autoNudged,
+}: {
+  status: Lead["status"];
+  sent?: boolean;
+  autoNudged?: boolean;
+}) {
+  const label = sent ? "✓ Contacted" : autoNudged ? "🛰️ Auto-nudged" : STATUS_META[status].label;
+  const style = sent ? BADGE_STYLES.ready : autoNudged ? BADGE_STYLES.stalled : BADGE_STYLES[status];
   return (
     <span
       className="inline-block rounded-full px-2.5 py-[3px] text-[11px] font-bold tracking-[0.03em]"
-      style={sent ? BADGE_STYLES.ready : BADGE_STYLES[status]}
+      style={style}
     >
-      {sent ? "✓ Contacted" : STATUS_META[status].label}
+      {label}
     </span>
   );
 }
@@ -49,6 +59,7 @@ export default function MissionControl() {
   const [leads, setLeads] = useState<Lead[]>(SEED_LEADS);
   const [selectedId, setSelectedId] = useState(SEED_LEADS[0].id);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
+  const [toast, setToast] = useState("");
 
   /* Live leads from the concierge land at the top of the queue. */
   useEffect(() => {
@@ -60,6 +71,46 @@ export default function MissionControl() {
     window.addEventListener("lope:lead", onLead);
     return () => window.removeEventListener("lope:lead", onLead);
   }, []);
+
+  /* Stall-Watch agent: autonomously re-engages a lead that stalled on cost. */
+  useEffect(() => {
+    const autoNudge = () => {
+      setLeads((prev) => {
+        let fired = false;
+        const next = prev.map((l) => {
+          if (l.id !== "l2" || l.autoNudged || sentIds.has(l.id)) return l;
+          fired = true;
+          return {
+            ...l,
+            status: "ready" as const,
+            time: "just now · auto",
+            autoNudged: true,
+            momentum: [
+              ...l.momentum,
+              "🛰️ Stall-Watch agent auto-sent a scholarship-math text (11:59pm)",
+              "Marcus opened it and replied — re-engaged",
+            ],
+            signal:
+              "Stall-Watch re-engaged him automatically with real cost numbers. He's warm again — you close it.",
+            draft:
+              "Hi Marcus — following up on that cost breakdown Lope sent you. With transfer credit and RN partnership discounts, your real number is a lot lower than the sticker. Want to hop on a 10-minute call this week and lock in your start date?",
+          };
+        });
+        if (fired) {
+          setSelectedId("l2");
+          setToast("🛰️ Stall-Watch agent re-engaged Marcus T. automatically");
+          setTimeout(() => setToast(""), 4200);
+        }
+        return next;
+      });
+    };
+    const timer = setTimeout(autoNudge, 14000);
+    window.addEventListener("lope:autonudge", autoNudge);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("lope:autonudge", autoNudge);
+    };
+  }, [sentIds]);
 
   const sel = leads.find((l) => l.id === selectedId) ?? leads[0];
   const readyCount = leads.filter((l) => l.status === "ready" && !sentIds.has(l.id)).length;
@@ -160,7 +211,7 @@ export default function MissionControl() {
                   </span>
                   <span className="mt-0.5 block text-[12.5px] text-ink-soft">{l.program}</span>
                   <span className="mt-2 block">
-                    <Badge status={l.status} sent={sentIds.has(l.id)} />
+                    <Badge status={l.status} sent={sentIds.has(l.id)} autoNudged={l.autoNudged} />
                   </span>
                 </button>
               ))}
@@ -169,7 +220,12 @@ export default function MissionControl() {
             {/* detail */}
             <div className="p-[22px]">
               <h4 className="flex flex-wrap items-center gap-2.5 text-xl font-bold tracking-[-0.02em]">
-                {sel.name} <Badge status={sel.status} />
+                {sel.name}{" "}
+                <Badge
+                  status={sel.status}
+                  sent={sentIds.has(sel.id)}
+                  autoNudged={sel.autoNudged}
+                />
               </h4>
               <div className="mt-1 text-[13px] text-ink-faint">
                 {sel.program} ·{" "}
@@ -187,7 +243,10 @@ export default function MissionControl() {
                   border: "1px solid color-mix(in srgb, var(--copper) 25%, transparent)",
                 }}
               >
-                <b style={{ color: "var(--copper)" }}>Lope's read:</b> {sel.signal}
+                <b style={{ color: "var(--copper)" }}>
+                  {sel.autoNudged && !sentIds.has(sel.id) ? "🛰️ Stall-Watch agent:" : "Lope's read:"}
+                </b>{" "}
+                {sel.signal}
               </div>
 
               <div
@@ -280,6 +339,18 @@ export default function MissionControl() {
           ))}
         </div>
       </div>
+
+      {toast && (
+        <div
+          className="fixed bottom-[22px] left-1/2 z-[60] max-w-[90vw] -translate-x-1/2 rounded-[14px] px-[18px] py-3 text-sm font-semibold text-white"
+          style={{
+            background: "color-mix(in srgb, var(--purple) 92%, black)",
+            boxShadow: "0 14px 34px -12px rgba(40,20,80,.6)",
+          }}
+        >
+          {toast}
+        </div>
+      )}
     </section>
   );
 }
