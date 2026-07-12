@@ -4,7 +4,7 @@ import Hero from "./components/Hero";
 import Concierge from "./components/Concierge";
 import Platform from "./components/Platform";
 import Agents from "./components/Agents";
-import MissionControl from "./components/MissionControl";
+import Dashboards from "./components/Dashboards";
 import Audiences from "./components/Audiences";
 import Flow from "./components/Flow";
 import Voices from "./components/Voices";
@@ -26,7 +26,7 @@ export default function App() {
         <Concierge persona={persona} />
         <Platform />
         <Agents />
-        <MissionControl />
+        <Dashboards />
         <Audiences />
         <Flow />
         <Voices />

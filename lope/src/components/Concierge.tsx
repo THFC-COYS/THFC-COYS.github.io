@@ -3,6 +3,7 @@ import { INTERESTS, OBSESSIONS, PROGRAMS, type Program } from "../data/programs"
 import type { Persona } from "../App";
 import type { Lead } from "../data/leads";
 import { localInterpret, EMPTY_INTERPRETATION, type Interpretation } from "../lib/interpret";
+import type { StudentUpdate } from "./StudentDashboard";
 
 type ModeChoice = "ground" | "online" | "either";
 type Stage = "hs" | "some" | "working" | "transfer" | "military";
@@ -293,6 +294,25 @@ function dispatchLead(
     draft: `Hi ${name || "there"}! I just read your conversation with Lope — ${program.name} lines up with what you told us${interests.length ? ` about ${interests[0].toLowerCase()}` : ""}. I can answer the real questions (cost, timeline, next steps) in one quick chat. When works for you?${obsessions.length ? ` P.S. — you mentioned ${obsessions[0].toLowerCase()}; there's more overlap with this program than you'd think. Ask me.` : ""}`,
   };
   window.dispatchEvent(new CustomEvent("lope:lead", { detail: lead }));
+}
+
+/** Populate the student dashboard from a finished conversation. */
+function dispatchStudent(program: Program, a: Answers, top3: Program[]) {
+  const name = a.name.trim() || "there";
+  const src = top3.length ? top3 : [program];
+  const paths = src.slice(0, 3).map((p) => ({
+    name: p.name,
+    college: p.college,
+    pay: p.outcomes.roles[0]?.range ?? "",
+  }));
+  const update: StudentUpdate = {
+    name,
+    program: program.name,
+    college: program.college,
+    paths,
+    counselorText: `Hi ${name}! I saw ${program.name} is your top match — I've got your whole Lope conversation in front of me, so we can pick up right where you left off. Want to knock out your application together this week?`,
+  };
+  window.dispatchEvent(new CustomEvent("lope:student", { detail: update }));
 }
 
 /* ---------- small UI pieces ---------- */
@@ -610,8 +630,9 @@ export default function Concierge({ persona }: { persona: Persona }) {
         [4400, () => {
           const program = ranked(a)[0];
           dispatchLead(program, a, "teen", "counselor");
+          dispatchStudent(program, a, ranked(a).slice(0, 3));
           setStep({ kind: "handoff", via: "counselor" });
-          document.getElementById("counselor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.dispatchEvent(new CustomEvent("lope:showdash", { detail: "counselor" }));
         }],
         [1800, () => { window.dispatchEvent(new Event("lope:autonudge")); setAutoOn(false); }],
       ];
@@ -1140,6 +1161,7 @@ export default function Concierge({ persona }: { persona: Persona }) {
                     <ResultActions
                       onHandoff={(via) => {
                         dispatchLead(program, answers, persona, via);
+                        dispatchStudent(program, answers, rankedPrograms.slice(0, 3));
                         setStep({ kind: "handoff", via });
                       }}
                       onRestart={restart}
@@ -1175,14 +1197,25 @@ export default function Concierge({ persona }: { persona: Persona }) {
                     Try another path
                   </button>
                 </div>
-                <p className="mt-5 text-sm">
-                  <a
-                    href="#counselor"
-                    className="font-semibold no-underline"
-                    style={{ color: "var(--purple-bright)" }}
+                <p className="mt-5 flex flex-wrap justify-center gap-4 text-sm">
+                  <button
+                    className="cursor-pointer border-none bg-transparent p-0 font-semibold"
+                    style={{ color: "var(--purple-bright)", fontFamily: "inherit" }}
+                    onClick={() =>
+                      window.dispatchEvent(new CustomEvent("lope:showdash", { detail: "student" }))
+                    }
+                  >
+                    Open your student dashboard →
+                  </button>
+                  <button
+                    className="cursor-pointer border-none bg-transparent p-0 font-semibold"
+                    style={{ color: "var(--purple-bright)", fontFamily: "inherit" }}
+                    onClick={() =>
+                      window.dispatchEvent(new CustomEvent("lope:showdash", { detail: "counselor" }))
+                    }
                   >
                     See what your counselor sees →
-                  </a>
+                  </button>
                 </p>
                 <p className="mt-2.5 text-sm text-ink-faint">
                   This is a concept prototype — no application is actually submitted and

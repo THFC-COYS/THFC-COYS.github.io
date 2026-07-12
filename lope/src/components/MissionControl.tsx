@@ -126,22 +126,10 @@ export default function MissionControl() {
     });
 
   return (
-    <section className="scroll-mt-16 py-[84px]" id="counselor">
-      <div className="wrap">
-        <div className="reveal">
-          <span className="kicker">For counselors · Mission Control</span>
-          <h2 className="head">
-            The moment they click, you know them. The moment they stall, you're there.
-          </h2>
-          <p className="lede">
-            Every Lope conversation becomes a living profile in the counselor's queue —
-            context, momentum, and hesitations included — with the first outreach already
-            drafted in your voice. You approve; Lope handles the paperwork of empathy.
-          </p>
-        </div>
-
+    <>
+      <div>
         <div
-          className="reveal mt-10 overflow-hidden rounded-[28px] border border-line bg-surface"
+          className="overflow-hidden rounded-[28px] border border-line bg-surface"
           style={{ boxShadow: "var(--shadow)" }}
         >
           {/* header */}
@@ -351,6 +339,6 @@ export default function MissionControl() {
           {toast}
         </div>
       )}
-    </section>
+    </>
   );
 }
