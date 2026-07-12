@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { INTERESTS, PROGRAMS, type Program } from "../data/programs";
+import type { Persona } from "../App";
 
 type ModeChoice = "ground" | "online" | "either";
 type Stage = "hs" | "some" | "working" | "transfer" | "military";
@@ -150,29 +151,69 @@ function OptionButton({
   );
 }
 
-function MatchCell({
-  label,
-  value,
-  note,
-  accent,
-}: {
-  label: string;
-  value: string;
-  note?: string;
-  accent?: boolean;
-}) {
+function classYear(p: Program, a: Answers): number {
+  const isGrad = /M\.|MBA|Master/.test(p.name);
+  const years = isGrad
+    ? 2
+    : ({ hs: 4, some: 3, working: 4, transfer: 3, military: 4 }[a.stage ?? "hs"] ?? 4);
+  return new Date().getFullYear() + years;
+}
+
+function FutureCard({ program, answers }: { program: Program; answers: Answers }) {
+  const role = program.outcomes.roles[0];
+  const t = timeline(program, answers);
+  const c = cost(program, answers);
+  const name = answers.name.trim();
   return (
-    <div className="rounded-2xl border border-line bg-surface-2 p-4">
-      <span className="text-xs font-semibold uppercase tracking-[0.05em] text-ink-faint">
-        {label}
-      </span>
-      <b
-        className="mt-1 block text-[21px] tracking-[-0.02em] tabular-nums"
-        style={accent ? { color: "var(--copper)" } : undefined}
-      >
-        {value}
-      </b>
-      {note && <small className="mt-0.5 block text-xs text-ink-faint">{note}</small>}
+    <div
+      className="relative mt-5 overflow-hidden rounded-[22px] p-6 text-white"
+      style={{
+        background:
+          "linear-gradient(140deg, #3A1770 0%, #522398 45%, #7C4DD4 80%, #B77BFF 115%)",
+        boxShadow: "var(--shadow)",
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(60% 80% at 85% 10%, rgba(240,168,92,0.35), transparent 60%)",
+        }}
+      />
+      <div className="relative flex flex-wrap justify-between gap-2.5 text-[11px] uppercase tracking-[0.14em] opacity-85">
+        <span>Future Lope ✦ Grand Canyon University</span>
+        <span>Class of {classYear(program, answers)}</span>
+      </div>
+      <div className="relative mt-3.5 text-[clamp(26px,5vw,38px)] font-extrabold leading-[1.08] tracking-[-0.03em]">
+        {name && (
+          <>
+            {name}
+            <br />
+          </>
+        )}
+        Future {role.title}
+      </div>
+      <div className="relative mt-1.5 text-[15px] opacity-90">
+        {program.name} · {chosenMode(program, answers)}
+      </div>
+      <div className="relative mt-[18px] flex flex-wrap gap-[22px]">
+        {[
+          ["Earning power", role.range],
+          ["Time to finish", t.label],
+          ["Est. cost", c.label],
+        ].map(([label, value]) => (
+          <div key={label}>
+            <span className="block text-[11px] uppercase tracking-[0.08em] opacity-75">
+              {label}
+            </span>
+            <b className="text-xl tracking-[-0.02em] tabular-nums">{value}</b>
+          </div>
+        ))}
+      </div>
+      <div className="relative mt-4 border-l-[3px] border-white/40 pl-3 text-[13.5px] leading-normal opacity-90">
+        {program.outcomes.spiritual}
+      </div>
     </div>
   );
 }
@@ -272,10 +313,14 @@ function ResultActions({
 
 const THINK_INTERVAL_MS = 620;
 
-export default function Concierge() {
+export default function Concierge({ persona }: { persona: Persona }) {
   const [step, setStep] = useState<Step>({ kind: "mode" });
   const [answers, setAnswers] = useState<Answers>(EMPTY);
   const [thinkLine, setThinkLine] = useState("");
+
+  /** Persona-adaptive copy: P(teenText, adultText[, neutralText]) */
+  const P = (teen: string, adult: string, neutral?: string) =>
+    persona === "teen" ? teen : persona === "adult" ? adult : (neutral ?? adult);
 
   const progressIndex =
     step.kind === "mode"
@@ -398,10 +443,18 @@ export default function Concierge() {
             {step.kind === "mode" && (
               <div className="step-fade" key="mode">
                 <div className="text-[clamp(21px,3vw,27px)] font-bold tracking-[-0.025em]">
-                  First things first — how do you want to learn?
+                  {P(
+                    "How do you picture college?",
+                    "How does school fit your life?",
+                    "First things first — how do you want to learn?",
+                  )}
                 </div>
                 <p className="mt-2 text-[15.5px] text-ink-soft">
-                  There's no wrong answer. It just helps me point you the right way.
+                  {P(
+                    "Dorms and game days, or a degree from your bedroom — no wrong answers here.",
+                    "Campus energy or 11pm-after-everything flexible — whatever actually works.",
+                    "There's no wrong answer. It just helps me point you the right way.",
+                  )}
                 </p>
                 <div className="mt-[22px] grid gap-3 sm:grid-cols-2">
                   <OptionButton
@@ -441,10 +494,13 @@ export default function Concierge() {
             {step.kind === "interests" && (
               <div className="step-fade" key="interests">
                 <div className="text-[clamp(21px,3vw,27px)] font-bold tracking-[-0.025em]">
-                  What pulls at you?
+                  {P("What's your thing?", "What pulls at you?")}
                 </div>
                 <p className="mt-2 text-[15.5px] text-ink-soft">
-                  Pick anything that sparks something — choose as many as you like.
+                  {P(
+                    "Pick what you'd actually love doing all day — as many as you want.",
+                    "Pick anything that sparks something — choose as many as you like.",
+                  )}
                 </p>
                 <div className="mt-[22px] grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
                   {INTERESTS.map((it) => {
@@ -534,10 +590,13 @@ export default function Concierge() {
             {step.kind === "name" && (
               <div className="step-fade" key="name">
                 <div className="text-[clamp(21px,3vw,27px)] font-bold tracking-[-0.025em]">
-                  What should I call you?
+                  {P("Last one — what do we call you?", "What should I call you?")}
                 </div>
                 <p className="mt-2 text-[15.5px] text-ink-soft">
-                  Optional — but a path feels more like yours with a name on it.
+                  {P(
+                    "Optional. But your Future Card looks way better with your name on it.",
+                    "Optional — but a path feels more like yours with a name on it.",
+                  )}
                 </p>
                 <div className="mt-[22px]">
                   <input
@@ -598,9 +657,6 @@ export default function Concierge() {
                 const alternatives = rankedPrograms
                   .filter((p) => p.id !== program.id)
                   .slice(0, 2);
-                const t = timeline(program, answers);
-                const c = cost(program, answers);
-                const name = answers.name.trim();
                 return (
                   <div className="step-fade" key={`result-${program.id}`}>
                     <div
@@ -613,19 +669,22 @@ export default function Concierge() {
                       >
                         ✓
                       </span>
-                      Found your best-fit path
+                      {P(
+                        "Found you — this is your lane.",
+                        "Found your best-fit path.",
+                        "Found your best-fit path.",
+                      )}
                     </div>
-                    <div className="mt-3 text-[clamp(24px,4vw,34px)] font-bold tracking-[-0.03em]">
-                      {name ? `${name}, here's` : "Here's"} your path:
-                      <br />
-                      {program.name}
-                    </div>
-                    <p className="mt-2 text-base text-ink-soft">{program.blurb}</p>
-                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                      <MatchCell label="Format" value={chosenMode(program, answers)} />
-                      <MatchCell label="Time to finish" value={t.label} note={t.note} />
-                      <MatchCell label="Est. cost" value={c.label} note={c.note} accent />
-                    </div>
+                    <FutureCard program={program} answers={answers} />
+                    <p className="mt-2.5 text-center text-xs text-ink-faint">
+                      📸{" "}
+                      {P(
+                        "Screenshot your Future Card — it belongs on your story.",
+                        "Screenshot your Future Card — pin it where Monday mornings can see it.",
+                        "Screenshot your Future Card.",
+                      )}
+                    </p>
+                    <p className="mt-4 text-base text-ink-soft">{program.blurb}</p>
                     <div
                       className="mt-[22px] rounded-2xl px-5 py-[18px]"
                       style={{

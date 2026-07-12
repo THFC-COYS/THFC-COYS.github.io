@@ -1,3 +1,5 @@
+import type { Persona } from "../App";
+
 const STATS = [
   { value: "24/7", label: "Always-on guidance" },
   { value: "~60s", label: "Curiosity → path" },
@@ -5,7 +7,33 @@ const STATS = [
   { value: "200+", label: "Programs matched" },
 ];
 
-export default function Hero() {
+const DOORS: { id: Exclude<Persona, null>; ico: string; title: string; sub: string }[] = [
+  {
+    id: "teen",
+    ico: "🚀",
+    title: "I'm starting out",
+    sub: "High school-ish. Big dreams, zero idea how this works. Find who you'll become.",
+  },
+  {
+    id: "adult",
+    ico: "⚡",
+    title: "I'm restarting",
+    sub: "Job, family, real life. A degree that fits around all of it — not the other way around.",
+  },
+];
+
+export default function Hero({
+  persona,
+  onPickPersona,
+}: {
+  persona: Persona;
+  onPickPersona: (p: Persona) => void;
+}) {
+  const pickDoor = (p: Exclude<Persona, null>) => {
+    onPickPersona(p);
+    document.getElementById("meet")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section className="relative overflow-hidden pb-10 pt-24 text-center">
       <div
@@ -53,20 +81,44 @@ export default function Hero() {
         </h1>
 
         <p className="mx-auto mt-[22px] max-w-[46ch] text-[clamp(18px,2.4vw,23px)] leading-[1.45] tracking-[-0.015em] text-ink-soft">
-          Lope is GCU's AI enrollment concierge. One conversation turns a moment
-          of curiosity into a personal path to a degree — online or on campus.
+          Lope is GCU's AI enrollment concierge, built on one mission: make
+          finding your future as easy as sending a text.
         </p>
 
-        <div className="mt-[34px] flex flex-wrap justify-center gap-3">
-          <a className="btn btn-primary" href="#meet">
-            Find your path <span aria-hidden>→</span>
-          </a>
-          <a className="btn btn-ghost" href="#platform">
-            See how it works
-          </a>
+        <div className="mx-auto mt-[34px] grid max-w-[640px] gap-3.5 text-left sm:grid-cols-2">
+          {DOORS.map((d) => (
+            <button
+              key={d.id}
+              onClick={() => pickDoor(d.id)}
+              className="cursor-pointer rounded-[20px] border-[1.5px] bg-surface p-5 text-left transition-transform hover:-translate-y-0.5"
+              style={{
+                fontFamily: "inherit",
+                borderColor: persona === d.id ? "var(--purple)" : "var(--line)",
+                boxShadow:
+                  persona === d.id
+                    ? "0 0 0 4px color-mix(in srgb, var(--purple) 14%, transparent)"
+                    : "var(--shadow-sm)",
+              }}
+            >
+              <span className="text-[26px]" aria-hidden>
+                {d.ico}
+              </span>
+              <b className="mt-2.5 block text-lg tracking-[-0.02em] text-ink">{d.title}</b>
+              <span className="mt-1 block text-[13.5px] leading-[1.4] text-ink-faint">
+                {d.sub}
+              </span>
+            </button>
+          ))}
         </div>
         <p className="mt-4 text-[13px] text-ink-faint">
-          No forms. No phone tag. Just the next right step — in about 60 seconds.
+          No forms. No phone tag. 60 seconds to a real answer.{" "}
+          <a
+            href="#platform"
+            className="font-semibold no-underline"
+            style={{ color: "var(--purple-bright)" }}
+          >
+            How it works →
+          </a>
         </p>
 
         <div className="reveal mx-auto mt-11 grid max-w-[860px] grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-line bg-line sm:grid-cols-4">

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Concierge from "./components/Concierge";
@@ -9,15 +10,18 @@ import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
 import { useReveal } from "./hooks/useReveal";
 
+export type Persona = "teen" | "adult" | null;
+
 export default function App() {
   useReveal();
+  const [persona, setPersona] = useState<Persona>(null);
 
   return (
     <>
       <Header />
       <main>
-        <Hero />
-        <Concierge />
+        <Hero persona={persona} onPickPersona={setPersona} />
+        <Concierge persona={persona} />
         <Platform />
         <Audiences />
         <Flow />
