@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { INTERESTS, PROGRAMS, type Program } from "../data/programs";
+import { INTERESTS, OBSESSIONS, PROGRAMS, type Program } from "../data/programs";
 import type { Persona } from "../App";
 import type { Lead } from "../data/leads";
 
@@ -8,6 +8,7 @@ type Stage = "hs" | "some" | "working" | "transfer" | "military";
 type Step =
   | { kind: "mode" }
   | { kind: "interests" }
+  | { kind: "obsessions" }
   | { kind: "stage" }
   | { kind: "name" }
   | { kind: "thinking" }
@@ -17,11 +18,18 @@ type Step =
 interface Answers {
   mode: ModeChoice | null;
   interests: string[];
+  obsessions: string[];
   stage: Stage | null;
   name: string;
 }
 
-const EMPTY: Answers = { mode: null, interests: [], stage: null, name: "" };
+const EMPTY: Answers = {
+  mode: null,
+  interests: [],
+  obsessions: [],
+  stage: null,
+  name: "",
+};
 
 /* ---------- matching logic ---------- */
 
@@ -32,6 +40,13 @@ function score(p: Program, a: Answers): number {
   else s -= 4;
   a.interests.forEach((t) => {
     if (p.tags.includes(t)) s += 4;
+  });
+  // obsession overlap — softer signal, but it breaks ties with who the student actually is
+  a.obsessions.forEach((id) => {
+    const ob = OBSESSIONS.find((o) => o.id === id);
+    ob?.tags.forEach((t) => {
+      if (p.tags.includes(t)) s += 2;
+    });
   });
   const isGrad = /M\.|MBA|Master/.test(p.name);
   if (a.stage === "hs" && isGrad) s -= 5;
@@ -94,6 +109,12 @@ function whyText(p: Program, a: Answers): string {
           : `${matched.slice(0, -1).join(", ")}, and ${matched[matched.length - 1]}`;
     bits.push(`It lines up with your interest in ${nice}.`);
   }
+  const obMatch = OBSESSIONS.find(
+    (ob) => a.obsessions.includes(ob.id) && ob.tags.some((t) => p.tags.includes(t)),
+  );
+  if (obMatch) {
+    bits.push(`And you're obsessed with ${obMatch.label.toLowerCase()} — ${obMatch.hook}.`);
+  }
   const stageTxt: Record<Stage, string> = {
     hs: "As someone finishing high school, this is a clean four-year start.",
     some: "Since you already have some college, we can build on the credits you've earned.",
@@ -104,6 +125,108 @@ function whyText(p: Program, a: Answers): string {
   };
   if (a.stage) bits.push(stageTxt[a.stage]);
   return bits.join(" ");
+}
+
+/** Dream companies: brands from the student's obsessions whose field matches this program. */
+function dreamCompanies(p: Program, a: Answers): string[] {
+  const set: string[] = [];
+  a.obsessions.forEach((id) => {
+    const ob = OBSESSIONS.find((o) => o.id === id);
+    if (!ob) return;
+    if (ob.tags.some((t) => p.tags.includes(t))) {
+      ob.companies.forEach((c) => {
+        if (!set.includes(c)) set.push(c);
+      });
+    }
+  });
+  return set.slice(0, 4);
+}
+
+/** The ranked top-3 pick list; tapping a row re-selects the hero program. */
+function TopThree({
+  programs,
+  selectedId,
+  answers,
+  onSelect,
+}: {
+  programs: Program[];
+  selectedId: string;
+  answers: Answers;
+  onSelect: (id: string) => void;
+}) {
+  return (
+    <>
+      <b
+        className="mt-6 block text-[13px] uppercase tracking-[0.06em]"
+        style={{ color: "var(--purple-bright)" }}
+      >
+        Your 3 best-fit paths — tap any to explore
+      </b>
+      <div className="mt-3 grid gap-2.5">
+        {programs.map((p, i) => {
+          const role = p.outcomes.roles[0];
+          const dreams = dreamCompanies(p, answers);
+          const selected = p.id === selectedId;
+          return (
+            <button
+              key={p.id}
+              onClick={() => onSelect(p.id)}
+              className="flex items-center gap-3.5 rounded-2xl border-[1.5px] px-[15px] py-[13px] text-left transition-colors"
+              style={{
+                fontFamily: "inherit",
+                borderColor: selected ? "var(--purple)" : "var(--line)",
+                background: selected
+                  ? "color-mix(in srgb, var(--purple) 9%, var(--surface))"
+                  : "var(--surface-2)",
+              }}
+            >
+              <span
+                className="grid h-7 w-7 flex-none place-items-center rounded-[9px] text-sm font-bold text-white tabular-nums"
+                style={{
+                  background: "linear-gradient(150deg, var(--purple), var(--purple-bright))",
+                }}
+              >
+                {i + 1}
+              </span>
+              <span className="min-w-0 flex-1">
+                <b className="block text-[15.5px] tracking-[-0.01em] text-ink">{p.name}</b>
+                {dreams.length ? (
+                  <span
+                    className="mt-0.5 block text-[12.5px] font-semibold"
+                    style={{ color: "var(--copper)" }}
+                  >
+                    → Could take you to {dreams.slice(0, 3).join(" · ")}
+                  </span>
+                ) : (
+                  <span className="mt-0.5 block text-[12.5px] text-ink-faint">
+                    {p.blurb.split("—")[0].split(".")[0]}
+                  </span>
+                )}
+              </span>
+              <span className="hidden flex-none text-right sm:block">
+                <b
+                  className="block text-sm tabular-nums"
+                  style={{ color: "var(--copper)" }}
+                >
+                  {role.range}
+                </b>
+                <span className="text-[11.5px] text-ink-faint">
+                  {chosenMode(p, answers)}
+                </span>
+              </span>
+              <span
+                className="w-5 flex-none text-center font-bold"
+                style={{ color: "var(--purple)", opacity: selected ? 1 : 0 }}
+                aria-hidden
+              >
+                ✓
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </>
+  );
 }
 
 /** Broadcast a finished conversation to Mission Control's live queue. */
@@ -118,6 +241,9 @@ function dispatchLead(
     ["working", "military", "transfer", "some"].includes(a.stage ?? "");
   const interests = INTERESTS.filter((it) => a.interests.includes(it.id)).map(
     (it) => it.label,
+  );
+  const obsessions = OBSESSIONS.filter((ob) => a.obsessions.includes(ob.id)).map(
+    (ob) => ob.label,
   );
   const name = a.name.trim();
   const lead: Lead = {
@@ -136,6 +262,7 @@ function dispatchLead(
           ? "Chose On Campus"
           : "Exploring both formats",
       interests.length ? `Picked ${interests.join(", ")}` : "Explored programs",
+      obsessions.length ? `Obsessed with: ${obsessions.join(", ")}` : "Skipped obsessions",
       `Matched ${program.name}`,
       via === "application" ? "Started an application" : "Requested a counselor",
     ],
@@ -143,7 +270,7 @@ function dispatchLead(
       via === "application"
         ? "Completed Lope and started an application just now. Confirm receipt within the hour — speed seals it."
         : "Completed Lope and asked for a human just now. The next voice they hear should be yours.",
-    draft: `Hi ${name || "there"}! I just read your conversation with Lope — ${program.name} lines up with what you told us${interests.length ? ` about ${interests[0].toLowerCase()}` : ""}. I can answer the real questions (cost, timeline, next steps) in one quick chat. When works for you?`,
+    draft: `Hi ${name || "there"}! I just read your conversation with Lope — ${program.name} lines up with what you told us${interests.length ? ` about ${interests[0].toLowerCase()}` : ""}. I can answer the real questions (cost, timeline, next steps) in one quick chat. When works for you?${obsessions.length ? ` P.S. — you mentioned ${obsessions[0].toLowerCase()}; there's more overlap with this program than you'd think. Ask me.` : ""}`,
   };
   window.dispatchEvent(new CustomEvent("lope:lead", { detail: lead }));
 }
@@ -370,24 +497,28 @@ export default function Concierge({ persona }: { persona: Persona }) {
       ? 0
       : step.kind === "interests"
         ? 1
-        : step.kind === "stage"
+        : step.kind === "obsessions"
           ? 2
-          : 3;
+          : step.kind === "stage"
+            ? 3
+            : 4;
 
   const statusText =
     step.kind === "mode"
-      ? "Question 1 of 4"
+      ? "Question 1 of 5"
       : step.kind === "interests"
-        ? "Question 2 of 4"
-        : step.kind === "stage"
-          ? "Question 3 of 4"
-          : step.kind === "name"
-            ? "Last one"
-            : step.kind === "thinking"
-              ? "Thinking…"
-              : step.kind === "result"
-                ? "Your match"
-                : "Warm handoff";
+        ? "Question 2 of 5"
+        : step.kind === "obsessions"
+          ? "Question 3 of 5"
+          : step.kind === "stage"
+            ? "Question 4 of 5"
+            : step.kind === "name"
+              ? "Last one"
+              : step.kind === "thinking"
+                ? "Thinking…"
+                : step.kind === "result"
+                  ? "Your match"
+                  : "Warm handoff";
 
   const rankedPrograms = useMemo(() => ranked(answers), [answers]);
 
@@ -412,6 +543,8 @@ export default function Concierge({ persona }: { persona: Persona }) {
       answers.stage ? stageLine[answers.stage] : "Mapping your path…",
       "Ranking your best fits…",
     ];
+    const ob0 = OBSESSIONS.find((o) => o.id === answers.obsessions[0]);
+    if (ob0) lines.splice(2, 0, `Connecting ${ob0.label.toLowerCase()} to real careers…`);
     let i = 0;
     const id = setInterval(() => {
       if (i < lines.length) {
@@ -469,7 +602,7 @@ export default function Concierge({ persona }: { persona: Persona }) {
               <span className="block text-[12.5px] text-ink-faint">{statusText}</span>
             </div>
             <div className="ml-auto flex gap-1.5" aria-hidden>
-              {[0, 1, 2, 3].map((i) => (
+              {[0, 1, 2, 3, 4].map((i) => (
                 <i
                   key={i}
                   className="h-[5px] w-[26px] rounded transition-colors duration-300"
@@ -576,6 +709,70 @@ export default function Concierge({ persona }: { persona: Persona }) {
                   <button
                     className="btn btn-primary ml-auto"
                     disabled={answers.interests.length === 0}
+                    onClick={() => setStep({ kind: "obsessions" })}
+                  >
+                    Continue <span aria-hidden>→</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {step.kind === "obsessions" && (
+              <div className="step-fade" key="obsessions">
+                <div className="text-[clamp(21px,3vw,27px)] font-bold tracking-[-0.025em]">
+                  {P(
+                    "What are you obsessed with right now?",
+                    "Outside of work, what pulls your attention?",
+                    "What are you into outside of school and work?",
+                  )}
+                </div>
+                <p className="mt-2 text-[15.5px] text-ink-soft">
+                  {P(
+                    "Brands, hobbies, rabbit holes — the stuff you could talk about for an hour. This is the good data.",
+                    "Hobbies, brands, podcasts — the things that make time disappear. They say more than a transcript does.",
+                    "The things you gravitate to say a lot about where you'll thrive. Pick a few.",
+                  )}
+                </p>
+                <div className="mt-[22px] grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
+                  {OBSESSIONS.map((ob) => {
+                    const selected = answers.obsessions.includes(ob.id);
+                    return (
+                      <OptionButton
+                        key={ob.id}
+                        ico={ob.ico}
+                        title={ob.label}
+                        selected={selected}
+                        onClick={() =>
+                          setAnswers({
+                            ...answers,
+                            obsessions: selected
+                              ? answers.obsessions.filter((x) => x !== ob.id)
+                              : [...answers.obsessions, ob.id],
+                          })
+                        }
+                      />
+                    );
+                  })}
+                </div>
+                <div className="mt-[26px] flex items-center gap-3">
+                  <button
+                    className="cursor-pointer border-none bg-transparent p-2 text-sm text-ink-faint hover:text-ink"
+                    onClick={() => setStep({ kind: "interests" })}
+                  >
+                    ← Back
+                  </button>
+                  <button
+                    className="cursor-pointer border-none bg-transparent p-2 text-sm text-ink-faint hover:text-ink"
+                    onClick={() => {
+                      setAnswers({ ...answers, obsessions: [] });
+                      setStep({ kind: "stage" });
+                    }}
+                  >
+                    Skip
+                  </button>
+                  <button
+                    className="btn btn-primary ml-auto"
+                    disabled={answers.obsessions.length === 0}
                     onClick={() => setStep({ kind: "stage" })}
                   >
                     Continue <span aria-hidden>→</span>
@@ -615,7 +812,7 @@ export default function Concierge({ persona }: { persona: Persona }) {
                 <div className="mt-[26px] flex items-center gap-3">
                   <button
                     className="cursor-pointer border-none bg-transparent p-2 text-sm text-ink-faint hover:text-ink"
-                    onClick={() => setStep({ kind: "interests" })}
+                    onClick={() => setStep({ kind: "obsessions" })}
                   >
                     ← Back
                   </button>
@@ -695,11 +892,15 @@ export default function Concierge({ persona }: { persona: Persona }) {
 
             {step.kind === "result" &&
               (() => {
+                const top3 = rankedPrograms.slice(0, 3);
                 const program =
-                  PROGRAMS.find((p) => p.id === step.programId) ?? rankedPrograms[0];
-                const alternatives = rankedPrograms
-                  .filter((p) => p.id !== program.id)
-                  .slice(0, 2);
+                  top3.find((p) => p.id === step.programId) ?? top3[0];
+                const dreams = dreamCompanies(program, answers);
+                const selOb = OBSESSIONS.find(
+                  (ob) =>
+                    answers.obsessions.includes(ob.id) &&
+                    ob.tags.some((t) => program.tags.includes(t)),
+                );
                 return (
                   <div className="step-fade" key={`result-${program.id}`}>
                     <div
@@ -713,9 +914,9 @@ export default function Concierge({ persona }: { persona: Persona }) {
                         ✓
                       </span>
                       {P(
-                        "Found you — this is your lane.",
-                        "Found your best-fit path.",
-                        "Found your best-fit path.",
+                        "Found you — here are your 3 best-fit paths.",
+                        "Here are your 3 best-fit paths.",
+                        "Here are your 3 best-fit paths.",
                       )}
                     </div>
                     <FutureCard program={program} answers={answers} />
@@ -727,7 +928,36 @@ export default function Concierge({ persona }: { persona: Persona }) {
                         "Screenshot your Future Card.",
                       )}
                     </p>
-                    <p className="mt-4 text-base text-ink-soft">{program.blurb}</p>
+                    {dreams.length > 0 && selOb && (
+                      <div
+                        className="mt-3.5 flex items-start gap-3 rounded-2xl px-4 py-3.5"
+                        style={{
+                          background:
+                            "linear-gradient(120deg, color-mix(in srgb, var(--copper) 16%, var(--surface)), var(--surface))",
+                          border: "1px solid color-mix(in srgb, var(--copper) 30%, transparent)",
+                        }}
+                      >
+                        <span className="text-[22px] leading-tight" aria-hidden>
+                          ✨
+                        </span>
+                        <p className="text-[14.5px] leading-normal text-ink-soft">
+                          Because you're into{" "}
+                          <b className="text-ink">{selOb.label.toLowerCase()}</b>, this path
+                          points straight at teams like{" "}
+                          <span className="font-bold" style={{ color: "var(--copper)" }}>
+                            {dreams.join(" · ")}
+                          </span>
+                          .
+                        </p>
+                      </div>
+                    )}
+                    <TopThree
+                      programs={top3}
+                      selectedId={program.id}
+                      answers={answers}
+                      onSelect={(id) => setStep({ kind: "result", programId: id })}
+                    />
+                    <p className="mt-5 text-base text-ink-soft">{program.blurb}</p>
                     <div
                       className="mt-[22px] rounded-2xl px-5 py-[18px]"
                       style={{
@@ -747,23 +977,6 @@ export default function Concierge({ persona }: { persona: Persona }) {
                       </p>
                     </div>
                     <LifeOutcomes program={program} />
-                    {alternatives.length > 0 && (
-                      <div className="mt-[18px] text-sm text-ink-faint">
-                        Also worth a look:{" "}
-                        {alternatives.map((a, i) => (
-                          <span key={a.id}>
-                            {i > 0 && " · "}
-                            <button
-                              className="cursor-pointer border-none bg-transparent p-0 font-semibold"
-                              style={{ color: "var(--purple-bright)", fontFamily: "inherit" }}
-                              onClick={() => setStep({ kind: "result", programId: a.id })}
-                            >
-                              {a.name}
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                    )}
                     <ResultActions
                       onHandoff={(via) => {
                         dispatchLead(program, answers, persona, via);

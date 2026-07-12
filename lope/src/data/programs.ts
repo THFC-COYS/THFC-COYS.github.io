@@ -353,6 +353,37 @@ export const PROGRAMS: Program[] = [
   },
 ];
 
+export interface Obsession {
+  id: string;
+  ico: string;
+  label: string;
+  tags: string[];
+  /** Dream brands the student obsesses over — surfaced as "could take you to …". */
+  companies: string[];
+  /** Hook line woven into the "why Lope picked this" explanation. */
+  hook: string;
+}
+
+/** Obsessions: brands, products, hobbies, rabbit holes — the real person behind the application. */
+export const OBSESSIONS: Obsession[] = [
+  { id: "gaming", ico: "🎮", label: "Gaming", tags: ["tech"], companies: ["Riot Games", "Epic Games", "Xbox", "Electronic Arts"], hook: "the people who build the games you love sit in these classes first" },
+  { id: "pcs", ico: "🖥️", label: "Building PCs", tags: ["tech"], companies: ["NVIDIA", "AMD", "Intel", "Microsoft"], hook: "you already think in systems — this just makes it official" },
+  { id: "apple", ico: "📱", label: "Apple & tech drops", tags: ["tech", "business"], companies: ["Apple", "Google", "Microsoft"], hook: "the companies you follow hire exactly this degree" },
+  { id: "space", ico: "🚀", label: "SpaceX & space", tags: ["tech"], companies: ["SpaceX", "Blue Origin", "NASA", "Lockheed Martin"], hook: "the teams launching rockets recruit straight from this field" },
+  { id: "ev", ico: "⚡", label: "Tesla & EVs", tags: ["tech", "business"], companies: ["Tesla", "Rivian", "Lucid Motors"], hook: "the future you keep reading about is built by people with this degree" },
+  { id: "sports", ico: "🏀", label: "Sports & training", tags: ["health", "business"], companies: ["Nike", "Under Armour", "pro sports teams"], hook: "careers around the game go deeper than playing it" },
+  { id: "fitness", ico: "🏋️", label: "Fitness & nutrition", tags: ["health"], companies: ["Peloton", "WHOOP", "EXOS"], hook: "you already care about how bodies work — that's the whole field" },
+  { id: "medshows", ico: "🩺", label: "Medical shows", tags: ["health"], companies: ["Mayo Clinic", "Banner Health", "HonorHealth"], hook: "you've binge-studied the vocabulary — now make it real" },
+  { id: "film", ico: "🎬", label: "Film & Netflix", tags: ["arts"], companies: ["Netflix", "Disney", "A24"], hook: "story is a craft, and crafts can be careers" },
+  { id: "music", ico: "🎵", label: "Music & production", tags: ["arts", "ministry"], companies: ["Spotify", "Universal Music", "Elevation Worship"], hook: "rooms full of people making music can be your day job" },
+  { id: "creator", ico: "📸", label: "Content creating", tags: ["arts", "business"], companies: ["YouTube", "TikTok", "Adobe"], hook: "you already run a brand — imagine it with a business engine behind it" },
+  { id: "sneakers", ico: "👟", label: "Nike & sneaker culture", tags: ["business", "arts"], companies: ["Nike", "StockX", "adidas"], hook: "the brands you track are marketing machines — learn to drive one" },
+  { id: "investing", ico: "💸", label: "Investing & hustles", tags: ["business"], companies: ["Charles Schwab", "Fidelity", "JPMorgan"], hook: "you're already doing the homework — this adds the credentials" },
+  { id: "truecrime", ico: "🕵️", label: "True crime", tags: ["justice", "helping"], companies: ["FBI", "Homeland Security", "county DA offices"], hook: "the real version of those cases needs sharp, fair minds" },
+  { id: "volunteer", ico: "❤️", label: "Volunteering & missions", tags: ["ministry", "helping", "teaching"], companies: ["Compassion International", "Red Cross", "Teach For America"], hook: "you keep showing up for people — there's a career in that" },
+  { id: "church", ico: "🙏", label: "Church & worship team", tags: ["ministry"], companies: ["multisite churches", "Young Life"], hook: "what you do on Sundays can be what you do every day" },
+];
+
 export const INTERESTS: Interest[] = [
   { id: "health", ico: "🩺", label: "Health & Nursing" },
   { id: "business", ico: "💼", label: "Business & Leadership" },
