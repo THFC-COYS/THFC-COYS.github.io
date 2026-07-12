@@ -61,10 +61,21 @@ interests → life stage → name), then scores every program in
 The top match renders with format, estimated timeline, estimated cost, a
 generated "why Lope picked this" rationale, and two tappable alternatives.
 
+## Open-ended understanding (`src/lib/interpret.ts`)
+
+The Obsessions step accepts free text ("A24 films and thrifting") and maps it to
+program fields + dream companies. `localInterpret` runs entirely in the browser
+(zero config, works on any static host). For true open-ended understanding,
+set `VITE_INTERPRET_ENDPOINT` to a **serverless proxy** that calls Claude
+(`claude-opus-4-8`) server-side and returns `{tags, companies, labels}` —
+`interpretObsession` will use it and fall back to the local heuristic on any
+error. Never call the Anthropic API directly from the browser (it exposes your
+key and is blocked by CORS); the proxy sketch is in the file's header comment.
+
 ## Roadmap ideas
 
 - Swap the illustrative catalog for real GCU program + tuition data
-- Wire the conversation to an LLM for open-ended Q&A
-- Counselor-side dashboard (the "enrollment intelligence" layer)
+- Ship the Claude interpret proxy (above) for fully open-ended passion matching
+- Counselor-side dashboard is built (`MissionControl.tsx`) — wire it to a real CRM
 - Transfer-credit and cost estimator modules
 - CRM handoff (lead context payload) integration

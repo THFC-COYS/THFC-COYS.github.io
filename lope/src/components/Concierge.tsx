@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { INTERESTS, OBSESSIONS, PROGRAMS, type Program } from "../data/programs";
 import type { Persona } from "../App";
 import type { Lead } from "../data/leads";
+import { localInterpret, EMPTY_INTERPRETATION, type Interpretation } from "../lib/interpret";
 
 type ModeChoice = "ground" | "online" | "either";
 type Stage = "hs" | "some" | "working" | "transfer" | "military";
@@ -19,6 +20,7 @@ interface Answers {
   mode: ModeChoice | null;
   interests: string[];
   obsessions: string[];
+  custom: Interpretation;
   stage: Stage | null;
   name: string;
 }
@@ -27,6 +29,7 @@ const EMPTY: Answers = {
   mode: null,
   interests: [],
   obsessions: [],
+  custom: EMPTY_INTERPRETATION,
   stage: null,
   name: "",
 };
@@ -47,6 +50,10 @@ function score(p: Program, a: Answers): number {
     ob?.tags.forEach((t) => {
       if (p.tags.includes(t)) s += 2;
     });
+  });
+  // free-text interpretation carries the same weight as a picked obsession
+  a.custom.tags.forEach((t) => {
+    if (p.tags.includes(t)) s += 2;
   });
   const isGrad = /M\.|MBA|Master/.test(p.name);
   if (a.stage === "hs" && isGrad) s -= 5;
@@ -114,6 +121,10 @@ function whyText(p: Program, a: Answers): string {
   );
   if (obMatch) {
     bits.push(`And you're obsessed with ${obMatch.label.toLowerCase()} — ${obMatch.hook}.`);
+  } else if (a.custom.labels.length && a.custom.tags.some((t) => p.tags.includes(t))) {
+    bits.push(
+      `You mentioned ${a.custom.labels.join(" and ").toLowerCase()} — that lines up with this field more than you'd expect.`,
+    );
   }
   const stageTxt: Record<Stage, string> = {
     hs: "As someone finishing high school, this is a clean four-year start.",
@@ -139,6 +150,11 @@ function dreamCompanies(p: Program, a: Answers): string[] {
       });
     }
   });
+  if (a.custom.tags.some((t) => p.tags.includes(t))) {
+    a.custom.companies.forEach((c) => {
+      if (!set.includes(c)) set.push(c);
+    });
+  }
   return set.slice(0, 4);
 }
 
@@ -262,7 +278,11 @@ function dispatchLead(
           ? "Chose On Campus"
           : "Exploring both formats",
       interests.length ? `Picked ${interests.join(", ")}` : "Explored programs",
-      obsessions.length ? `Obsessed with: ${obsessions.join(", ")}` : "Skipped obsessions",
+      obsessions.length
+        ? `Obsessed with: ${obsessions.join(", ")}`
+        : a.custom.raw
+          ? `In their words: "${a.custom.raw}"`
+          : "Skipped obsessions",
       `Matched ${program.name}`,
       via === "application" ? "Started an application" : "Requested a counselor",
     ],
@@ -754,6 +774,40 @@ export default function Concierge({ persona }: { persona: Persona }) {
                     );
                   })}
                 </div>
+                <div className="mt-4">
+                  <input
+                    type="text"
+                    maxLength={80}
+                    placeholder={P(
+                      "Or say it in your own words — “A24 films, thrifting, my church band…”",
+                      "Or type it — “woodworking, my kids’ school, home renovation…”",
+                      "Or tell me in your own words…",
+                    )}
+                    value={answers.custom.raw}
+                    onChange={(e) =>
+                      setAnswers({ ...answers, custom: localInterpret(e.target.value) })
+                    }
+                    className="w-full rounded-[14px] border-[1.5px] border-line bg-surface-2 px-[18px] py-3.5 text-[15px] text-ink outline-none focus:border-purple"
+                    style={{ fontFamily: "inherit", letterSpacing: "-0.01em" }}
+                  />
+                  {answers.custom.labels.length > 0 && (
+                    <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                      <span className="w-full text-xs text-ink-faint">✨ Lope heard:</span>
+                      {answers.custom.labels.map((l) => (
+                        <span
+                          key={l}
+                          className="rounded-full border px-3 py-1.5 text-[13px] font-medium"
+                          style={{
+                            borderColor: "color-mix(in srgb, var(--purple) 35%, var(--line))",
+                            color: "var(--purple-bright)",
+                          }}
+                        >
+                          {l}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="mt-[26px] flex items-center gap-3">
                   <button
                     className="cursor-pointer border-none bg-transparent p-2 text-sm text-ink-faint hover:text-ink"
@@ -764,7 +818,7 @@ export default function Concierge({ persona }: { persona: Persona }) {
                   <button
                     className="cursor-pointer border-none bg-transparent p-2 text-sm text-ink-faint hover:text-ink"
                     onClick={() => {
-                      setAnswers({ ...answers, obsessions: [] });
+                      setAnswers({ ...answers, obsessions: [], custom: EMPTY_INTERPRETATION });
                       setStep({ kind: "stage" });
                     }}
                   >
@@ -772,7 +826,7 @@ export default function Concierge({ persona }: { persona: Persona }) {
                   </button>
                   <button
                     className="btn btn-primary ml-auto"
-                    disabled={answers.obsessions.length === 0}
+                    disabled={answers.obsessions.length === 0 && answers.custom.tags.length === 0}
                     onClick={() => setStep({ kind: "stage" })}
                   >
                     Continue <span aria-hidden>→</span>
