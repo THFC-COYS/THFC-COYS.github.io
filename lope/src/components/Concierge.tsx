@@ -177,6 +177,75 @@ function MatchCell({
   );
 }
 
+function LifeOutcomes({ program }: { program: Program }) {
+  const o = program.outcomes;
+  const dims = [
+    {
+      ico: "💼",
+      label: "Professional",
+      text: "A field with real demand and a clear ladder — see the roles and employers below.",
+    },
+    { ico: "🌱", label: "Personal", text: o.personal },
+    { ico: "✝️", label: "Spiritual", text: o.spiritual },
+  ];
+  return (
+    <div className="mt-[22px]">
+      <b
+        className="text-[13px] uppercase tracking-[0.06em]"
+        style={{ color: "var(--purple-bright)" }}
+      >
+        What this path means for your life
+      </b>
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {dims.map((d) => (
+          <div key={d.label} className="rounded-2xl border border-line bg-surface-2 p-4">
+            <div className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.05em] text-ink">
+              <span aria-hidden>{d.ico}</span> {d.label}
+            </div>
+            <p className="mt-2 text-[13.5px] leading-relaxed text-ink-soft">{d.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <b
+        className="mt-6 block text-[13px] uppercase tracking-[0.06em]"
+        style={{ color: "var(--purple-bright)" }}
+      >
+        Where Lopes land
+      </b>
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {o.roles.map((r) => (
+          <div key={r.title} className="rounded-2xl border border-line bg-surface-2 p-4">
+            <b className="block text-[15px] leading-tight tracking-[-0.01em]">{r.title}</b>
+            <span
+              className="mt-1 block text-sm font-semibold tabular-nums"
+              style={{ color: "var(--copper)" }}
+            >
+              {r.range}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 text-[13px] text-ink-faint">Teams that hire from this field:</div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {o.employers.map((e) => (
+          <span
+            key={e}
+            className="rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium text-ink-soft"
+          >
+            {e}
+          </span>
+        ))}
+      </div>
+      <p className="mt-3 text-xs text-ink-faint">
+        Roles, salary ranges, and employers are illustrative examples of the field — not
+        placement guarantees, partnerships, or endorsements.
+      </p>
+    </div>
+  );
+}
+
 function ResultActions({
   onHandoff,
   onRestart,
@@ -575,6 +644,7 @@ export default function Concierge() {
                         {whyText(program, answers)}
                       </p>
                     </div>
+                    <LifeOutcomes program={program} />
                     {alternatives.length > 0 && (
                       <div className="mt-[18px] text-sm text-ink-faint">
                         Also worth a look:{" "}
