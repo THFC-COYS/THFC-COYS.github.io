@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { INTERESTS, PROGRAMS, type Program } from "../data/programs";
 import type { Persona } from "../App";
+import type { Lead } from "../data/leads";
 
 type ModeChoice = "ground" | "online" | "either";
 type Stage = "hs" | "some" | "working" | "transfer" | "military";
@@ -103,6 +104,48 @@ function whyText(p: Program, a: Answers): string {
   };
   if (a.stage) bits.push(stageTxt[a.stage]);
   return bits.join(" ");
+}
+
+/** Broadcast a finished conversation to Mission Control's live queue. */
+function dispatchLead(
+  program: Program,
+  a: Answers,
+  persona: Persona,
+  via: "application" | "counselor",
+) {
+  const isAdult =
+    persona === "adult" ||
+    ["working", "military", "transfer", "some"].includes(a.stage ?? "");
+  const interests = INTERESTS.filter((it) => a.interests.includes(it.id)).map(
+    (it) => it.label,
+  );
+  const name = a.name.trim();
+  const lead: Lead = {
+    id: `you-${Date.now()}`,
+    name: `${name || "You"} ✦`,
+    persona: isAdult ? "adult" : "teen",
+    mode: a.mode === "either" || a.mode === null ? "either" : a.mode,
+    program: program.name,
+    time: "just now",
+    status: "ready",
+    momentum: [
+      "Opened Lope",
+      a.mode === "online"
+        ? "Chose Online"
+        : a.mode === "ground"
+          ? "Chose On Campus"
+          : "Exploring both formats",
+      interests.length ? `Picked ${interests.join(", ")}` : "Explored programs",
+      `Matched ${program.name}`,
+      via === "application" ? "Started an application" : "Requested a counselor",
+    ],
+    signal:
+      via === "application"
+        ? "Completed Lope and started an application just now. Confirm receipt within the hour — speed seals it."
+        : "Completed Lope and asked for a human just now. The next voice they hear should be yours.",
+    draft: `Hi ${name || "there"}! I just read your conversation with Lope — ${program.name} lines up with what you told us${interests.length ? ` about ${interests[0].toLowerCase()}` : ""}. I can answer the real questions (cost, timeline, next steps) in one quick chat. When works for you?`,
+  };
+  window.dispatchEvent(new CustomEvent("lope:lead", { detail: lead }));
 }
 
 /* ---------- small UI pieces ---------- */
@@ -722,7 +765,10 @@ export default function Concierge({ persona }: { persona: Persona }) {
                       </div>
                     )}
                     <ResultActions
-                      onHandoff={(via) => setStep({ kind: "handoff", via })}
+                      onHandoff={(via) => {
+                        dispatchLead(program, answers, persona, via);
+                        setStep({ kind: "handoff", via });
+                      }}
                       onRestart={restart}
                     />
                   </div>
@@ -756,7 +802,16 @@ export default function Concierge({ persona }: { persona: Persona }) {
                     Try another path
                   </button>
                 </div>
-                <p className="mt-5 text-sm text-ink-faint">
+                <p className="mt-5 text-sm">
+                  <a
+                    href="#counselor"
+                    className="font-semibold no-underline"
+                    style={{ color: "var(--purple-bright)" }}
+                  >
+                    See what your counselor sees →
+                  </a>
+                </p>
+                <p className="mt-2.5 text-sm text-ink-faint">
                   This is a concept prototype — no application is actually submitted and
                   nothing is sent.
                 </p>

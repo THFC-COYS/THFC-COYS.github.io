@@ -53,6 +53,9 @@ export default function Header() {
           <a className="hidden no-underline hover:text-ink md:inline" href="#audiences">
             Online &amp; Ground
           </a>
+          <a className="hidden no-underline hover:text-ink md:inline" href="#counselor">
+            Counselors
+          </a>
           <button
             className="grid h-[34px] w-[34px] cursor-pointer place-items-center rounded-[10px] border border-line bg-surface text-[15px] text-ink-soft"
             onClick={toggleTheme}
