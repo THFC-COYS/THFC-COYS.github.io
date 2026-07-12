@@ -387,6 +387,9 @@ function FutureCard({ program, answers }: { program: Program; answers: Answers }
       <div className="relative mt-1.5 text-[15px] opacity-90">
         {program.name} · {chosenMode(program, answers)}
       </div>
+      {program.college && (
+        <div className="relative mt-0.5 text-[13px] opacity-70">{program.college}</div>
+      )}
       <div className="relative mt-[18px] flex flex-wrap gap-[22px]">
         {[
           ["Earning power", role.range],

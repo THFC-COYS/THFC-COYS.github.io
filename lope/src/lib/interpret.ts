@@ -59,6 +59,7 @@ const TERMS: Term[] = [
   { kw: ["cyber", "hacking", "security", "infosec", "pentest"], tags: ["tech"], companies: ["CrowdStrike", "Northrop Grumman", "Wells Fargo"], label: "Cybersecurity" },
   { kw: ["apple", "iphone", "tech drop", "gadget"], tags: ["tech", "business"], companies: ["Apple", "Google", "Microsoft"], label: "Apple & tech" },
   { kw: ["nurse", "nursing", "medicine", "medical", "doctor", "hospital", "anatomy", "er", "icu"], tags: ["health"], companies: ["Mayo Clinic", "Banner Health", "HonorHealth"], label: "Health & medicine" },
+  { kw: ["biology", "chemistry", "lab", "research", "science", "pre-med", "environment", "physics"], tags: ["science", "health"], companies: ["Mayo Clinic", "TGen", "research universities"], label: "Science & research" },
   { kw: ["fitness", "gym", "workout", "lifting", "nutrition", "trainer", "wellness"], tags: ["health"], companies: ["Peloton", "WHOOP", "EXOS"], label: "Fitness & nutrition" },
   { kw: ["sport", "basketball", "football", "soccer", "baseball", "coach", "athlet"], tags: ["health", "business"], companies: ["Nike", "Under Armour", "pro sports teams"], label: "Sports" },
   { kw: ["business", "entrepreneur", "startup", "hustle", "founder", "manage"], tags: ["business"], companies: ["American Express", "Amazon", "State Farm"], label: "Business" },
