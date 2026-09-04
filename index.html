@@ -806,10 +806,16 @@
                 }
             });
         }, {
-            threshold: 0.1
+            threshold: 0
         });
 
         sections.forEach(section => {
+            // Safety: reveal sections already in/near viewport on load
+            // (tall sections can never reach threshold 0.1 if >10% taller than viewport)
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                section.classList.add('visible');
+            }
             observer.observe(section);
         });
 
